@@ -1,0 +1,12 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "ShareNut Backend Signaling and Same Network File Transfer"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "pydantic-settings>=2.6.0",
+    "python-multipart>=0.0.18",
+    "uvicorn[standard]>=0.32.0",
+    "websockets>=13.1",
+]
