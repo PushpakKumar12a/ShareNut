@@ -1,0 +1,13 @@
+{
+  "name": "browser-mesh-test",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node runner.mjs",
+    "start": "node runner.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
