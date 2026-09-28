@@ -10,13 +10,17 @@
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber.svg?style=flat-square" alt="License: MIT" /></a>
-  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16.3-black?style=flat-square&logo=next.js" alt="Next.js" /></a>
-  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19.2-149eca?style=flat-square&logo=react" alt="React" /></a>
-  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat-square&logo=fastapi" alt="FastAPI" /></a>
-  <a href="https://webrtc.org/"><img src="https://img.shields.io/badge/WebRTC-SCTP_DataChannels-333333?style=flat-square&logo=webrtc" alt="WebRTC" /></a>
-  <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto"><img src="https://img.shields.io/badge/Crypto-AES--256--GCM_%2B_SHA--256-blueviolet?style=flat-square" alt="Web Crypto API" /></a>
-  <a href="https://web.dev/articles/origin-private-file-system"><img src="https://img.shields.io/badge/Storage-OPFS_Zero--RAM-emerald.svg?style=flat-square" alt="OPFS Storage" /></a>
-  <a href="https://bun.sh/"><img src="https://img.shields.io/badge/Bun-1.3+-fbf0df?style=flat-square&logo=bun" alt="Bun" /></a>
+  <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-black?style=flat-square&logo=next.js" alt="Next.js" /></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-149eca?style=flat-square&logo=react" alt="React" /></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-443e38?style=flat-square&logo=tailwindcss" alt="Tailwind CSS" /></a>
+  <a href="https://ui.shadcn.com/"><img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=flat-square&logo=shadcnui" alt="shadcn/ui" /></a>
+  <a href="https://github.com/pmndrs/zustand"><img src="https://img.shields.io/badge/Zustand-443e38?style=flat-square&logo=react" alt="Zustand" /></a>
+  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi" alt="FastAPI" /></a>
+  <a href="https://webrtc.org/"><img src="https://img.shields.io/badge/WebRTC-333333?style=flat-square&logo=webrtc" alt="WebRTC" /></a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto"><img src="https://img.shields.io/badge/Web_Crypto_API-blueviolet?style=flat-square" alt="Web Crypto API" /></a>
+  <a href="https://web.dev/articles/origin-private-file-system"><img src="https://img.shields.io/badge/OPFS_Storage-emerald?style=flat-square" alt="OPFS Storage" /></a>
+  <a href="https://github.com/astral-sh/uv"><img src="https://img.shields.io/badge/uv-DE5FE9?style=flat-square&logo=python" alt="uv" /></a>
+  <a href="https://bun.sh/"><img src="https://img.shields.io/badge/Bun-fbf0df?style=flat-square&logo=bun&logoColor=black" alt="Bun" /></a>
 </p>
 
 ---
@@ -32,6 +36,7 @@ Engineered with a **BitTorrent-inspired swarm architecture**, files are divided 
 ## Table of Contents
 
 - [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
 - [User Guide & Step-by-Step Usage](#user-guide--step-by-step-usage)
   - [Sending Files (Desktop or Mobile)](#1-sending-files-desktop-or-mobile)
   - [Receiving Files](#2-receiving-files)
@@ -64,9 +69,29 @@ Engineered with a **BitTorrent-inspired swarm architecture**, files are divided 
 - **Zero-RAM OPFS Streaming**: Arriving binary chunks write straight to disk via the Origin Private File System (`FileSystemWritableFileStream`), handling multi-gigabyte transfers with flat RAM.
 - **BitTorrent Rarest-First Swarming**: Multi-peer chunk scheduler prioritizes rarest slices across the room, converting every receiver into an active seeder.
 - **Hybrid Dual-Transport**: Automatically switches between WebRTC SCTP DataChannels (cross-network internet) and direct HTTP streaming sockets (same Wi-Fi LAN).
+- **Modern Design with Tailwind CSS v4 & shadcn/ui**: Bespoke, accessible user interface crafted with Tailwind CSS v4 and Radix UI primitives, featuring interactive telemetry gauges and chunk visualizers.
+- **Reactive Zustand State Engine**: Granular client state management synchronizing peer discovery, live transfer telemetry, and room status without unnecessary React component tree re-renders.
 - **Frictionless QR Code Pairing**: Display instant session codes or scan dynamic QR codes using your device camera to connect mobile phones to desktops in seconds.
 - **Session Continuity & Resumption**: Network drops and tab reloads preserve transfer progress via `ResumeRegistry` and OPFS chunk offset checks.
 - **On-the-Fly Streaming ZIP**: Multi-file packages and directory trees compress dynamically on-the-fly without creating temp files on disk.
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version / Spec | Purpose |
+|:---|:---|:---|:---|
+| **Frontend Framework** | [Next.js](https://nextjs.org/) | `16.3` (App Router) | High-performance React framework with Turbopack compilation and client-side streaming |
+| **UI Library** | [React](https://react.dev/) | `19.2` | Component architecture leveraging concurrent rendering primitives |
+| **Design System & Styling** | [Tailwind CSS](https://tailwindcss.com/) | `v4.0` (`@tailwindcss/postcss`) | CSS-first architecture using `@import "tailwindcss";`, `@theme inline` variables, and zero runtime CSS overhead |
+| **Accessible UI Primitives** | [shadcn/ui](https://ui.shadcn.com/) | Radix UI Primitives | Accessible dialogs, dropdown menus, progress bars, switches, badges, data tables, and Lucide React icons |
+| **Client State Management** | [Zustand](https://github.com/pmndrs/zustand) | `v5.0` | High-speed reactive store orchestrating peer discovery, room lifecycle, and live telemetry without render bottlenecks |
+| **P2P Transport** | [WebRTC](https://webrtc.org/) | SCTP `RTCDataChannel` | Direct browser-to-browser encrypted data plane with zero intermediate server relays |
+| **Local Storage Engine** | [Origin Private File System (OPFS)](https://web.dev/articles/origin-private-file-system) | W3C File System Access API | Random-access streaming directly to disk via `FileSystemWritableFileStream` with flat memory footprint |
+| **In-Flight Cryptography** | [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) | Hardware `SubtleCrypto` | Native AES-256-GCM chunk encryption with isolated 12-byte IVs and bit-for-bit SHA-256 digest validation |
+| **Control Plane / Signaling** | [FastAPI](https://fastapi.tiangolo.com/) | `0.115+` | High-concurrency async Python WebSocket signaling server, ephemeral memory-only room routing |
+| **Python Toolchain** | [uv](https://github.com/astral-sh/uv) | Latest | Ultra-fast package installer, virtual environment resolver, and script runner |
+| **JS Runtime & Bundler** | [Bun](https://bun.sh/) | `1.3+` | High-speed JavaScript runtime, package manager, and native unit test execution engine |
 
 ---
 
@@ -185,6 +210,9 @@ graph TD
    - `Bitfield.ts`: Compact bit-array tracking chunk possession across peers.
    - `Scheduler.ts`: Implements rarest-first chunk prioritization, preventing peer starvation in multi-peer swarm environments.
    - **End-Game Mode**: Requests remaining 5% missing chunks in parallel from all connected nodes to eliminate tail latency.
+5. **Reactive State & Modern Design System (`frontend/src/`)**:
+   - **Zustand (`features/mesh/peerStore.ts`)**: Decouples UI rendering from high-frequency WebRTC binary packet arrival (hundreds of chunks/sec). Components subscribe only to granular slice selectors, preventing full-tree React re-renders during peak throughput.
+   - **Tailwind CSS v4 & shadcn/ui (`components/ui/`, `app/globals.css`)**: Built using Tailwind v4's CSS-first `@import "tailwindcss";` pipeline, providing accessible Radix UI dialogs, interactive chunk matrices, speed gauges, and warm amber theme tokens.
 
 ---
 
@@ -239,6 +267,18 @@ All binary packets traveling across DataChannels use a compact, 16-byte protocol
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
 
+### Protocol Header Fields
+
+| Offset (Bytes) | Field | Type | Description |
+|:---:|:---|:---:|:---|
+| `0` | **Magic Byte** | `uint8` | Constant identifier `0x50` (ASCII `'P'`) for instant packet validation. |
+| `1` | **Packet Type** | `uint8` | OpCode determining packet action and payload type (`0x01` – `0x0C`). |
+| `2 - 3` | **File Seq ID** | `uint16` | Sequence identifier mapping chunks to the active file transfer manifest. |
+| `4 - 7` | **Chunk Index** | `uint32` | 0-based chunk index within the file. For ping/pong, holds the microsecond timestamp. |
+| `8 - 11` | **Payload Length** | `uint32` | Length of the subsequent payload in bytes (`0` for control messages). |
+| `12 - 15` | **Timestamp** | `uint32` | Unix epoch timestamp (seconds) or high-resolution clock reading. |
+| `16+` | **Payload** | `binary` | Binary chunk slice (AES-256-GCM encrypted) or JSON-encoded metadata. |
+
 ### Protocol OpCodes
 
 | OpCode | Identifier | Description |
@@ -255,6 +295,13 @@ All binary packets traveling across DataChannels use a compact, 16-byte protocol
 | `0x0B` | `PING` | High-frequency latency measurement probe. |
 | `0x0C` | `PONG` | Heartbeat response returning original timestamp for round-trip latency tracking. |
 
+### Congestion Control & Backpressure (`DataChannelBackpressure`)
+
+WebRTC data channels can drop packets if chunks are dispatched faster than the underlying SCTP socket can flush. ShareNut implements adaptive backpressure:
+- Monitors `RTCDataChannel.bufferedAmount` against high-water marks.
+- Sets `bufferedAmountLowThreshold` to automatically pause chunk encoding until the browser's network buffer drains below the threshold.
+- Eliminates memory ballooning and prevents socket disconnection on gigabit LAN or high-latency mobile networks.
+
 ---
 
 ## Repository Structure
@@ -263,49 +310,88 @@ All binary packets traveling across DataChannels use a compact, 16-byte protocol
 ShareNut/
 ├── backend/                        # Python FastAPI Signaling Service
 │   ├── app/
-│   │   ├── api/v1/                 # REST endpoints (health, network info, LAN streaming)
+│   │   ├── api/v1/                 # REST routing
+│   │   │   ├── api.py              # Primary v1 API router aggregation
+│   │   │   ├── lan_transfer.py     # Local subnet HTTP streaming pipe
+│   │   │   ├── network.py          # Host network and LAN IP route discovery
+│   │   │   └── transfers.py        # File staging & session query endpoints
 │   │   ├── websockets/             # In-memory ephemeral WebRTC signaling engine
 │   │   │   ├── manager.py          # Room lifecycle, peer registry, broadcast dispatch
 │   │   │   └── router.py           # WebSocket route (/ws/transfers/{session_code})
-│   │   ├── config.py               # Pydantic configuration & CORS settings
-│   │   └── main.py                 # FastAPI application & lifespan management
+│   │   ├── config.py               # Pydantic environment configuration & CORS settings
+│   │   ├── main.py                 # FastAPI application definition & lifespan management
+│   │   └── schemas.py              # Signaling message contracts & Pydantic DTOs
+│   ├── .python-version             # Python 3.12 version pinning
 │   ├── pyproject.toml              # Python project metadata (>=3.12)
-│   └── requirements.txt            # Python dependencies
+│   ├── requirements.txt            # Python dependencies
+│   └── uv.lock                     # UV dependency lockfile
 │
 ├── frontend/                       # Next.js 16 + React 19 Client Web Application
-│   ├── public/                     # Static media & illustrations
+│   ├── public/                     # Static media & brand assets
 │   │   ├── images/                 # Architecture diagrams (arch.png, ShareNut.png)
+│   │   ├── favicon.ico             # App favicon
 │   │   └── sharenut-logo.png       # Official ShareNut brand logo
 │   ├── src/
 │   │   ├── app/                    # Next.js App Router (dashboard, about, architecture, transfers)
-│   │   ├── components/             # UI primitives & landing layouts
-│   │   └── features/
-│   │       ├── p2p/                # WebRTC, Bitfield, and Rarest-First Scheduler
-│   │       ├── sharing/            # QR code generator, camera QR scanner, share modals
-│   │       └── transfer/           # Core Transfer Engine
-│   │           ├── components/     # Transfer table, chunk inspector modal, progress gauges
-│   │           └── engine/
-│   │               ├── CryptoEngine.ts # In-flight AES-GCM encryption & SHA-256 hashing
-│   │               ├── ChunkStore.ts   # Origin Private File System (OPFS) direct-to-disk write
-│   │               ├── Chunker.ts      # 64 KB slicing engine & manifest generator
-│   │               ├── TransferEngine.ts# State machine & swarm orchestrator
-│   │               └── web/
-│   │                   ├── BinaryFraming.ts    # 16-byte protocol packing & backpressure
-│   │                   └── WebTransferHandler.ts# WebRTC chunk streaming handler
+│   │   │   ├── about/              # About ShareNut page
+│   │   │   ├── architecture/       # Interactive system architecture page
+│   │   │   ├── dashboard/          # Transfer workspace, active transfers & mesh panels
+│   │   │   ├── devices/            # Mesh devices & peer connection explorer
+│   │   │   ├── faq/                # Frequently asked questions
+│   │   │   ├── privacy/            # Privacy policy & zero-storage guarantees
+│   │   │   ├── security/           # DTLS, Web Cryptography & security architecture
+│   │   │   ├── transfers/          # Transfer views & live telemetry
+│   │   │   ├── globals.css         # Tailwind CSS v4 design system styles
+│   │   │   ├── layout.tsx          # Root layout with fonts & theme provider
+│   │   │   └── page.tsx            # Landing page
+│   │   ├── components/             # Reusable UI primitives & layouts
+│   │   │   ├── landing/            # Hero, features, FAQ, and tech stack landing sections
+│   │   │   ├── layout/             # Application navbar, footer, and navigation shells
+│   │   │   └── ui/                 # Accessible UI components (shadcn/ui & Radix UI)
+│   │   ├── features/               # Modular domain feature engines
+│   │   │   ├── dashboard/          # Quick-action transfer cards & room controls
+│   │   │   ├── mesh/               # Connected devices, live topology & Zustand peerStore
+│   │   │   ├── p2p/                # WebRTC, Bitfield, and Rarest-First Scheduler
+│   │   │   ├── settings/           # Configurable ICE STUN & backpressure stores
+│   │   │   ├── sharing/            # QR code generator, camera QR scanner, share modals
+│   │   │   └── transfer/           # Core Transfer Engine
+│   │   │       ├── components/     # Transfer table, chunk inspector modal, progress gauges
+│   │   │       └── engine/
+│   │   │           ├── lan/        # LAN Turbo Transport & Network Route Prober
+│   │   │           ├── web/        # WebRTC Binary Framing & Transfer Handler
+│   │   │           ├── CancelManager.ts# Transfer cancellation lifecycle
+│   │   │           ├── ChunkStore.ts   # Origin Private File System (OPFS) direct-to-disk write
+│   │   │           ├── Chunker.ts      # 64 KB slicing engine & manifest generator
+│   │   │           ├── CryptoEngine.ts # In-flight AES-GCM encryption & SHA-256 hashing
+│   │   │           ├── EngineContext.tsx# React context provider for transfer engine
+│   │   │           ├── ResumeRegistry.ts# Session recovery registry
+│   │   │           ├── SessionManager.ts# Session code management
+│   │   │           ├── StagingManager.ts# File preparation & staging
+│   │   │           ├── StreamingZip.ts # On-the-fly multi-file ZIP packaging
+│   │   │           ├── TransferEngine.ts# State machine & swarm orchestrator
+│   │   │           └── engineTypes.ts  # Engine type contracts
+│   │   ├── lib/                    # Byte formatting, utils & helper functions
+│   │   ├── services/               # REST API client services (api.ts)
+│   │   └── types/                  # Protocol & data type definitions
+│   ├── bun.lock                    # Bun package lockfile
+│   ├── eslint.config.mjs           # ESLint configuration
+│   ├── next.config.ts              # Next.js configuration & API rewrites
 │   ├── package.json                # Frontend dependencies
+│   ├── postcss.config.mjs          # PostCSS configuration
 │   └── tsconfig.json               # TypeScript configuration
 │
 ├── tests/                          # Automated Verification Suite
 │   ├── CryptoEngine.test.ts        # Unit test: AES-GCM streaming encryption & SHA-256 digests
 │   └── browser_mesh/               # Playwright multi-browser headless swarm test
+│       ├── bun.lock                # Lockfile for test runner dependencies
+│       ├── generate_payload.ts     # Deterministic binary payload generator
+│       ├── package.json            # Test runner dependencies
 │       ├── run_mesh_browser_test.ts# Multi-peer automated transfer simulation
-│       ├── runner.mjs              # Test runner orchestration script
-│       └── generate_payload.ts     # Deterministic binary payload generator
+│       └── runner.mjs              # Test runner orchestration script
 │
-├── start.ps1                       # One-click Windows PowerShell dev launcher
-├── clean-cache.ps1                 # Deep cache cleaner (OPFS, Bun, Next.js, Python caches)
 ├── .env.example                    # Environment variable template
-└── README.md                       # Platform documentation
+├── README.md                       # Platform documentation
+└── start.ps1                       # One-click Windows PowerShell dev launcher
 ```
 
 ---
@@ -314,7 +400,8 @@ ShareNut/
 
 ### Prerequisites
 
-- **Python 3.12+**
+- **uv** (Fast Python package and project manager)
+- **Python 3.12+** (managed automatically via `uv`)
 - **Bun 1.2+** (or **Node.js 20+**)
 - Modern web browser with OPFS support (Google Chrome, Microsoft Edge, Brave, Mozilla Firefox, or Apple Safari).
 
@@ -335,23 +422,15 @@ ShareNut includes an automated launcher that starts both the backend and fronten
 
 ### Option B: Manual Development Setup
 
-#### 1. Backend Setup
+#### 1. Backend Setup (using uv)
 ```bash
 cd backend
 
-# Create virtual environment
-python -m venv .venv
+# Install locked dependencies using uv
+uv sync
 
-# Activate environment (Windows)
-.\.venv\Scripts\activate
-# Activate environment (macOS/Linux)
-# source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Start signaling server
-python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+# Start FastAPI signaling server
+uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 #### 2. Frontend Setup
@@ -410,14 +489,6 @@ Simulate a live multi-peer file transfer using automated Playwright browser inst
 cd tests/browser_mesh
 bun install
 bun run run_mesh_browser_test.ts
-```
-
-### 4. Deep Cache Cleaner
-
-When testing OPFS storage and WebRTC, persistent browser storage can retain temporary chunks. Run the cleanup script:
-
-```powershell
-.\clean-cache.ps1
 ```
 
 ---
