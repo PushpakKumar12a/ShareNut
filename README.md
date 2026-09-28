@@ -9,13 +9,15 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber.svg?style=flat-square" alt="License: MIT" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-amber.svg?style=flat-square" alt="License: Apache 2.0" /></a>
   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-black?style=flat-square&logo=next.js" alt="Next.js" /></a>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-149eca?style=flat-square&logo=react" alt="React" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-443e38?style=flat-square&logo=tailwindcss" alt="Tailwind CSS" /></a>
   <a href="https://ui.shadcn.com/"><img src="https://img.shields.io/badge/shadcn%2Fui-000000?style=flat-square&logo=shadcnui" alt="shadcn/ui" /></a>
   <a href="https://github.com/pmndrs/zustand"><img src="https://img.shields.io/badge/Zustand-443e38?style=flat-square&logo=react" alt="Zustand" /></a>
-  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi" alt="FastAPI" /></a>
+  <a href="https://fastapi.tiangolo.com/">
+    <img src="https://img.shields.io/badge/FastAPI-000000?style=flat-square&logo=fastapi&logoColor=white" alt="FastAPI" />
+  </a>
   <a href="https://webrtc.org/"><img src="https://img.shields.io/badge/WebRTC-333333?style=flat-square&logo=webrtc" alt="WebRTC" /></a>
   <a href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto"><img src="https://img.shields.io/badge/Web_Crypto_API-blueviolet?style=flat-square" alt="Web Crypto API" /></a>
   <a href="https://web.dev/articles/origin-private-file-system"><img src="https://img.shields.io/badge/OPFS_Storage-emerald?style=flat-square" alt="OPFS Storage" /></a>
@@ -79,19 +81,19 @@ Engineered with a **BitTorrent-inspired swarm architecture**, files are divided 
 
 ## Tech Stack
 
-| Layer | Technology | Version / Spec | Purpose |
-|:---|:---|:---|:---|
-| **Frontend Framework** | [Next.js](https://nextjs.org/) | `16.3` (App Router) | High-performance React framework with Turbopack compilation and client-side streaming |
-| **UI Library** | [React](https://react.dev/) | `19.2` | Component architecture leveraging concurrent rendering primitives |
-| **Design System & Styling** | [Tailwind CSS](https://tailwindcss.com/) | `v4.0` (`@tailwindcss/postcss`) | CSS-first architecture using `@import "tailwindcss";`, `@theme inline` variables, and zero runtime CSS overhead |
-| **Accessible UI Primitives** | [shadcn/ui](https://ui.shadcn.com/) | Radix UI Primitives | Accessible dialogs, dropdown menus, progress bars, switches, badges, data tables, and Lucide React icons |
-| **Client State Management** | [Zustand](https://github.com/pmndrs/zustand) | `v5.0` | High-speed reactive store orchestrating peer discovery, room lifecycle, and live telemetry without render bottlenecks |
-| **P2P Transport** | [WebRTC](https://webrtc.org/) | SCTP `RTCDataChannel` | Direct browser-to-browser encrypted data plane with zero intermediate server relays |
-| **Local Storage Engine** | [Origin Private File System (OPFS)](https://web.dev/articles/origin-private-file-system) | W3C File System Access API | Random-access streaming directly to disk via `FileSystemWritableFileStream` with flat memory footprint |
-| **In-Flight Cryptography** | [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto) | Hardware `SubtleCrypto` | Native AES-256-GCM chunk encryption with isolated 12-byte IVs and bit-for-bit SHA-256 digest validation |
-| **Control Plane / Signaling** | [FastAPI](https://fastapi.tiangolo.com/) | `0.115+` | High-concurrency async Python WebSocket signaling server, ephemeral memory-only room routing |
-| **Python Toolchain** | [uv](https://github.com/astral-sh/uv) | Latest | Ultra-fast package installer, virtual environment resolver, and script runner |
-| **JS Runtime & Bundler** | [Bun](https://bun.sh/) | `1.3+` | High-speed JavaScript runtime, package manager, and native unit test execution engine |
+| Layer                         | Technology                                                                               | Version / Spec                  | Purpose                                                                                                               |
+| :---------------------------- | :--------------------------------------------------------------------------------------- | :------------------------------ | :-------------------------------------------------------------------------------------------------------------------- |
+| **Frontend Framework**        | [Next.js](https://nextjs.org/)                                                           | `16.3` (App Router)             | High-performance React framework with Turbopack compilation and client-side streaming                                 |
+| **UI Library**                | [React](https://react.dev/)                                                              | `19.2`                          | Component architecture leveraging concurrent rendering primitives                                                     |
+| **Design System & Styling**   | [Tailwind CSS](https://tailwindcss.com/)                                                 | `v4.0` (`@tailwindcss/postcss`) | CSS-first architecture using `@import "tailwindcss";`, `@theme inline` variables, and zero runtime CSS overhead       |
+| **Accessible UI Primitives**  | [shadcn/ui](https://ui.shadcn.com/)                                                      | Radix UI Primitives             | Accessible dialogs, dropdown menus, progress bars, switches, badges, data tables, and Lucide React icons              |
+| **Client State Management**   | [Zustand](https://github.com/pmndrs/zustand)                                             | `v5.0`                          | High-speed reactive store orchestrating peer discovery, room lifecycle, and live telemetry without render bottlenecks |
+| **P2P Transport**             | [WebRTC](https://webrtc.org/)                                                            | SCTP `RTCDataChannel`           | Direct browser-to-browser encrypted data plane with zero intermediate server relays                                   |
+| **Local Storage Engine**      | [Origin Private File System (OPFS)](https://web.dev/articles/origin-private-file-system) | W3C File System Access API      | Random-access streaming directly to disk via `FileSystemWritableFileStream` with flat memory footprint                |
+| **In-Flight Cryptography**    | [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto)          | Hardware `SubtleCrypto`         | Native AES-256-GCM chunk encryption with isolated 12-byte IVs and bit-for-bit SHA-256 digest validation               |
+| **Control Plane / Signaling** | [FastAPI](https://fastapi.tiangolo.com/)                                                 | `0.115+`                        | High-concurrency async Python WebSocket signaling server, ephemeral memory-only room routing                          |
+| **Python Toolchain**          | [uv](https://github.com/astral-sh/uv)                                                    | Latest                          | Ultra-fast package installer, virtual environment resolver, and script runner                                         |
+| **JS Runtime & Bundler**      | [Bun](https://bun.sh/)                                                                   | `1.3+`                          | High-speed JavaScript runtime, package manager, and native unit test execution engine                                 |
 
 ---
 
@@ -115,14 +117,16 @@ Engineered with a **BitTorrent-inspired swarm architecture**, files are divided 
 ### 3. Interrupted Transfer Recovery (Resume Engine)
 
 If your Wi-Fi disconnects or your browser tab is accidentally refreshed:
+
 1. Re-open the Dashboard and join the same session code.
 2. ShareNut automatically detects existing partial chunks stored in OPFS (`ShareNut_opfs_{fileId}.bin`).
-3. The engine verifies the online presence of the sender peer and sends delta `REQUEST_CHUNK` packets *only* for missing byte offsets.
+3. The engine verifies the online presence of the sender peer and sends delta `REQUEST_CHUNK` packets _only_ for missing byte offsets.
 4. The transfer seamlessly picks up exactly where it paused without re-downloading completed chunks.
 
 ### 4. Inspecting Chunks & Real-Time Telemetry
 
 Click **Inspect Chunks** on any ongoing or completed transfer:
+
 - **Visual Chunk Grid**: View every 64 KB chunk color-coded by state (`Verified`, `In-Flight`, `Pending`).
 - **Cryptographic Audit**: Click any chunk to view its exact byte offset, slice length, and verified **SHA-256 hex digest**.
 - **Copy Digest**: One-click copy chunk digests for bit-for-bit manual verification.
@@ -185,13 +189,13 @@ graph TD
 
 ### Control Plane vs. Data Plane
 
-| Feature | Control Plane | Data Plane |
-|:---|:---|:---|
-| **Protocol** | WebSockets over TLS (`wss://`) | WebRTC SCTP DataChannels (`RTCDataChannel`) / HTTP LAN Stream |
-| **Server Role** | Ephemeral signaling relay | **None** (Bypasses server completely) |
-| **Payload Storage** | Zero bytes stored; in-memory rooms destroyed on disconnect | Direct-to-disk streaming inside client OPFS |
-| **Data Handled** | JSON signaling: `JOIN`, `OFFER`, `ANSWER`, `ICE_CANDIDATE` | Binary 16-byte framed packets containing encrypted 64 KB slices |
-| **Bandwidth Cost** | Kilobytes of text metadata | Unthrottled direct peer network capacity |
+| Feature             | Control Plane                                              | Data Plane                                                      |
+| :------------------ | :--------------------------------------------------------- | :-------------------------------------------------------------- |
+| **Protocol**        | WebSockets over TLS (`wss://`)                             | WebRTC SCTP DataChannels (`RTCDataChannel`) / HTTP LAN Stream   |
+| **Server Role**     | Ephemeral signaling relay                                  | **None** (Bypasses server completely)                           |
+| **Payload Storage** | Zero bytes stored; in-memory rooms destroyed on disconnect | Direct-to-disk streaming inside client OPFS                     |
+| **Data Handled**    | JSON signaling: `JOIN`, `OFFER`, `ANSWER`, `ICE_CANDIDATE` | Binary 16-byte framed packets containing encrypted 64 KB slices |
+| **Bandwidth Cost**  | Kilobytes of text metadata                                 | Unthrottled direct peer network capacity                        |
 
 ### Subsystem Deep Dives
 
@@ -234,6 +238,7 @@ Every chunk is individually encrypted prior to transmission using the browser's 
 ### Bit-for-Bit SHA-256 Integrity Verification
 
 Upon receiving and decrypting each chunk, `CryptoEngine.computeSha256` computes its cryptographic digest:
+
 - The receiver compares the chunk digest against the sender's manifest.
 - Mismatched or corrupted chunks are rejected and re-requested.
 - Guarantees 100% bit-for-bit file delivery across any network route.
@@ -269,35 +274,36 @@ All binary packets traveling across DataChannels use a compact, 16-byte protocol
 
 ### Protocol Header Fields
 
-| Offset (Bytes) | Field | Type | Description |
-|:---:|:---|:---:|:---|
-| `0` | **Magic Byte** | `uint8` | Constant identifier `0x50` (ASCII `'P'`) for instant packet validation. |
-| `1` | **Packet Type** | `uint8` | OpCode determining packet action and payload type (`0x01` – `0x0C`). |
-| `2 - 3` | **File Seq ID** | `uint16` | Sequence identifier mapping chunks to the active file transfer manifest. |
-| `4 - 7` | **Chunk Index** | `uint32` | 0-based chunk index within the file. For ping/pong, holds the microsecond timestamp. |
-| `8 - 11` | **Payload Length** | `uint32` | Length of the subsequent payload in bytes (`0` for control messages). |
-| `12 - 15` | **Timestamp** | `uint32` | Unix epoch timestamp (seconds) or high-resolution clock reading. |
-| `16+` | **Payload** | `binary` | Binary chunk slice (AES-256-GCM encrypted) or JSON-encoded metadata. |
+| Offset (Bytes) | Field              |   Type   | Description                                                                          |
+| :------------: | :----------------- | :------: | :----------------------------------------------------------------------------------- |
+|      `0`       | **Magic Byte**     | `uint8`  | Constant identifier `0x50` (ASCII `'P'`) for instant packet validation.              |
+|      `1`       | **Packet Type**    | `uint8`  | OpCode determining packet action and payload type (`0x01` – `0x0C`).                 |
+|    `2 - 3`     | **File Seq ID**    | `uint16` | Sequence identifier mapping chunks to the active file transfer manifest.             |
+|    `4 - 7`     | **Chunk Index**    | `uint32` | 0-based chunk index within the file. For ping/pong, holds the microsecond timestamp. |
+|    `8 - 11`    | **Payload Length** | `uint32` | Length of the subsequent payload in bytes (`0` for control messages).                |
+|   `12 - 15`    | **Timestamp**      | `uint32` | Unix epoch timestamp (seconds) or high-resolution clock reading.                     |
+|     `16+`      | **Payload**        | `binary` | Binary chunk slice (AES-256-GCM encrypted) or JSON-encoded metadata.                 |
 
 ### Protocol OpCodes
 
-| OpCode | Identifier | Description |
-|:---:|:---|:---|
-| `0x01` | `CHUNK_DATA` | Carries sliced binary chunk data (AES-GCM encrypted payload). |
-| `0x02` | `MANIFEST` | Broadcasts file metadata (name, byte size, MIME type, chunk count, hashes). |
-| `0x03` | `REQUEST_CHUNK` | Targeted request from receiver to peer for a specific chunk index. |
-| `0x04` | `HAVE_CHUNK` | Broadcast informing peers that a specific chunk index is verified and ready for seeder sharing. |
-| `0x05` | `TRANSFER_PAUSE` | Signals transfer pause request across the peer channel. |
-| `0x07` | `TRANSFER_COMPLETE`| Terminal handshake acknowledging full file receipt and disk flush. |
-| `0x08` | `TRANSFER_CANCEL` | Abort signal tearing down session state and cleaning temporary files. |
-| `0x09` | `LAN_MANIFEST` | Manifest exchange for high-speed same-network HTTP streaming. |
-| `0x0A` | `LAN_PROGRESS` | Progress lockstep synchronization for LAN transfers. |
-| `0x0B` | `PING` | High-frequency latency measurement probe. |
-| `0x0C` | `PONG` | Heartbeat response returning original timestamp for round-trip latency tracking. |
+| OpCode | Identifier          | Description                                                                                     |
+| :----: | :------------------ | :---------------------------------------------------------------------------------------------- |
+| `0x01` | `CHUNK_DATA`        | Carries sliced binary chunk data (AES-GCM encrypted payload).                                   |
+| `0x02` | `MANIFEST`          | Broadcasts file metadata (name, byte size, MIME type, chunk count, hashes).                     |
+| `0x03` | `REQUEST_CHUNK`     | Targeted request from receiver to peer for a specific chunk index.                              |
+| `0x04` | `HAVE_CHUNK`        | Broadcast informing peers that a specific chunk index is verified and ready for seeder sharing. |
+| `0x05` | `TRANSFER_PAUSE`    | Signals transfer pause request across the peer channel.                                         |
+| `0x07` | `TRANSFER_COMPLETE` | Terminal handshake acknowledging full file receipt and disk flush.                              |
+| `0x08` | `TRANSFER_CANCEL`   | Abort signal tearing down session state and cleaning temporary files.                           |
+| `0x09` | `LAN_MANIFEST`      | Manifest exchange for high-speed same-network HTTP streaming.                                   |
+| `0x0A` | `LAN_PROGRESS`      | Progress lockstep synchronization for LAN transfers.                                            |
+| `0x0B` | `PING`              | High-frequency latency measurement probe.                                                       |
+| `0x0C` | `PONG`              | Heartbeat response returning original timestamp for round-trip latency tracking.                |
 
 ### Congestion Control & Backpressure (`DataChannelBackpressure`)
 
 WebRTC data channels can drop packets if chunks are dispatched faster than the underlying SCTP socket can flush. ShareNut implements adaptive backpressure:
+
 - Monitors `RTCDataChannel.bufferedAmount` against high-water marks.
 - Sets `bufferedAmountLowThreshold` to automatically pause chunk encoding until the browser's network buffer drains below the threshold.
 - Eliminates memory ballooning and prevents socket disconnection on gigabit LAN or high-latency mobile networks.
@@ -390,6 +396,7 @@ ShareNut/
 │       └── runner.mjs              # Test runner orchestration script
 │
 ├── .env.example                    # Environment variable template
+├── LICENSE                         # Apache 2.0 open-source license
 ├── README.md                       # Platform documentation
 └── start.ps1                       # One-click Windows PowerShell dev launcher
 ```
@@ -423,6 +430,7 @@ ShareNut includes an automated launcher that starts both the backend and fronten
 ### Option B: Manual Development Setup
 
 #### 1. Backend Setup (using uv)
+
 ```bash
 cd backend
 
@@ -434,6 +442,7 @@ uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 #### 2. Frontend Setup
+
 ```bash
 cd frontend
 
@@ -461,6 +470,7 @@ bun test tests/CryptoEngine.test.ts
 ```
 
 Output:
+
 ```text
 tests/CryptoEngine.test.ts:
 ✓ CryptoEngine > encrypts and decrypts a 64 KB chunk bit-for-bit
@@ -497,14 +507,14 @@ bun run run_mesh_browser_test.ts
 
 Deploying ShareNut across the internet involves deploying the frontend to a global edge CDN and hosting the backend on a persistent WebSocket-capable host:
 
-| Service | Recommended Host | Configuration |
-|:---|:---|:---|
-| **Frontend** | **Vercel** or **Netlify** | Set `NEXT_PUBLIC_API_URL=https://api.yourdomain.com/api`<br/>Set `NEXT_PUBLIC_WS_URL=wss://api.yourdomain.com/ws` |
-| **Backend** | **Render**, **Railway**, or **Fly.io** | Set `CORS_ORIGINS=https://your-frontend.vercel.app`<br/>Runs 24/7 with persistent WebSockets (`wss://`) |
-| **STUN Discovery** | **Google STUN** (Default) | Built into `DEFAULT_ICE_SERVERS` (`stun.l.google.com:19302`) with no external setup required |
+| Service            | Recommended Host                       | Configuration                                                                                                     |
+| :----------------- | :------------------------------------- | :---------------------------------------------------------------------------------------------------------------- |
+| **Frontend**       | **Vercel** or **Netlify**              | Set `NEXT_PUBLIC_API_URL=https://api.yourdomain.com/api`<br/>Set `NEXT_PUBLIC_WS_URL=wss://api.yourdomain.com/ws` |
+| **Backend**        | **Render**, **Railway**, or **Fly.io** | Set `CORS_ORIGINS=https://your-frontend.vercel.app`<br/>Runs 24/7 with persistent WebSockets (`wss://`)           |
+| **STUN Discovery** | **Google STUN** (Default)              | Built into `DEFAULT_ICE_SERVERS` (`stun.l.google.com:19302`) with no external setup required                      |
 
 ---
 
 ## License
 
-Distributed under the [MIT License](LICENSE). Built for high-performance, decentralized, private data transfer.
+Distributed under the [Apache 2.0 License](LICENSE). Built for high-performance, decentralized, private data transfer.
