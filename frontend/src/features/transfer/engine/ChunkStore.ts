@@ -7,6 +7,8 @@ export class ChunkStore {
   private opfsHandles: Map<string, FileSystemFileHandle> = new Map();
   private opfsWriteQueues: Map<string, Promise<void>> = new Map();
   private opfsClosingPromises: Map<string, Promise<void>> = new Map();
+  private memoryChunks: Map<string, Map<number, ArrayBuffer>> = new Map();
+  private readonly maxMemoryChunksPerFile = 192;
 
   public isOpfsSupported(): boolean {
     return (
@@ -116,12 +118,44 @@ export class ChunkStore {
     }
   }
 
+  public hasMemoryChunk(fileId: string, chunkIndex: number): boolean {
+    return Boolean(this.memoryChunks.get(fileId)?.has(chunkIndex));
+  }
+
+  public getMemoryChunk(
+    fileId: string,
+    chunkIndex: number,
+  ): ArrayBuffer | null {
+    const fileCache = this.memoryChunks.get(fileId);
+    if (!fileCache) return null;
+    const chunkData = fileCache.get(chunkIndex);
+    if (!chunkData) return null;
+
+    fileCache.delete(chunkIndex);
+    fileCache.set(chunkIndex, chunkData);
+    return chunkData;
+  }
+
   public async saveChunk(
     fileId: string,
     chunkIndex: number,
     data: ArrayBuffer,
     chunkSize: number = DEFAULT_CHUNK_SIZE,
   ): Promise<void> {
+    let fileCache = this.memoryChunks.get(fileId);
+    if (!fileCache) {
+      fileCache = new Map<number, ArrayBuffer>();
+      this.memoryChunks.set(fileId, fileCache);
+    }
+    fileCache.delete(chunkIndex);
+    fileCache.set(chunkIndex, data);
+    if (fileCache.size > this.maxMemoryChunksPerFile) {
+      const oldestKey = fileCache.keys().next().value;
+      if (oldestKey !== undefined) {
+        fileCache.delete(oldestKey);
+      }
+    }
+
     const byteOffset = chunkIndex * chunkSize;
     return this.enqueueOpfsWrite(fileId, async () => {
       const root = await this.getOpfsRoot();
@@ -146,6 +180,11 @@ export class ChunkStore {
     chunkIndex: number,
     chunkSize: number = DEFAULT_CHUNK_SIZE,
   ): Promise<ArrayBuffer | null> {
+    const cached = this.getMemoryChunk(fileId, chunkIndex);
+    if (cached) {
+      return cached;
+    }
+
     const root = await this.getOpfsRoot();
     if (root) {
       try {
@@ -212,6 +251,7 @@ export class ChunkStore {
   }
 
   public async clearFileChunks(fileId: string): Promise<void> {
+    this.memoryChunks.delete(fileId);
     await this.closeOpfsWritable(fileId);
 
     const root = await this.getOpfsRoot();
@@ -221,7 +261,7 @@ export class ChunkStore {
         await root.removeEntry(sanitizedName);
         this.opfsHandles.delete(fileId);
         console.log(`[ChunkStore] Purged OPFS file: ${sanitizedName}`);
-      } catch (err) {
+      } catch {
         // Entry may already be removed
       }
     }

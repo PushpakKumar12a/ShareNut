@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePeerStore } from "@/features/mesh/peerStore";
 import { useEngineState, useTransferEngine } from "@/features/transfer/engine/EngineContext";
+import { useModalStore } from "@/features/ui/modalStore";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { TopTransferActionCards } from "@/features/dashboard/ActionCards";
 import { ConnectedMeshPanel, type PeerMeshItem } from "@/features/mesh/MeshPanel";
@@ -56,8 +57,12 @@ function DashboardContent() {
   const engineState = useEngineState();
 
   const [activeSessionCode, setActiveSessionCode] = useState<string>("");
-  const [isQrScannerOpen, setIsQrScannerOpen] = useState(false);
-  const [isShareOpen, setIsShareOpen] = useState(false);
+  const isShareOpen = useModalStore((state) => state.isShareOpen);
+  const isQrScannerOpen = useModalStore((state) => state.isQrScannerOpen);
+  const openShare = useModalStore((state) => state.openShare);
+  const closeShare = useModalStore((state) => state.closeShare);
+  const openQrScanner = useModalStore((state) => state.openQrScanner);
+  const closeQrScanner = useModalStore((state) => state.closeQrScanner);
   const [sessionInitialized, setSessionInitialized] = useState(false);
 
   useEffect(() => {
@@ -145,7 +150,7 @@ function DashboardContent() {
   };
 
   const handleOpenShare = () => {
-    setIsShareOpen(true);
+    openShare(currentSessionCode);
   };
 
   const currentSessionCode = activeSessionCode || engineState.sessionCode || "NUT-ROOM1";
@@ -190,7 +195,7 @@ function DashboardContent() {
             onSelectFiles={handleSelectFiles}
             activeFileId={engineState.activeFiles[0]?.fileId}
             onJoinSession={(code) => initSession(code)}
-            onOpenQrScanner={() => setIsQrScannerOpen(true)}
+            onOpenQrScanner={() => openQrScanner()}
           />
 
           <div className="hidden lg:block h-full">
@@ -221,14 +226,14 @@ function DashboardContent() {
 
       <QrScannerDialog
         isOpen={isQrScannerOpen}
-        onClose={() => setIsQrScannerOpen(false)}
+        onClose={closeQrScanner}
         onScanSuccess={(code: string) => initSession(code)}
       />
 
       <ShareSessionDialog
         sessionCode={currentSessionCode}
         isOpen={isShareOpen}
-        onClose={() => setIsShareOpen(false)}
+        onClose={closeShare}
       />
     </div>
   );

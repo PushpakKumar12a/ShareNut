@@ -1,7 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useState, type ReactNode } from "react";
 import { getTransferEngine, TransferEngine, type EngineState } from "@/features/transfer/engine/TransferEngine";
+import { useEngineStore, useEngineState } from "./engineStore";
+
+export { useEngineStore, useEngineState };
+export type { EngineState };
 
 const EngineContext = createContext<TransferEngine | null>(null);
 
@@ -18,20 +22,7 @@ export function EngineProvider({ children }: { children: ReactNode }) {
 export function useTransferEngine(): TransferEngine {
   const engine = useContext(EngineContext);
   if (!engine) {
-    throw new Error("useTransferEngine must be used within an EngineProvider");
+    return getTransferEngine();
   }
   return engine;
-}
-
-export function useEngineState(): EngineState {
-  const engine = useTransferEngine();
-  const [state, setState] = useState<EngineState>(() => engine.getState());
-
-  useEffect(() => {
-    return engine.subscribe((newState) => {
-      setState(newState);
-    });
-  }, [engine]);
-
-  return state;
 }

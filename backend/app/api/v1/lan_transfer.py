@@ -51,19 +51,20 @@ async def prepare_upload(payload: PrepareUploadRequest) -> PrepareUploadResponse
     session_id = f"lan-sess-{uuid.uuid4().hex[:12]}"
     file_tokens: dict[str, str] = {}
     file_chunks: dict[str, list[bytes]] = {}
-    file_events: dict[str, asyncio.Event] = {}
+    file_conditions: dict[str, asyncio.Condition] = {}
 
     for file_id in payload.files.keys():
         file_tokens[file_id] = f"tok-{uuid.uuid4().hex[:8]}"
         file_chunks[file_id] = []
-        file_events[file_id] = asyncio.Event()
+        file_conditions[file_id] = asyncio.Condition()
 
     active_sessions[session_id] = {
         "info": payload.info.model_dump(),
         "files": {fid: f.model_dump() for fid, f in payload.files.items()},
         "tokens": file_tokens,
         "chunks": file_chunks,
-        "events": file_events,
+        "conditions": file_conditions,
+        "events": file_conditions,
         "received_bytes": {fid: 0 for fid in payload.files.keys()},
         "completed": {fid: False for fid in payload.files.keys()},
         "room": payload.room.upper() if payload.room else None,
@@ -102,8 +103,8 @@ async def upload_stream(
         raise HTTPException(status_code=404, detail="File metadata not found")
 
     chunks = session["chunks"].get(fileId)
-    event = session["events"].get(fileId)
-    if chunks is None or event is None:
+    condition = session.get("conditions", {}).get(fileId)
+    if chunks is None or condition is None:
         raise HTTPException(status_code=500, detail="Streaming buffer not found")
 
     received = 0
@@ -118,11 +119,13 @@ async def upload_stream(
                 session["received_bytes"][fileId] = received
                 if received - last_flush_bytes >= FLUSH_THRESHOLD:
                     last_flush_bytes = received
-                    event.set()
+                    async with condition:
+                        condition.notify_all()
                     await asyncio.sleep(0)
     finally:
         session["completed"][fileId] = True
-        event.set()
+        async with condition:
+            condition.notify_all()
 
     logger.info(
         f"[ShareNut Live Pipe] Finished streaming '{file_meta['fileName']}' ({received}/{file_meta['size']} B)"
@@ -152,8 +155,8 @@ async def download_file(
         raise HTTPException(status_code=404, detail="File metadata not found in session")
 
     chunks = session["chunks"].get(file_id)
-    event = session["events"].get(file_id)
-    if chunks is None or event is None:
+    condition = session.get("conditions", {}).get(file_id)
+    if chunks is None or condition is None:
         raise HTTPException(status_code=500, detail="Live streaming buffer not found")
 
     async def live_pipe_generator() -> AsyncGenerator[bytes, None]:
@@ -165,22 +168,22 @@ async def download_file(
                     chunk_idx += 1
                     yield chunk
 
-                if session["completed"].get(file_id, False):
-                    while chunk_idx < len(chunks):
-                        chunk = chunks[chunk_idx]
-                        chunk_idx += 1
-                        yield chunk
+                if session["completed"].get(file_id, False) and chunk_idx >= len(chunks):
                     break
 
-                event.clear()
-                if chunk_idx < len(chunks):
-                    continue
-
-                try:
-                    await asyncio.wait_for(event.wait(), timeout=60.0)
-                except asyncio.TimeoutError:
-                    logger.warning(f"[ShareNut Live Pipe] Stream timeout for file {file_id}")
-                    break
+                async with condition:
+                    if chunk_idx >= len(chunks) and not session["completed"].get(file_id, False):
+                        try:
+                            await asyncio.wait_for(
+                                condition.wait_for(
+                                    lambda: chunk_idx < len(chunks)
+                                    or session["completed"].get(file_id, False)
+                                ),
+                                timeout=60.0,
+                            )
+                        except asyncio.TimeoutError:
+                            logger.warning(f"[ShareNut Live Pipe] Stream timeout for file {file_id}")
+                            break
         except (asyncio.CancelledError, GeneratorExit):
             logger.info(f"[ShareNut Live Pipe] Receiver disconnected early for file {file_id}")
 
@@ -255,9 +258,13 @@ async def cancel_session(sessionId: str = Query(..., alias="sessionId")) -> dict
     if sessionId in active_sessions:
         s = active_sessions[sessionId]
 
-        for ev in s.get("events", {}).values():
+        for cond in s.get("conditions", {}).values():
             try:
-                ev.set()
+                if isinstance(cond, asyncio.Condition):
+                    async with cond:
+                        cond.notify_all()
+                elif hasattr(cond, "set"):
+                    cond.set()
             except Exception:
                 pass
         del active_sessions[sessionId]

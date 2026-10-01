@@ -1,3 +1,7 @@
+"use client";
+
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import {
   NetworkRouteDetector,
   type TransportRoute,
@@ -10,9 +14,7 @@ export interface ShareNutSettings {
   chunkSize: number;
   concurrency: number;
   backpressureLimit: number;
-
   lanDirectMode?: boolean;
-
   transportMode: TransportModeSetting;
 }
 
@@ -34,32 +36,68 @@ export const DEFAULT_SETTINGS: ShareNutSettings = {
   transportMode: "auto",
 };
 
-export function loadSettings(): ShareNutSettings {
-  return DEFAULT_SETTINGS;
+export interface SettingsStoreState extends ShareNutSettings {
+  setTransportMode: (mode: TransportModeSetting) => void;
+  setConcurrency: (concurrency: number) => void;
+  setChunkSize: (chunkSize: number) => void;
+  setStunServers: (servers: string[]) => void;
+  setLanDirectMode: (enabled: boolean) => void;
+  resetSettings: () => void;
 }
 
-export function saveSettings(): ShareNutSettings {
-  return DEFAULT_SETTINGS;
+export const useSettingsStore = create<SettingsStoreState>()(
+  persist(
+    (set) => ({
+      ...DEFAULT_SETTINGS,
+      setTransportMode: (mode) => set({ transportMode: mode }),
+      setConcurrency: (concurrency) => set({ concurrency }),
+      setChunkSize: (chunkSize) => set({ chunkSize }),
+      setStunServers: (servers) => set({ stunServers: servers }),
+      setLanDirectMode: (enabled) => set({ lanDirectMode: enabled }),
+      resetSettings: () => set(DEFAULT_SETTINGS),
+    }),
+    {
+      name: "ShareNut_settings",
+      storage: createJSONStorage(() =>
+        typeof window !== "undefined"
+          ? localStorage
+          : {
+              getItem: () => null,
+              setItem: () => {},
+              removeItem: () => {},
+            },
+      ),
+    },
+  ),
+);
+
+export function loadSettings(): ShareNutSettings {
+  return useSettingsStore.getState();
+}
+
+export function saveSettings(settings: Partial<ShareNutSettings>): ShareNutSettings {
+  useSettingsStore.setState(settings);
+  return useSettingsStore.getState();
 }
 
 export function getIceServers(): RTCIceServer[] {
-  return DEFAULT_SETTINGS.stunServers.map((url) => ({ urls: url }));
+  return useSettingsStore.getState().stunServers.map((url) => ({ urls: url }));
 }
 
 export function getConfiguredChunkSize(): number {
-  return BEST_CHUNK_SIZE;
+  return useSettingsStore.getState().chunkSize || BEST_CHUNK_SIZE;
 }
 
 export function getConfiguredConcurrency(): number {
-  return BEST_CONCURRENCY;
+  return useSettingsStore.getState().concurrency || BEST_CONCURRENCY;
 }
 
 export function getConfiguredBackpressureLimit(): number {
-  return BEST_BACKPRESSURE_LIMIT;
+  return useSettingsStore.getState().backpressureLimit || BEST_BACKPRESSURE_LIMIT;
 }
 
 export function getTransportMode(): TransportModeSetting {
-  return DEFAULT_SETTINGS.transportMode;
+  return useSettingsStore.getState().transportMode;
 }
 
 export function getEffectiveTransportRoute(): TransportRoute {

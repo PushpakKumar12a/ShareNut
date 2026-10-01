@@ -10,7 +10,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { get } from "@/services/api";
 
 interface ShareSessionDialogProps {
   sessionCode: string;
@@ -59,10 +58,11 @@ export function ShareSessionDialog({
 
   useEffect(() => {
     if (isOpen) {
-      get<{ lan_ip: string }>("/v1/network/info")
-        .then((res) => {
-          if (res?.lan_ip && res.lan_ip !== "127.0.0.1") {
-            setLanIp(res.lan_ip);
+      fetch("/api/v1/network/info")
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data: { lan_ip?: string } | null) => {
+          if (data?.lan_ip && data.lan_ip !== "127.0.0.1") {
+            setLanIp(data.lan_ip);
           }
         })
         .catch(() => {});

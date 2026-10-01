@@ -6,7 +6,7 @@ from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
 from app.schemas import SignalingEventType, SignalingMessage
 from app.websockets.manager import signaling_manager
 
-logger = logging.getLogger("p2sync.ws")
+logger = logging.getLogger("ShareNut.ws")
 router = APIRouter()
 
 @router.websocket("/ws/transfers/{session_code}")

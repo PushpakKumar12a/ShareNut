@@ -23,7 +23,6 @@ import {
 } from "./transferUtils";
 
 export type { TransfersTableProps } from "./transferUtils";
-export { OngoingTransfersTable } from "./OngoingTransfersTable";
 
 export function TransferActivityHub({
   activeFiles = [],

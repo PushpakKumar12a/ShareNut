@@ -12,6 +12,7 @@ export enum PacketType {
   LAN_PROGRESS = 0x0a,
   PING = 0x0b,
   PONG = 0x0c,
+  CHUNK_UNAVAILABLE = 0x0d,
 }
 
 const MAGIC_BYTE = 0x50;
@@ -23,6 +24,7 @@ export interface DecodedPacket {
   chunkIndex: number;
   payloadLength: number;
   payload: ArrayBuffer;
+  requestId: number;
 }
 
 export class BinaryFraming {
@@ -30,6 +32,7 @@ export class BinaryFraming {
     fileSeqId: number,
     chunkIndex: number,
     chunkData: ArrayBuffer,
+    requestId: number = 0,
   ): ArrayBuffer {
     const totalLength = HEADER_SIZE + chunkData.byteLength;
     const packet = new Uint8Array(totalLength);
@@ -40,7 +43,7 @@ export class BinaryFraming {
     view.setUint16(2, fileSeqId);
     view.setUint32(4, chunkIndex);
     view.setUint32(8, chunkData.byteLength);
-    view.setUint32(12, Math.floor(Date.now() / 1000));
+    view.setUint32(12, requestId >>> 0);
 
     packet.set(new Uint8Array(chunkData), HEADER_SIZE);
     return packet.buffer as ArrayBuffer;
@@ -71,6 +74,7 @@ export class BinaryFraming {
   public static encodeRequestChunk(
     fileSeqId: number,
     chunkIndex: number,
+    requestId: number = 0,
   ): ArrayBuffer {
     const packet = new Uint8Array(HEADER_SIZE);
     const view = new DataView(packet.buffer);
@@ -80,7 +84,25 @@ export class BinaryFraming {
     view.setUint16(2, fileSeqId);
     view.setUint32(4, chunkIndex);
     view.setUint32(8, 0);
-    view.setUint32(12, 0);
+    view.setUint32(12, requestId >>> 0);
+
+    return packet.buffer as ArrayBuffer;
+  }
+
+  public static encodeChunkUnavailable(
+    fileSeqId: number,
+    chunkIndex: number,
+    requestId: number = 0,
+  ): ArrayBuffer {
+    const packet = new Uint8Array(HEADER_SIZE);
+    const view = new DataView(packet.buffer);
+
+    view.setUint8(0, MAGIC_BYTE);
+    view.setUint8(1, PacketType.CHUNK_UNAVAILABLE);
+    view.setUint16(2, fileSeqId);
+    view.setUint32(4, chunkIndex);
+    view.setUint32(8, 0);
+    view.setUint32(12, requestId >>> 0);
 
     return packet.buffer as ArrayBuffer;
   }
@@ -148,6 +170,7 @@ export class BinaryFraming {
     const fileSeqId = view.getUint16(2);
     const chunkIndex = view.getUint32(4);
     const payloadLength = view.getUint32(8);
+    const requestId = view.getUint32(12);
 
     const payload = buffer.slice(HEADER_SIZE, HEADER_SIZE + payloadLength);
 
@@ -157,6 +180,7 @@ export class BinaryFraming {
       chunkIndex,
       payloadLength,
       payload,
+      requestId,
     };
   }
 }

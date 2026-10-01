@@ -652,8 +652,6 @@ export class TransferEngine {
     return CancelManager.handleRemoteCancelTransfer(this, fileId, all);
   }
 
-
-
   public async stageFiles(files: File[]): Promise<void> {
     return StagingManager.stageFiles(this, files);
   }

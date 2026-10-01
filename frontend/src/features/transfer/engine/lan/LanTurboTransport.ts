@@ -189,6 +189,7 @@ export class LanTurboTransport {
     sessionId: string,
     fileId: string,
     fileName: string,
+    peerIdOrProgress?: string | LanProgressCallback,
     onProgress?: LanProgressCallback,
   ): Promise<void> {
     if (this.initiatedDownloads.has(fileId)) {
@@ -196,7 +197,18 @@ export class LanTurboTransport {
     }
     this.initiatedDownloads.add(fileId);
 
-    return this.executeDownloadFile(sessionId, fileId, fileName, onProgress);
+    const progressCallback =
+      typeof peerIdOrProgress === "function" ? peerIdOrProgress : onProgress;
+    const peerId =
+      typeof peerIdOrProgress === "string" ? peerIdOrProgress : undefined;
+
+    return this.executeDownloadFile(
+      sessionId,
+      fileId,
+      fileName,
+      peerId,
+      progressCallback,
+    );
   }
   public static resetDownload(fileId: string): void {
     this.initiatedDownloads.delete(fileId);
@@ -206,21 +218,57 @@ export class LanTurboTransport {
     sessionId: string,
     fileId: string,
     fileName: string,
+    peerId?: string,
     onProgress?: LanProgressCallback,
   ): Promise<void> {
     const baseUrl = await this.getLanBaseUrl();
-    const url = `${baseUrl}/api/v1/lan-transfer/download/${encodeURIComponent(fileId)}?sessionId=${encodeURIComponent(sessionId)}`;
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = decodeURIComponent(fileName);
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
+    const peerParam = peerId ? `&peerId=${encodeURIComponent(peerId)}` : "";
+    const url = `${baseUrl}/api/v1/lan-transfer/download/${encodeURIComponent(fileId)}?sessionId=${encodeURIComponent(sessionId)}${peerParam}`;
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = decodeURIComponent(fileName);
+    anchor.style.display = "none";
+    document.body.appendChild(anchor);
+    anchor.click();
     setTimeout(() => {
-      if (document.body.contains(a)) {
-        document.body.removeChild(a);
+      if (document.body.contains(anchor)) {
+        document.body.removeChild(anchor);
       }
     }, 1000);
+  }
+
+  public static async getSessionProgress(sessionId: string): Promise<{
+    sessionId: string;
+    totalDownloadSpeedBps: number;
+    downloaders: Record<
+      string,
+      {
+        peerId: string;
+        fileId: string;
+        bytesDownloaded: number;
+        totalBytes: number;
+        progress: number;
+        speedBytesPerSec: number;
+        completed: boolean;
+      }
+    >;
+    activeDownloadersCount: number;
+    totalDownloadersCount: number;
+    avgDownloadProgress: number;
+    minDownloadProgress: number;
+    allCompleted: boolean;
+  } | null> {
+    try {
+      const baseUrl = await this.getLanBaseUrl();
+      const url = `${baseUrl}/api/v1/lan-transfer/progress/${encodeURIComponent(sessionId)}`;
+      const res = await axios.get(url);
+      if (res.status >= 200 && res.status < 300) {
+        return res.data;
+      }
+    } catch (err) {
+      console.warn("[LanTurboTransport] Error getting session progress:", err);
+    }
+    return null;
   }
 
   public static async cancelSession(sessionId: string): Promise<void> {

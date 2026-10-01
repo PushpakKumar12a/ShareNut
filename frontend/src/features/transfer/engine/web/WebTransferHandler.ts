@@ -196,8 +196,15 @@ export class WebTransferHandler {
         if (!chunkData) continue;
 
         const sessionSecret = engine.sessionCode || file.manifest.fileId;
-        const encryptedChunk = await CryptoEngine.encryptChunk(chunkData, sessionSecret);
-        const packet = BinaryFraming.encodeChunk(file.fileSeqId, i, encryptedChunk);
+        const encryptedChunk = await CryptoEngine.encryptChunk(
+          chunkData,
+          sessionSecret,
+        );
+        const packet = BinaryFraming.encodeChunk(
+          file.fileSeqId,
+          i,
+          encryptedChunk,
+        );
 
         CryptoEngine.computeSha256(chunkData).then((chunkHash) => {
           if (file.chunks[i]) {
@@ -486,8 +493,12 @@ export class WebTransferHandler {
         }
 
         if (chunkData) {
-          const sessionSecret = engine.sessionCode || file.manifest?.fileId || "ShareNut";
-          const encryptedChunk = await CryptoEngine.encryptChunk(chunkData, sessionSecret);
+          const sessionSecret =
+            engine.sessionCode || file.manifest?.fileId || "ShareNut";
+          const encryptedChunk = await CryptoEngine.encryptChunk(
+            chunkData,
+            sessionSecret,
+          );
           const chunkPacket = BinaryFraming.encodeChunk(
             packet.fileSeqId,
             chunkIndex,
@@ -529,8 +540,12 @@ export class WebTransferHandler {
           return;
 
         const chunkIndex = packet.chunkIndex;
-        const sessionSecret = engine.sessionCode || file.manifest.fileId || "ShareNut";
-        const chunkData = await CryptoEngine.decryptChunk(packet.payload, sessionSecret);
+        const sessionSecret =
+          engine.sessionCode || file.manifest.fileId || "ShareNut";
+        const chunkData = await CryptoEngine.decryptChunk(
+          packet.payload,
+          sessionSecret,
+        );
 
         const effectiveChunkSize = file.manifest.chunkSize || 65536;
         chunkStore

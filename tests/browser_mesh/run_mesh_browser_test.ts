@@ -173,19 +173,22 @@ async function runRealBrowserMeshTest(): Promise<void> {
         route.abort(),
       );
 
-      if (peerIndex === 0) {
-        pages[0].on("console", (msg) => {
-          const text = msg.text();
-          if (
-            text.includes("TransferEngine") ||
-            text.includes("WebRTC") ||
-            text.includes("error") ||
-            text.includes("Route")
-          ) {
-            console.log(`  [Chrome P1 Log] ${text}`);
-          }
-        });
-      }
+      pages[peerIndex].on("console", (msg) => {
+        const text = msg.text();
+        if (
+          text.includes("TransferEngine") ||
+          text.includes("WebRTC") ||
+          text.includes("error") ||
+          text.includes("Scheduler") ||
+          text.includes("Uncaught") ||
+          text.includes("failed")
+        ) {
+          console.log(`  [Chrome P${peerDisplayNum} Log] ${text}`);
+        }
+      });
+      pages[peerIndex].on("pageerror", (pageError) => {
+        console.error(`  [Chrome P${peerDisplayNum} PageError]`, pageError.message);
+      });
 
       await contexts[peerIndex].addInitScript(() => {
         const targetWindow = window as unknown as Record<string, any>;

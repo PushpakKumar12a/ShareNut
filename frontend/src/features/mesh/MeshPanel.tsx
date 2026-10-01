@@ -11,7 +11,6 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { get } from "@/services/api";
 
 export interface PeerMeshItem {
   id: string;
@@ -70,10 +69,11 @@ export function ConnectedMeshPanel({
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
   useEffect(() => {
-    get<{ lan_ip: string }>("/v1/network/info")
-      .then((res) => {
-        if (res?.lan_ip && res.lan_ip !== "127.0.0.1") {
-          setLanIp(res.lan_ip);
+    fetch("/api/v1/network/info")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { lan_ip?: string } | null) => {
+        if (data?.lan_ip && data.lan_ip !== "127.0.0.1") {
+          setLanIp(data.lan_ip);
         }
       })
       .catch(() => {});

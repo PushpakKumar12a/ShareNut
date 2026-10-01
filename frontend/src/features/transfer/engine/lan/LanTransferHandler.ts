@@ -443,7 +443,12 @@ export class LanTransferHandler {
       sessionId,
       fileId,
       name,
-      (progress, speedBps, bytesReceived, totalBytes) => {
+      (
+        progress: number,
+        speedBps: number,
+        bytesReceived: number,
+        totalBytes: number,
+      ) => {
         if (!fileTransfer) return;
         fileTransfer.progress = progress;
         fileTransfer.speedBytesPerSec = speedBps;

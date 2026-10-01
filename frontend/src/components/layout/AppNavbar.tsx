@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { usePeerStore } from "@/features/mesh/peerStore";
 import { useEngineState } from "@/features/transfer/engine/EngineContext";
+import { useModalStore } from "@/features/ui/modalStore";
 import { ShareSessionDialog } from "@/features/sharing/ShareDialog";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +34,14 @@ export function AppNavbar({
 }: AppNavbarProps) {
   const pathname = usePathname();
   const { user, device, logout } = usePeerStore();
-  const engineState = useEngineState();
+  const engineSignalingConnected = useEngineState(
+    (state) => state.signalingConnected,
+  );
+  const engineSessionCode = useEngineState((state) => state.sessionCode);
+  const connectedPeersCount = useEngineState(
+    (state) => (state.peers ? state.peers.size : 0),
+  );
+  const openShareModal = useModalStore((state) => state.openShare);
 
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -86,13 +94,11 @@ export function AppNavbar({
   const isConnected =
     signalingConnected !== undefined
       ? signalingConnected
-      : engineState.signalingConnected;
+      : engineSignalingConnected;
 
   const currentSessionCode = mounted
-    ? (sessionCode !== undefined ? sessionCode : engineState.sessionCode || "NUT-ROOM1")
+    ? (sessionCode !== undefined ? sessionCode : engineSessionCode || "NUT-ROOM1")
     : (sessionCode || "NUT-ROOM1");
-
-  const connectedPeersCount = engineState.peers ? engineState.peers.size : 0;
 
   const handleCopySession = () => {
     if (currentSessionCode) {
@@ -106,6 +112,7 @@ export function AppNavbar({
     if (onOpenShare) {
       onOpenShare();
     } else {
+      openShareModal(currentSessionCode);
       setInternalShareOpen(true);
     }
   };

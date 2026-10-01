@@ -1,7 +1,6 @@
 import { BinaryFraming, PacketType } from "./web/BinaryFraming";
 import { LanTurboTransport } from "./lan/LanTurboTransport";
 import { chunkStore } from "@/features/transfer/engine/ChunkStore";
-import { ResumeRegistry } from "./ResumeRegistry";
 import type { TransferEngine } from "./TransferEngine";
 
 export class CancelManager {
@@ -10,7 +9,6 @@ export class CancelManager {
     fileId?: string,
   ): Promise<void> {
     if (fileId) {
-      ResumeRegistry.removePartialTransfer(fileId);
       engine.cancelledFileIds.add(fileId);
       engine.localOriginatedFileIds.delete(fileId);
       const controller = engine.abortControllers.get(fileId);
