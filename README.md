@@ -74,7 +74,7 @@ Engineered with a **BitTorrent-inspired swarm architecture**, files are divided 
 - **Modern Design with Tailwind CSS v4 & shadcn/ui**: Bespoke, accessible user interface crafted with Tailwind CSS v4 and Radix UI primitives, featuring interactive telemetry gauges and chunk visualizers.
 - **Reactive Zustand State Engine**: Granular client state management synchronizing peer discovery, live transfer telemetry, and room status without unnecessary React component tree re-renders.
 - **Frictionless QR Code Pairing**: Display instant session codes or scan dynamic QR codes using your device camera to connect mobile phones to desktops in seconds.
-- **Session Continuity & Resumption**: Network drops and tab reloads preserve transfer progress via `ResumeRegistry` and OPFS chunk offset checks.
+- **Session Continuity & Resumption**: Network drops and tab reloads preserve transfer progress via OPFS chunk offset and bitfield state recovery.
 - **On-the-Fly Streaming ZIP**: Multi-file packages and directory trees compress dynamically on-the-fly without creating temp files on disk.
 
 ---
@@ -153,10 +153,13 @@ graph TD
         FileSelect["User File Selection / Staging"]
         ChunkerA["Chunker / StreamingZip (64 KB Slices)"]
         CryptoA["CryptoEngine (AES-256-GCM + SHA-256)"]
-        RTCA["WebRTC Manager (DataChannels)"]
         EngineA["TransferEngine (Transfer Orchestrator)"]
+        RTCA["WebRTC Manager (DataChannels)"]
+        LanA["LAN Turbo Transport (Sender HTTP Pipe)"]
 
-        FileSelect --> ChunkerA --> CryptoA --> EngineA --> RTCA
+        FileSelect --> ChunkerA --> CryptoA --> EngineA
+        EngineA --> RTCA
+        EngineA --> LanA
     end
 
     subgraph PeerB ["Peer B (Receiver / Leecher)"]
@@ -164,27 +167,27 @@ graph TD
         EngineB["TransferEngine (Decryption & Scheduling)"]
         CryptoB["CryptoEngine (AES-256-GCM Decrypt)"]
         SchedulerB["Rarest-First ChunkScheduler & Bitfield"]
+        LanB["LAN Turbo Transport (Receiver Fetch Stream)"]
         OPFSB["OPFS Direct-to-Disk Stream (ChunkStore)"]
-        ResumeReg["Resume Registry (Persistent Session State)"]
         DiskB[("OPFS Disk: ShareNut_opfs_{fileId}.bin")]
 
         RTCB <--> EngineB
         EngineB <--> CryptoB
         EngineB <--> SchedulerB
         EngineB --> OPFSB --> DiskB
-        EngineB <--> ResumeReg
+        LanB --> OPFSB
     end
 
     subgraph TransportRoutes ["Hybrid Dual-Transport Data Plane"]
         WebRTCChannel["WebRTC SCTP DataChannel (AES-GCM In-Flight / Cross-Network)"]
-        LANPipe["LAN Turbo Transport (Direct HTTP Socket / Same Subnet)"]
+        LANPipe["LAN Turbo Transport (Direct HTTP Stream / Same Subnet)"]
     end
 
-    PeerA <-->|Signaling WebSocket| FastAPI
-    PeerB <-->|Signaling WebSocket| FastAPI
+    RTCA <-->|Signaling WebSocket| FastAPI
+    RTCB <-->|Signaling WebSocket| FastAPI
 
     RTCA <==>|16-Byte Framed Packets| WebRTCChannel <==> RTCB
-    PeerA -.->|Direct LAN Streaming Pipe| LANPipe -.-> PeerB
+    LanA -.->|Direct Subnet Stream| LANPipe -.-> LanB
 ```
 
 ### Control Plane vs. Data Plane
@@ -214,8 +217,11 @@ graph TD
    - `Bitfield.ts`: Compact bit-array tracking chunk possession across peers.
    - `Scheduler.ts`: Implements rarest-first chunk prioritization, preventing peer starvation in multi-peer swarm environments.
    - **End-Game Mode**: Requests remaining 5% missing chunks in parallel from all connected nodes to eliminate tail latency.
-5. **Reactive State & Modern Design System (`frontend/src/`)**:
-   - **Zustand (`features/mesh/peerStore.ts`)**: Decouples UI rendering from high-frequency WebRTC binary packet arrival (hundreds of chunks/sec). Components subscribe only to granular slice selectors, preventing full-tree React re-renders during peak throughput.
+5. **LAN Turbo Transport & Network Route Detection (`frontend/src/features/transfer/engine/lan/` & `backend/app/api/v1/lan_transfer.py`)**:
+   - `NetworkRouteDetector.ts`: Discovers host LAN IP addresses via `/api/v1/network/info` and probes subnet reachability with `/api/v1/lan-transfer/probe`.
+   - `LanTurboTransport.ts`: Bypasses WebRTC DataChannel bandwidth limits when peers share a local subnet, streaming directly over HTTP (`/api/v1/lan-transfer/stream/{session_id}`) with live progress polling and direct-to-OPFS assembly.
+6. **Reactive State & Modern Design System (`frontend/src/`)**:
+   - **Zustand (`features/mesh/peerStore.ts`, `engineStore.ts`)**: Decouples UI rendering from high-frequency WebRTC binary packet arrival (hundreds of chunks/sec). Components subscribe only to granular slice selectors, preventing full-tree React re-renders during peak throughput.
    - **Tailwind CSS v4 & shadcn/ui (`components/ui/`, `app/globals.css`)**: Built using Tailwind v4's CSS-first `@import "tailwindcss";` pipeline, providing accessible Radix UI dialogs, interactive chunk matrices, speed gauges, and warm amber theme tokens.
 
 ---
@@ -319,8 +325,7 @@ ShareNut/
 │   │   ├── api/v1/                 # REST routing
 │   │   │   ├── api.py              # Primary v1 API router aggregation
 │   │   │   ├── lan_transfer.py     # Local subnet HTTP streaming pipe
-│   │   │   ├── network.py          # Host network and LAN IP route discovery
-│   │   │   └── transfers.py        # File staging & session query endpoints
+│   │   │   └── network.py          # Host network and LAN IP route discovery
 │   │   ├── websockets/             # In-memory ephemeral WebRTC signaling engine
 │   │   │   ├── manager.py          # Room lifecycle, peer registry, broadcast dispatch
 │   │   │   └── router.py           # WebSocket route (/ws/transfers/{session_code})
@@ -360,25 +365,30 @@ ShareNut/
 │   │   │   ├── p2p/                # WebRTC, Bitfield, and Rarest-First Scheduler
 │   │   │   ├── settings/           # Configurable ICE STUN & backpressure stores
 │   │   │   ├── sharing/            # QR code generator, camera QR scanner, share modals
-│   │   │   └── transfer/           # Core Transfer Engine
-│   │   │       ├── components/     # Transfer table, chunk inspector modal, progress gauges
-│   │   │       └── engine/
-│   │   │           ├── lan/        # LAN Turbo Transport & Network Route Prober
-│   │   │           ├── web/        # WebRTC Binary Framing & Transfer Handler
-│   │   │           ├── CancelManager.ts# Transfer cancellation lifecycle
-│   │   │           ├── ChunkStore.ts   # Origin Private File System (OPFS) direct-to-disk write
-│   │   │           ├── Chunker.ts      # 64 KB slicing engine & manifest generator
-│   │   │           ├── CryptoEngine.ts # In-flight AES-GCM encryption & SHA-256 hashing
-│   │   │           ├── EngineContext.tsx# React context provider for transfer engine
-│   │   │           ├── ResumeRegistry.ts# Session recovery registry
-│   │   │           ├── SessionManager.ts# Session code management
-│   │   │           ├── StagingManager.ts# File preparation & staging
-│   │   │           ├── StreamingZip.ts # On-the-fly multi-file ZIP packaging
-│   │   │           ├── TransferEngine.ts# State machine & swarm orchestrator
-│   │   │           └── engineTypes.ts  # Engine type contracts
+│   │   │   ├── transfer/           # Core Transfer Engine
+│   │   │   │   ├── components/     # Transfer table, chunk inspector modal, progress gauges
+│   │   │   │   └── engine/
+│   │   │   │       ├── lan/        # LAN Turbo Transport & Network Route Prober
+│   │   │   │       │   ├── LanTransferHandler.ts
+│   │   │   │       │   ├── LanTurboTransport.ts
+│   │   │   │       │   └── NetworkRouteDetector.ts
+│   │   │   │       ├── web/        # WebRTC Binary Framing & Transfer Handler
+│   │   │   │       │   ├── BinaryFraming.ts
+│   │   │   │       │   └── WebTransferHandler.ts
+│   │   │   │       ├── CancelManager.ts# Transfer cancellation lifecycle
+│   │   │   │       ├── ChunkStore.ts   # Origin Private File System (OPFS) direct-to-disk write
+│   │   │   │       ├── Chunker.ts      # 64 KB slicing engine & manifest generator
+│   │   │   │       ├── CryptoEngine.ts # In-flight AES-GCM encryption & SHA-256 hashing
+│   │   │   │       ├── EngineContext.tsx# React context provider for transfer engine
+│   │   │   │       ├── SessionManager.ts# Session code management
+│   │   │   │       ├── StagingManager.ts# File preparation & staging
+│   │   │   │       ├── StreamingZip.ts # On-the-fly multi-file ZIP packaging
+│   │   │   │       ├── TransferEngine.ts# State machine & swarm orchestrator
+│   │   │   │       ├── engineStore.ts  # Zustand transfer engine store
+│   │   │   │       └── engineTypes.ts  # Engine type contracts
+│   │   │   └── ui/                 # Global UI state & modal store (modalStore.ts)
 │   │   ├── lib/                    # Byte formatting, utils & helper functions
-│   │   ├── services/               # REST API client services (api.ts)
-│   │   └── types/                  # Protocol & data type definitions
+│   │   └── types/                  # Protocol & REST API type definitions (api.ts, protocol.ts)
 │   ├── bun.lock                    # Bun package lockfile
 │   ├── eslint.config.mjs           # ESLint configuration
 │   ├── next.config.ts              # Next.js configuration & API rewrites
@@ -387,7 +397,10 @@ ShareNut/
 │   └── tsconfig.json               # TypeScript configuration
 │
 ├── tests/                          # Automated Verification Suite
+│   ├── BinaryFraming.test.ts       # Unit test: 16-byte header framing encode/decode
+│   ├── ChunkStore.test.ts          # Unit test: OPFS write & LRU chunk caching
 │   ├── CryptoEngine.test.ts        # Unit test: AES-GCM streaming encryption & SHA-256 digests
+│   ├── Scheduler.test.ts           # Unit test: Rarest-first swarm chunk scheduling
 │   └── browser_mesh/               # Playwright multi-browser headless swarm test
 │       ├── bun.lock                # Lockfile for test runner dependencies
 │       ├── generate_payload.ts     # Deterministic binary payload generator
@@ -461,25 +474,21 @@ Open `http://localhost:3000` in your browser.
 
 ## Testing & Quality Assurance
 
-### 1. In-Flight Cryptography & Slicing Unit Tests
+### 1. Core Engine & Protocol Unit Tests
 
-Run the native Bun test suite covering AES-GCM 64 KB encryption, tampering detection, and SHA-256 digests:
+Run the native Bun test suite covering framing, chunk storage, AES-GCM encryption, and rarest-first scheduling:
 
 ```bash
-bun test tests/CryptoEngine.test.ts
+bun test
 ```
 
 Output:
 
 ```text
-tests/CryptoEngine.test.ts:
-✓ CryptoEngine > encrypts and decrypts a 64 KB chunk bit-for-bit
-✓ CryptoEngine > produces unique IVs and ciphertexts for identical chunks
-✓ CryptoEngine > gracefully catches tampered ciphertext
-✓ CryptoEngine > computes accurate SHA-256 hex digest
-✓ CryptoEngine > completes full multi-chunk stream with BinaryFraming bit-for-bit
-
-5 pass, 0 fail [151ms]
+ 19 pass
+ 0 fail
+ 312 expect() calls
+Ran 19 tests across 5 files.
 ```
 
 ### 2. Frontend Production Build & Typecheck
