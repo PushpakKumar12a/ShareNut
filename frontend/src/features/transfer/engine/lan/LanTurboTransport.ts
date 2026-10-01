@@ -150,36 +150,93 @@ export class LanTurboTransport {
       bodyToSend = file as Blob;
     }
 
-    let lastTime = performance.now();
-    let lastBytes = 0;
-    let speedBps = 0;
+    const total = file.size;
+    let smoothedSpeed = 0;
+    let prevDlBytes = 0;
+    let prevPollTime = performance.now();
+    let uploadDone = false;
+
+    // Poll the backend /progress endpoint to get actual download-side bytes
+    // instead of measuring localhost upload speed (which is inflated).
+    const pollInterval = setInterval(async () => {
+      if (signal?.aborted) {
+        clearInterval(pollInterval);
+        return;
+      }
+      try {
+        const progressData = await this.getSessionProgress(sessionId);
+        if (!progressData) return;
+        const fileProgress = progressData.downloaders?.[fileId];
+        if (!fileProgress) return;
+
+        const dlBytes = fileProgress.bytesDownloaded || 0;
+        const now = performance.now();
+        const dtMs = now - prevPollTime;
+
+        if (dtMs >= 200) {
+          const bytesDiff = dlBytes - prevDlBytes;
+          const instantSpeed = bytesDiff > 0 ? (bytesDiff / dtMs) * 1000 : 0;
+          if (smoothedSpeed === 0) {
+            smoothedSpeed = Math.round(instantSpeed);
+          } else {
+            smoothedSpeed = Math.round(
+              smoothedSpeed * 0.3 + instantSpeed * 0.7,
+            );
+          }
+          prevDlBytes = dlBytes;
+          prevPollTime = now;
+        }
+
+        const progress =
+          total > 0 ? Math.min(99, Math.floor((dlBytes / total) * 100)) : 99;
+        onProgress?.(progress, smoothedSpeed, dlBytes, total);
+
+        if (fileProgress.completed && uploadDone) {
+          clearInterval(pollInterval);
+          onProgress?.(100, 0, total, total);
+        }
+      } catch {
+        // Polling failure is non-fatal; upload continues
+      }
+    }, 500);
+
     try {
-      const total = file.size;
       await axios.post(url, bodyToSend, {
         headers: { "Content-Type": "application/octet-stream" },
         signal,
-        onUploadProgress: (evt) => {
-          const current = evt.loaded;
-          const now = performance.now();
-          const dtMs = now - lastTime;
-          if (dtMs >= 100) {
-            const bytesDiff = current - lastBytes;
-            const instantSpeed = (bytesDiff / dtMs) * 1000;
-            if (speedBps === 0) {
-              speedBps = Math.round(instantSpeed);
-            } else {
-              speedBps = Math.round(speedBps * 0.25 + instantSpeed * 0.75);
-            }
-            lastBytes = current;
-            lastTime = now;
-          }
-          const progress =
-            total > 0 ? Math.min(99, Math.floor((current / total) * 100)) : 99;
-          onProgress?.(progress, speedBps, current, total);
-        },
       });
-      onProgress?.(100, 0, file.size, file.size);
+      uploadDone = true;
+
+      // Give the poll a moment to catch the final state
+      await new Promise<void>((resolve) => {
+        const finalCheck = setInterval(async () => {
+          try {
+            const progressData = await this.getSessionProgress(sessionId);
+            const fileProgress = progressData?.downloaders?.[fileId];
+            if (fileProgress?.completed || signal?.aborted) {
+              clearInterval(finalCheck);
+              clearInterval(pollInterval);
+              onProgress?.(100, 0, total, total);
+              resolve();
+            }
+          } catch {
+            clearInterval(finalCheck);
+            clearInterval(pollInterval);
+            onProgress?.(100, 0, total, total);
+            resolve();
+          }
+        }, 500);
+
+        // Timeout after 30s max wait for download completion
+        setTimeout(() => {
+          clearInterval(finalCheck);
+          clearInterval(pollInterval);
+          onProgress?.(100, 0, total, total);
+          resolve();
+        }, 30000);
+      });
     } finally {
+      clearInterval(pollInterval);
     }
   }
 
@@ -239,23 +296,17 @@ export class LanTurboTransport {
 
   public static async getSessionProgress(sessionId: string): Promise<{
     sessionId: string;
-    totalDownloadSpeedBps: number;
     downloaders: Record<
       string,
       {
-        peerId: string;
         fileId: string;
         bytesDownloaded: number;
+        bytesUploaded: number;
         totalBytes: number;
         progress: number;
-        speedBytesPerSec: number;
         completed: boolean;
       }
     >;
-    activeDownloadersCount: number;
-    totalDownloadersCount: number;
-    avgDownloadProgress: number;
-    minDownloadProgress: number;
     allCompleted: boolean;
   } | null> {
     try {

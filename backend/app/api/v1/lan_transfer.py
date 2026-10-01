@@ -66,7 +66,9 @@ async def prepare_upload(payload: PrepareUploadRequest) -> PrepareUploadResponse
         "conditions": file_conditions,
         "events": file_conditions,
         "received_bytes": {fid: 0 for fid in payload.files.keys()},
+        "downloaded_bytes": {fid: 0 for fid in payload.files.keys()},
         "completed": {fid: False for fid in payload.files.keys()},
+        "download_completed": {fid: False for fid in payload.files.keys()},
         "room": payload.room.upper() if payload.room else None,
         "sender_peer_id": payload.sender_peer_id,
     }
@@ -166,9 +168,11 @@ async def download_file(
                 while chunk_idx < len(chunks):
                     chunk = chunks[chunk_idx]
                     chunk_idx += 1
+                    session["downloaded_bytes"][file_id] = session["downloaded_bytes"].get(file_id, 0) + len(chunk)
                     yield chunk
 
                 if session["completed"].get(file_id, False) and chunk_idx >= len(chunks):
+                    session["download_completed"][file_id] = True
                     break
 
                 async with condition:
@@ -186,6 +190,8 @@ async def download_file(
                             break
         except (asyncio.CancelledError, GeneratorExit):
             logger.info(f"[ShareNut Live Pipe] Receiver disconnected early for file {file_id}")
+        finally:
+            session["download_completed"][file_id] = True
 
     import mimetypes
     import urllib.parse
@@ -250,6 +256,43 @@ async def get_session_info(session_id: str) -> dict[str, Any]:
         "files": s["files"],
         "receivedBytes": s["received_bytes"],
         "completed": s["completed"],
+    }
+
+@router.get("/progress/{session_id}")
+async def get_session_progress(session_id: str) -> dict[str, Any]:
+    """Return real download progress for a session based on bytes actually delivered to receivers."""
+    if session_id not in active_sessions:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    session = active_sessions[session_id]
+    downloaders: dict[str, Any] = {}
+    total_dl_speed = 0
+    all_done = True
+
+    for fid, fmeta in session["files"].items():
+        total_bytes = fmeta["size"]
+        dl_bytes = session.get("downloaded_bytes", {}).get(fid, 0)
+        up_bytes = session.get("received_bytes", {}).get(fid, 0)
+        dl_done = session.get("download_completed", {}).get(fid, False)
+        progress = min(100, int((dl_bytes / total_bytes) * 100)) if total_bytes > 0 else 0
+        if dl_done:
+            progress = 100
+        if not dl_done:
+            all_done = False
+
+        downloaders[fid] = {
+            "fileId": fid,
+            "bytesDownloaded": dl_bytes,
+            "bytesUploaded": up_bytes,
+            "totalBytes": total_bytes,
+            "progress": progress,
+            "completed": dl_done,
+        }
+
+    return {
+        "sessionId": session_id,
+        "downloaders": downloaders,
+        "allCompleted": all_done,
     }
 
 @router.post("/cancel")
