@@ -151,96 +151,112 @@ export class LanTurboTransport {
     }
 
     const total = file.size;
-    let smoothedSpeed = 0;
-    let prevDlBytes = 0;
-    let prevPollTime = performance.now();
-    let uploadDone = false;
+    let transferComplete = false;
 
-    // Poll the backend /progress endpoint to get actual download-side bytes
-    // instead of measuring localhost upload speed (which is inflated).
-    const pollInterval = setInterval(async () => {
-      if (signal?.aborted) {
-        clearInterval(pollInterval);
-        return;
-      }
-      try {
-        const progressData = await this.getSessionProgress(sessionId);
-        if (!progressData) return;
-        const fileProgress = progressData.downloaders?.[fileId];
-        if (!fileProgress) return;
-
-        const dlBytes = fileProgress.bytesDownloaded || 0;
-        const now = performance.now();
-        const dtMs = now - prevPollTime;
-
-        if (dtMs >= 200) {
-          const bytesDiff = dlBytes - prevDlBytes;
-          const instantSpeed = bytesDiff > 0 ? (bytesDiff / dtMs) * 1000 : 0;
-          if (smoothedSpeed === 0) {
-            smoothedSpeed = Math.round(instantSpeed);
-          } else {
-            smoothedSpeed = Math.round(
-              smoothedSpeed * 0.3 + instantSpeed * 0.7,
-            );
-          }
-          prevDlBytes = dlBytes;
-          prevPollTime = now;
-        }
-
-        const progress =
-          total > 0 ? Math.min(99, Math.floor((dlBytes / total) * 100)) : 99;
-        onProgress?.(progress, smoothedSpeed, dlBytes, total);
-
-        if (fileProgress.completed && uploadDone) {
-          clearInterval(pollInterval);
-          onProgress?.(100, 0, total, total);
-        }
-      } catch {
-        // Polling failure is non-fatal; upload continues
-      }
-    }, 500);
+    const pollInterval = this.startProgressPoller(
+      sessionId,
+      fileId,
+      onProgress,
+      () => {
+        transferComplete = true;
+      },
+      signal,
+    );
 
     try {
       await axios.post(url, bodyToSend, {
         headers: { "Content-Type": "application/octet-stream" },
         signal,
       });
-      uploadDone = true;
 
-      // Give the poll a moment to catch the final state
-      await new Promise<void>((resolve) => {
-        const finalCheck = setInterval(async () => {
-          try {
-            const progressData = await this.getSessionProgress(sessionId);
-            const fileProgress = progressData?.downloaders?.[fileId];
-            if (fileProgress?.completed || signal?.aborted) {
-              clearInterval(finalCheck);
-              clearInterval(pollInterval);
-              onProgress?.(100, 0, total, total);
+      // Upload to backend done, but receiver download is still ongoing.
+      // Wait for download to complete (poll will report progress).
+      if (!transferComplete) {
+        await new Promise<void>((resolve) => {
+          const checker = setInterval(() => {
+            if (transferComplete || signal?.aborted) {
+              clearInterval(checker);
               resolve();
             }
-          } catch {
-            clearInterval(finalCheck);
-            clearInterval(pollInterval);
-            onProgress?.(100, 0, total, total);
-            resolve();
-          }
-        }, 500);
-
-        // Timeout after 30s max wait for download completion
-        setTimeout(() => {
-          clearInterval(finalCheck);
-          clearInterval(pollInterval);
-          onProgress?.(100, 0, total, total);
-          resolve();
-        }, 30000);
-      });
+          }, 250);
+        });
+      }
     } finally {
+      transferComplete = true;
       clearInterval(pollInterval);
     }
   }
 
+  private static startProgressPoller(
+    sessionId: string,
+    fileId: string,
+    onProgress?: LanProgressCallback,
+    onComplete?: () => void,
+    signal?: AbortSignal,
+  ): ReturnType<typeof setInterval> {
+    let prevDlBytes = 0;
+    let prevPollTime = performance.now();
+    let downloadSpeed = 0;
+    let failureCount = 0;
+
+    const pollInterval = setInterval(async () => {
+      if (signal?.aborted) {
+        clearInterval(pollInterval);
+        return;
+      }
+      try {
+        const data = await this.getSessionProgress(sessionId);
+        if (!data) {
+          failureCount += 1;
+          if (failureCount >= 20) {
+            clearInterval(pollInterval);
+            onComplete?.();
+          }
+          return;
+        }
+        failureCount = 0;
+
+        const fp = data.downloaders?.[fileId];
+        if (!fp) return;
+
+        const dlBytes = fp.bytesDownloaded || 0;
+        const total = fp.totalBytes || 0;
+        const now = performance.now();
+        const dtMs = now - prevPollTime;
+
+        if (dtMs >= 200 && dlBytes > prevDlBytes) {
+          const diff = dlBytes - prevDlBytes;
+          const instant = (diff / dtMs) * 1000;
+          downloadSpeed =
+            downloadSpeed === 0
+              ? Math.round(instant)
+              : Math.round(downloadSpeed * 0.3 + instant * 0.7);
+          prevDlBytes = dlBytes;
+          prevPollTime = now;
+        }
+
+        if (fp.completed) {
+          clearInterval(pollInterval);
+          onComplete?.();
+          onProgress?.(100, 0, total, total);
+        } else {
+          const progress =
+            total > 0 ? Math.min(99, Math.floor((dlBytes / total) * 100)) : 0;
+          onProgress?.(progress, downloadSpeed, dlBytes, total);
+        }
+      } catch {
+        // Polling failure is non-fatal
+      }
+    }, 1000);
+
+    return pollInterval;
+  }
+
   private static initiatedDownloads = new Set<string>();
+  private static activeDownloadPolls = new Map<
+    string,
+    ReturnType<typeof setInterval>
+  >();
 
   public static async downloadFile(
     sessionId: string,
@@ -267,8 +283,14 @@ export class LanTurboTransport {
       progressCallback,
     );
   }
+
   public static resetDownload(fileId: string): void {
     this.initiatedDownloads.delete(fileId);
+    const existingPoll = this.activeDownloadPolls.get(fileId);
+    if (existingPoll) {
+      clearInterval(existingPoll);
+      this.activeDownloadPolls.delete(fileId);
+    }
   }
 
   private static async executeDownloadFile(
@@ -292,6 +314,18 @@ export class LanTurboTransport {
         document.body.removeChild(anchor);
       }
     }, 1000);
+
+    if (onProgress) {
+      const pollInterval = this.startProgressPoller(
+        sessionId,
+        fileId,
+        onProgress,
+        () => {
+          this.activeDownloadPolls.delete(fileId);
+        },
+      );
+      this.activeDownloadPolls.set(fileId, pollInterval);
+    }
   }
 
   public static async getSessionProgress(sessionId: string): Promise<{
@@ -323,6 +357,10 @@ export class LanTurboTransport {
   }
 
   public static async cancelSession(sessionId: string): Promise<void> {
+    for (const [fileId, poll] of this.activeDownloadPolls.entries()) {
+      clearInterval(poll);
+      this.activeDownloadPolls.delete(fileId);
+    }
     try {
       const baseUrl = await this.getLanBaseUrl();
       const url = `${baseUrl}/api/v1/lan-transfer/cancel?sessionId=${encodeURIComponent(sessionId)}`;

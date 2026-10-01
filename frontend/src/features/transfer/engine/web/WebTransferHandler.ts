@@ -16,6 +16,7 @@ import type {
 } from "@/types/protocol";
 import type { InternalFileTransfer } from "../engineTypes";
 import type { TransferEngine } from "../TransferEngine";
+import { LanTransferHandler } from "../lan/LanTransferHandler";
 
 export class WebTransferHandler {
   public static async stageWebUpload(
@@ -679,6 +680,24 @@ export class WebTransferHandler {
           peer.latencyMs = rtt;
           engine.notify();
         }
+        break;
+      }
+
+      case PacketType.LAN_MANIFEST: {
+        await LanTransferHandler.handleLanManifest(
+          engine,
+          senderPeerId,
+          packet,
+        );
+        break;
+      }
+
+      case PacketType.LAN_PROGRESS: {
+        LanTransferHandler.handleLanProgressPacket(
+          engine,
+          senderPeerId,
+          packet,
+        );
         break;
       }
     }

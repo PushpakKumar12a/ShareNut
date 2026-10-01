@@ -98,6 +98,15 @@ export class SessionManager {
             rf.sessionId,
             rf.fileId,
             rf.fileName,
+            (progress, speedBps, bytesReceived, totalBytes) => {
+              engine.handleLanProgressUpdate({
+                fileId: rf.fileId,
+                progress,
+                speedBytesPerSec: speedBps,
+                bytesTransferred: bytesReceived,
+                totalBytes,
+              });
+            },
           ).catch((err) => {
             console.error(
               `[LanTurboTransport] Auto-download failed for ${rf.fileName}:`,

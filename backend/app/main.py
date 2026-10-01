@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
@@ -16,6 +16,13 @@ logging.basicConfig(
 logger = logging.getLogger("ShareNut")
 
 logging.getLogger("asyncio").setLevel(logging.ERROR)
+
+class AccessLogFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "/lan-transfer/progress" not in record.getMessage()
+
+access_filter = AccessLogFilter()
+logging.getLogger("uvicorn.access").addFilter(access_filter)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:

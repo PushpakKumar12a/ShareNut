@@ -1013,9 +1013,20 @@ export class TransferEngine {
       this.fileSeqMap.set(fileSeqId, p.fileId);
 
       if (p.sessionId && p.name && !fileTransfer.isSender) {
-        LanTurboTransport.downloadFile(p.sessionId, p.fileId, p.name).catch(
-          console.error,
-        );
+        LanTurboTransport.downloadFile(
+          p.sessionId,
+          p.fileId,
+          p.name,
+          (progress, speedBps, bytesReceived, totalBytes) => {
+            this.handleLanProgressUpdate({
+              fileId: p.fileId,
+              progress,
+              speedBytesPerSec: speedBps,
+              bytesTransferred: bytesReceived,
+              totalBytes,
+            });
+          },
+        ).catch(console.error);
       }
     }
 
