@@ -14,7 +14,6 @@ async def transfer_signaling_ws(
     websocket: WebSocket,
     session_code: str,
     peer_id: str = Query(...),
-    device_id: str = Query(...),
     device_name: str = Query(default="Web Peer"),
     username: str | None = Query(default=None),
 ) -> None:
@@ -29,7 +28,6 @@ async def transfer_signaling_ws(
     metadata = {
         "user_id": peer_id,
         "username": display_name,
-        "device_id": device_id,
         "device_name": device_name,
         "role": role,
     }

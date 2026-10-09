@@ -5,7 +5,6 @@ import {
   Laptop,
   Smartphone,
   Server,
-  RotateCcw,
   QrCode,
   ChevronLeft,
   ChevronRight,
@@ -14,7 +13,7 @@ import Link from "next/link";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { Button } from "@/components/ui/button";
 import { usePeerStore } from "@/features/mesh/peerStore";
-import { useEngineState, useTransferEngine } from "@/features/transfer/engine/EngineContext";
+import { useEngineState } from "@/features/transfer/engine/EngineContext";
 import { cn, extractPeerShortId } from "@/lib/utils";
 
 interface DeviceItem {
@@ -30,20 +29,8 @@ const PAGE_SIZE = 6;
 
 export default function DevicesPage() {
   const { user: currentUser, device: currentDevice } = usePeerStore();
-  const engine = useTransferEngine();
   const engineState = useEngineState();
   const [currentPage, setCurrentPage] = useState(1);
-  const handleResetNodeIdentity = async () => {
-    const newProfile = usePeerStore.getState().regeneratePeerId();
-    if (newProfile && engineState.sessionCode) {
-      await engine.joinSession(
-        engineState.sessionCode,
-        newProfile.device.id,
-        newProfile.device.device_name,
-        newProfile.user.username
-      );
-    }
-  };
   const getDeviceIcon = (name: string) => {
     const n = (name || "").toLowerCase();
     if (n.includes("phone") || n.includes("mobile") || n.includes("android") || n.includes("ios") || n.includes("iphone")) {
@@ -100,15 +87,6 @@ export default function DevicesPage() {
             </p>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleResetNodeIdentity}
-            className="h-7.5 text-xs font-semibold rounded-xl text-slate-600 hover:text-slate-900 gap-1.5 shadow-2xs cursor-pointer border-slate-200 shrink-0 px-2.5"
-          >
-            <RotateCcw className="h-3 w-3" />
-            <span className="hidden sm:inline">Regenerate</span> ID
-          </Button>
         </div>
 
         <div className="rounded-2xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">

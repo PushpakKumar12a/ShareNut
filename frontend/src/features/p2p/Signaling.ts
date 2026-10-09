@@ -5,7 +5,6 @@ export type SignalingEventHandler = (msg: SignalingMessage) => void;
 export interface SignalingClientConfig {
   sessionCode: string;
   peerId: string;
-  deviceId: string;
   deviceName: string;
   username?: string;
   wsUrl?: string;
@@ -58,7 +57,6 @@ export class SignalingClient {
 
     const params = new URLSearchParams({
       peer_id: this.config.peerId,
-      device_id: this.config.deviceId || "dev-local-node",
       device_name: this.config.deviceName || "Web Peer",
       username: this.config.username || this.config.deviceName || "Web Peer",
     });

@@ -69,7 +69,6 @@ function TransferDetailPageContent() {
     if (user && device && !engineState.sessionCode && currentSessionCode) {
       engine.joinSession(
         currentSessionCode,
-        device.id,
         device.device_name,
         user.username,
       );

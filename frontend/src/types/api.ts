@@ -1,17 +1,10 @@
 export interface User {
-  id: string;
-  email?: string;
   username: string;
-  is_active?: boolean;
-  created_at?: string;
 }
 
 export interface Device {
-  id: string;
   device_name: string;
-  fingerprint: string;
   is_online: boolean;
-  last_seen_at: string;
   created_at: string;
 }
 

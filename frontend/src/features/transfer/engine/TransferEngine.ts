@@ -47,7 +47,6 @@ export class TransferEngine {
   public sessionCode: string | null = null;
   public localRole: "host" | "peer" | null = null;
   public localUsername: string = "User";
-  public localDeviceId: string = "";
 
   public signalingClient: SignalingClient | null = null;
   public webrtcManager: WebRTCManager | null = null;
@@ -267,7 +266,6 @@ export class TransferEngine {
 
   public async joinSession(
     sessionCode: string,
-    deviceId: string,
     deviceName: string,
     username: string,
   ): Promise<void> {
@@ -313,7 +311,6 @@ export class TransferEngine {
       }
       this.sessionCode = cleanCode;
       this.localUsername = username;
-      this.localDeviceId = deviceId;
 
       this.webrtcManager = new WebRTCManager(
         this.localPeerId,
@@ -358,9 +355,7 @@ export class TransferEngine {
               const fallbackCode = extractPeerShortId(null, peerId);
               this.addOrUpdatePeer({
                 peer_id: peerId,
-                user_id: "",
                 username: `Peer #${fallbackCode}`,
-                device_id: "",
                 device_name: "Web Peer",
                 role: "peer",
               });
@@ -451,7 +446,6 @@ export class TransferEngine {
       this.signalingClient = new SignalingClient({
         sessionCode: this.sessionCode,
         peerId: this.localPeerId,
-        deviceId,
         deviceName,
         username: this.localUsername,
         onOpen: () => {

@@ -10,7 +10,6 @@ import {
   QrCode,
   Copy,
   Check,
-  RotateCcw,
   User as UserIcon,
   Menu,
   X,
@@ -33,7 +32,7 @@ export function AppNavbar({
   onOpenShare,
 }: AppNavbarProps) {
   const pathname = usePathname();
-  const { user, device, logout } = usePeerStore();
+  const { user, device } = usePeerStore();
   const engineSignalingConnected = useEngineState(
     (state) => state.signalingConnected,
   );
@@ -115,15 +114,6 @@ export function AppNavbar({
       openShareModal(currentSessionCode);
       setInternalShareOpen(true);
     }
-  };
-
-  const handleResetNode = async (e?: React.MouseEvent | React.TouchEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    setMobileMenuOpen(false);
-    await logout();
   };
 
   const navItems = [
@@ -339,19 +329,6 @@ export function AppNavbar({
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between">
-                <span className="text-[10px] text-slate-500">
-                  Device Identity
-                </span>
-                <button
-                  onClick={handleResetNode}
-                  type="button"
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 text-[11px] font-semibold transition-colors cursor-pointer shadow-2xs"
-                >
-                  <RotateCcw className="h-3 w-3 text-slate-500" />
-                  <span>Regenerate ID</span>
-                </button>
-              </div>
             </div>
           </div>
         )}

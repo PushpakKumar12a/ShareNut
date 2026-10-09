@@ -250,17 +250,11 @@ async function runRealBrowserMeshTest(): Promise<void> {
             "ShareNut_peer_profile",
             JSON.stringify({
               user: {
-                id: `00000000-0000-0000-0000-00000000000${idx}`,
                 username: name,
-                is_active: true,
-                created_at: new Date().toISOString(),
               },
               device: {
-                id: `dev-real-peer-${idx}`,
                 device_name: `Chrome Peer ${idx}`,
-                fingerprint: `fp-peer-${idx}`,
                 is_online: true,
-                last_seen_at: new Date().toISOString(),
                 created_at: new Date().toISOString(),
               },
             }),

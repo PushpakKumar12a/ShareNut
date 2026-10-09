@@ -55,9 +55,7 @@ class SignalingManager:
             sender_peer_id=peer_id,
             payload={
                 "peer_id": peer_id,
-                "user_id": str(metadata.get("user_id")),
                 "username": metadata.get("username"),
-                "device_id": str(metadata.get("device_id")),
                 "device_name": metadata.get("device_name"),
                 "role": metadata.get("role", "peer"),
             },
@@ -67,9 +65,7 @@ class SignalingManager:
         existing_peers = [
             {
                 "peer_id": pid,
-                "user_id": str(meta.get("user_id")),
                 "username": meta.get("username"),
-                "device_id": str(meta.get("device_id")),
                 "device_name": meta.get("device_name"),
                 "role": meta.get("role", "peer"),
             }

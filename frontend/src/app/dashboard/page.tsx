@@ -95,7 +95,7 @@ function DashboardContent() {
         }
 
         setActiveSessionCode(code);
-        await engine.joinSession(code, device.id, device.device_name, user.username);
+        await engine.joinSession(code, device.device_name, user.username);
         setSessionInitialized(true);
 
         const pendingFiles = consumeStagedFiles();

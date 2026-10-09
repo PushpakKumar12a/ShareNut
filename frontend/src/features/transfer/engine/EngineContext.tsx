@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useState, type ReactNode } from "react";
+import React, { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { getTransferEngine, TransferEngine, type EngineState } from "@/features/transfer/engine/TransferEngine";
 import { useEngineStore, useEngineState } from "./engineStore";
+import { usePeerStore } from "@/features/mesh/peerStore";
 
 export { useEngineStore, useEngineState };
 export type { EngineState };
@@ -11,6 +12,11 @@ const EngineContext = createContext<TransferEngine | null>(null);
 
 export function EngineProvider({ children }: { children: ReactNode }) {
   const [engine] = useState<TransferEngine>(() => getTransferEngine());
+  const initialize = usePeerStore((state) => state.initialize);
+
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   return (
     <EngineContext.Provider value={engine}>

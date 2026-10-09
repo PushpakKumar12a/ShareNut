@@ -22,9 +22,7 @@ export interface SignalingMessage<T = Record<string, unknown>> {
 
 export interface PeerMetadata {
   peer_id: string;
-  user_id: string;
   username: string;
-  device_id: string;
   device_name: string;
   role: "host" | "peer";
 }
