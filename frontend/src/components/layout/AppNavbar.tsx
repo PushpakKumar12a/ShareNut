@@ -17,24 +17,25 @@ import {
 import { usePeerStore } from "@/features/mesh/peerStore";
 import { useEngineState } from "@/features/transfer/engine/EngineContext";
 import { useModalStore } from "@/features/ui/modalStore";
-import { ShareSessionDialog } from "@/features/sharing/ShareDialog";
 import { cn } from "@/lib/utils";
 
 interface AppNavbarProps {
-  signalingConnected?: boolean;
   sessionCode?: string;
   onOpenShare?: () => void;
 }
 
 export function AppNavbar({
-  signalingConnected,
   sessionCode,
   onOpenShare,
 }: AppNavbarProps) {
   const pathname = usePathname();
   const { user, device } = usePeerStore();
-  const engineSignalingConnected = useEngineState(
-    (state) => state.signalingConnected,
+  const hasConnectedPeer = useEngineState((state) =>
+    Array.from(state.peers.values()).some(
+      (peer) =>
+        peer.connectionState === "connected" ||
+        peer.dataChannelState === "open",
+    ),
   );
   const engineSessionCode = useEngineState((state) => state.sessionCode);
   const connectedPeersCount = useEngineState(
@@ -44,7 +45,6 @@ export function AppNavbar({
 
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [internalShareOpen, setInternalShareOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -90,10 +90,7 @@ export function AppNavbar({
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  const isConnected =
-    signalingConnected !== undefined
-      ? signalingConnected
-      : engineSignalingConnected;
+  const isConnected = hasConnectedPeer;
 
   const currentSessionCode = mounted
     ? (sessionCode !== undefined ? sessionCode : engineSessionCode || "NUT-ROOM1")
@@ -112,7 +109,6 @@ export function AppNavbar({
       onOpenShare();
     } else {
       openShareModal(currentSessionCode);
-      setInternalShareOpen(true);
     }
   };
 
@@ -190,7 +186,7 @@ export function AppNavbar({
                 }`}
               />
               <span className="text-[11px]">
-                {isConnected ? "Signaling: Connected" : "Connecting..."}
+                {isConnected ? "Session: Connected" : "Connecting..."}
               </span>
             </div>
 
@@ -334,11 +330,6 @@ export function AppNavbar({
         )}
       </header>
 
-      <ShareSessionDialog
-        isOpen={internalShareOpen}
-        onClose={() => setInternalShareOpen(false)}
-        sessionCode={currentSessionCode}
-      />
     </>
   );
 }

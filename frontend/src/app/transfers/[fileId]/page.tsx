@@ -20,7 +20,6 @@ import {
 } from "lucide-react";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { Button } from "@/components/ui/button";
-import { usePeerStore } from "@/features/mesh/peerStore";
 import {
   useEngineState,
   useTransferEngine,
@@ -44,7 +43,6 @@ function TransferDetailPageContent() {
   const fileIdParam = (params?.fileId as string) || "";
   const engine = useTransferEngine();
   const engineState = useEngineState();
-  const { user, device } = usePeerStore();
 
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -64,16 +62,6 @@ function TransferDetailPageContent() {
     (typeof window !== "undefined"
       ? sessionStorage.getItem("ShareNut_active_session_code") || "NUT-ACTIVE"
       : "NUT-ACTIVE");
-
-  useEffect(() => {
-    if (user && device && !engineState.sessionCode && currentSessionCode) {
-      engine.joinSession(
-        currentSessionCode,
-        device.device_name,
-        user.username,
-      );
-    }
-  }, [user, device, engineState.sessionCode, currentSessionCode, engine]);
 
   const targetFile = useMemo(() => {
     if (!fileIdParam) return engineState.activeFiles[0] || null;

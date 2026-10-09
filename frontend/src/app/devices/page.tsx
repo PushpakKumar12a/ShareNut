@@ -9,11 +9,12 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import Link from "next/link";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { Button } from "@/components/ui/button";
 import { usePeerStore } from "@/features/mesh/peerStore";
 import { useEngineState } from "@/features/transfer/engine/EngineContext";
+import { ShareSessionDialog } from "@/features/sharing/ShareDialog";
+import { useModalStore } from "@/features/ui/modalStore";
 import { cn, extractPeerShortId } from "@/lib/utils";
 
 interface DeviceItem {
@@ -30,6 +31,9 @@ const PAGE_SIZE = 6;
 export default function DevicesPage() {
   const { user: currentUser, device: currentDevice } = usePeerStore();
   const engineState = useEngineState();
+  const isShareOpen = useModalStore((state) => state.isShareOpen);
+  const openShare = useModalStore((state) => state.openShare);
+  const closeShare = useModalStore((state) => state.closeShare);
   const [currentPage, setCurrentPage] = useState(1);
   const getDeviceIcon = (name: string) => {
     const n = (name || "").toLowerCase();
@@ -172,16 +176,15 @@ export default function DevicesPage() {
                 </p>
               </div>
 
-              <Link href="/dashboard" className="shrink-0">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="h-7 text-xs font-semibold px-2.5 rounded-lg border-slate-200 bg-white shadow-2xs gap-1 cursor-pointer text-slate-700 hover:text-slate-900"
-                >
-                  <QrCode className="h-3 w-3 text-amber-700" />
-                  <span>Open QR</span>
-                </Button>
-              </Link>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => openShare(engineState.sessionCode || undefined)}
+                className="h-7 text-xs font-semibold px-2.5 rounded-lg border-slate-200 bg-white shadow-2xs gap-1 cursor-pointer text-slate-700 hover:text-slate-900"
+              >
+                <QrCode className="h-3 w-3 text-amber-700" />
+                <span>Open QR</span>
+              </Button>
             </div>
           )}
 
@@ -221,6 +224,12 @@ export default function DevicesPage() {
         </div>
 
       </main>
+
+      <ShareSessionDialog
+        sessionCode={engineState.sessionCode || ""}
+        isOpen={isShareOpen}
+        onClose={closeShare}
+      />
     </div>
   );
 }

@@ -3,7 +3,11 @@
 import { useEffect, useState, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { usePeerStore } from "@/features/mesh/peerStore";
-import { useEngineState, useTransferEngine } from "@/features/transfer/engine/EngineContext";
+import {
+  useEngineState,
+  useTransferEngine,
+} from "@/features/transfer/engine/EngineContext";
+import { useQrModel } from "@/features/mesh/qrModel";
 import { useModalStore } from "@/features/ui/modalStore";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { TopTransferActionCards } from "@/features/dashboard/ActionCards";
@@ -55,6 +59,8 @@ function DashboardContent() {
   const { user, device } = usePeerStore();
   const engine = useTransferEngine();
   const engineState = useEngineState();
+  const showQr = useQrModel((state) => state.showQr);
+  const revealQr = useQrModel((state) => state.revealQr);
 
   const [activeSessionCode, setActiveSessionCode] = useState<string>("");
   const isShareOpen = useModalStore((state) => state.isShareOpen);
@@ -72,6 +78,13 @@ function DashboardContent() {
     const code = param || existing || stored || generateFreshSessionCode();
     setActiveSessionCode(code);
   }, [searchParams, engine]);
+
+  useEffect(() => {
+    if (engineState.sessionCode) {
+      setActiveSessionCode(engineState.sessionCode);
+      setSessionInitialized(true);
+    }
+  }, [engineState.sessionCode]);
 
   const initSession = useCallback(
     async (codeToJoin?: string) => {
@@ -109,12 +122,6 @@ function DashboardContent() {
     },
     [user, device, searchParams, engine]
   );
-
-  useEffect(() => {
-    if (user && device && !sessionInitialized) {
-      initSession();
-    }
-  }, [user, device, sessionInitialized, initSession]);
 
   // Auto-consume files staged from landing page hero uploader
   useEffect(() => {
@@ -201,7 +208,13 @@ function DashboardContent() {
           <div className="hidden lg:block h-full">
             <ConnectedMeshPanel
               meshPeers={meshPeersList}
-              sessionCode={currentSessionCode}
+              sessionCode={
+                sessionInitialized
+                  ? activeSessionCode || engineState.sessionCode || undefined
+                  : undefined
+              }
+              showQr={showQr}
+              onRevealQr={revealQr}
               onJoinSession={(code) => initSession(code)}
             />
           </div>

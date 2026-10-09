@@ -103,6 +103,7 @@ export class TransferEngine {
           Math.random().toString(36).slice(2, 8) +
           "-" +
           Math.random().toString(36).slice(2, 6));
+
   }
 
   public getLocalPeerId(): string {
@@ -289,26 +290,6 @@ export class TransferEngine {
         this.leaveSession();
       }
 
-      let userSuffix = "";
-      if (username && username.includes("#")) {
-        const extracted = username
-          .split("#")[1]
-          ?.trim()
-          .slice(0, 4)
-          .toLowerCase();
-        if (extracted && extracted !== "peer" && extracted.length === 4) {
-          userSuffix = extracted;
-        }
-      }
-      if (userSuffix) {
-        this.localPeerId = `peer-${Math.random().toString(36).slice(2, 8)}-${userSuffix}`;
-      } else if (!this.localPeerId) {
-        this.localPeerId =
-          "peer-" +
-          Math.random().toString(36).slice(2, 8) +
-          "-" +
-          Math.random().toString(36).slice(2, 6);
-      }
       this.sessionCode = cleanCode;
       this.localUsername = username;
 

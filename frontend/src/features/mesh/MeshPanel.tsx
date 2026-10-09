@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { Network, Users, HelpCircle, Link2 } from "lucide-react";
+import React, { useState, useEffect, memo } from "react";
+import { Network, Users, HelpCircle, Link2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,10 +27,14 @@ interface ConnectedMeshPanelProps {
   sessionCode?: string;
   shareUrl?: string;
   onJoinSession?: (code: string) => void;
+  showQr: boolean;
+  onRevealQr: () => void;
 }
 
-function MeshQRCodeDisplay({ value }: { value: string }) {
-  const [QRComponent, setQRComponent] = useState<any>(null);
+const MeshQRCodeDisplay = memo(function MeshQRCodeDisplay({value}: {value: string}) {
+  const [QRComponent, setQRComponent] = useState<
+    typeof import("qrcode.react").QRCodeSVG | null
+  >(null);
 
   useEffect(() => {
     import("qrcode.react").then((mod) => {
@@ -55,20 +59,23 @@ function MeshQRCodeDisplay({ value }: { value: string }) {
       fgColor="#0f172a"
     />
   );
-}
+});
 
 export function ConnectedMeshPanel({
   meshPeers = [],
   sessionCode,
   shareUrl,
   onJoinSession,
+  showQr,
+  onRevealQr,
 }: ConnectedMeshPanelProps) {
   const peers = meshPeers;
   const [peerCode, setPeerCode] = useState("");
   const [lanIp, setLanIp] = useState<string | null>(null);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
-
   useEffect(() => {
+    if (!showQr) return;
+
     fetch("/api/v1/network/info")
       .then((res) => (res.ok ? res.json() : null))
       .then((data: { lan_ip?: string } | null) => {
@@ -77,13 +84,14 @@ export function ConnectedMeshPanel({
         }
       })
       .catch(() => {});
-  }, []);
+  }, [showQr]);
 
   const computeShareUrl = () => {
     if (shareUrl) return shareUrl;
     if (typeof window === "undefined") return "";
+    if (!sessionCode) return "";
 
-    const code = sessionCode?.toUpperCase() || "NUT-ROOM1";
+    const code = sessionCode.toUpperCase();
     const isLocalhost =
       window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1";
@@ -97,7 +105,7 @@ export function ConnectedMeshPanel({
     return `${protocol}//${host}/dashboard?session=${code}&autodownload=1`;
   };
 
-  const effectiveShareUrl = computeShareUrl();
+  const effectiveShareUrl = showQr ? computeShareUrl() : "";
 
   const handleConnectSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,10 +137,25 @@ export function ConnectedMeshPanel({
 
           <div className="flex flex-col items-center justify-center bg-[#faf8f5] border border-slate-100/90 rounded-xl p-2.5 sm:p-3 shrink-0">
             <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-2xs flex items-center justify-center">
-              <MeshQRCodeDisplay value={effectiveShareUrl} />
+              {showQr && effectiveShareUrl ? (
+                <MeshQRCodeDisplay value={effectiveShareUrl} />
+              ) : (
+                <div className="h-[105px] w-[105px] flex items-center justify-center">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onRevealQr}
+                    disabled={!sessionCode}
+                    className="h-9 rounded-lg gap-1.5 text-xs font-semibold"
+                  >
+                    <QrCode className="h-3.5 w-3.5" />
+                    Show QR
+                  </Button>
+                </div>
+              )}
             </div>
             <span className="text-[11px] font-medium text-slate-500 mt-1.5 text-center">
-              Scan this QR code
+              {showQr ? "Scan this QR code" : "Reveal when needed"}
             </span>
           </div>
 
