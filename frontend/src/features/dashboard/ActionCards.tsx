@@ -65,12 +65,12 @@ export function TopTransferActionCards({
         onDrop={handleDrop}
         className={`rounded-2xl border-2 border-dashed transition-all duration-200 p-4 sm:p-5 shadow-xs flex flex-col items-center justify-between text-center ${
           isDragging
-            ? "border-amber-500 bg-amber-50/50 scale-[1.01]"
-            : "border-amber-300/80 hover:border-amber-400 bg-white"
+            ? "border-orange-500 bg-orange-50/50 scale-[1.01]"
+            : "border-orange-300/80 hover:border-orange-400 bg-white"
         }`}
       >
         <div className="flex flex-col items-center justify-center space-y-2 my-auto">
-          <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-600 shadow-xs">
+          <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-orange-50 text-orange-600 shadow-xs">
             <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
 
@@ -86,7 +86,7 @@ export function TopTransferActionCards({
           <div className="flex items-center gap-2 flex-wrap justify-center">
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="font-semibold rounded-lg h-9 px-6 text-xs bg-amber-600 hover:bg-amber-700 text-white shadow-xs shadow-amber-600/20 cursor-pointer active:scale-95 transition-all gap-1.5"
+              className="font-semibold rounded-lg h-9 px-6 text-xs bg-orange-600 hover:bg-orange-700 text-white shadow-xs shadow-orange-600/20 cursor-pointer active:scale-95 transition-all gap-1.5"
             >
               <Upload className="h-3.5 w-3.5" />
               <span>Transfer File</span>
@@ -95,7 +95,7 @@ export function TopTransferActionCards({
         </div>
 
         <div className="inline-flex items-center gap-1.5 text-[10px] font-medium pt-2 mt-2 border-t border-slate-100 w-full justify-center text-slate-400">
-          <Zap className="h-3 w-3 text-amber-500" />
+          <Zap className="h-3 w-3 text-orange-500" />
           <span>Unlimited file size • 64 KB SHA-256 Slicing</span>
         </div>
       </div>

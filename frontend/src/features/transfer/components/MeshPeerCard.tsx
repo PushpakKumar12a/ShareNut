@@ -85,8 +85,8 @@ export function MeshPeerCard({ peer, className = "" }: MeshPeerCardProps) {
               <span>Complete</span>
             </span>
           ) : isTransferring ? (
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 font-semibold text-xs border border-amber-200 shadow-2xs">
-              <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 text-orange-700 font-semibold text-xs border border-orange-200 shadow-2xs">
+              <span className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
               <span>Downloading</span>
             </span>
           ) : isPaused ? (
@@ -120,7 +120,7 @@ export function MeshPeerCard({ peer, className = "" }: MeshPeerCardProps) {
               isCompleted
                 ? "bg-emerald-500"
                 : isTransferring
-                ? "bg-linear-to-r from-amber-500 to-amber-600"
+                ? "bg-linear-to-r from-orange-500 to-orange-600"
                 : "bg-slate-400"
             }`}
             style={{ width: `${Math.max(2, peer.progress)}%` }}
@@ -138,7 +138,7 @@ export function MeshPeerCard({ peer, className = "" }: MeshPeerCardProps) {
         </div>
 
         {peer.speedBytesPerSec > 0 && (
-          <div className="flex items-center gap-1 text-amber-700 font-semibold">
+          <div className="flex items-center gap-1 text-orange-700 font-semibold">
             <ArrowDown className="h-3 w-3" />
             <span>{formatSpeed(peer.speedBytesPerSec)}</span>
           </div>

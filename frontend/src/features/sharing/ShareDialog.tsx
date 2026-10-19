@@ -30,7 +30,7 @@ function QRCodeDisplay({ value }: { value: string }) {
   if (!QRComponent) {
     return (
       <div className="h-[135px] w-[135px] flex items-center justify-center">
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-orange-600 border-t-transparent" />
       </div>
     );
   }
@@ -121,7 +121,7 @@ export function ShareSessionDialog({
       <DialogContent className="max-w-[340px] p-4 sm:p-5 gap-3 rounded-2xl">
         <DialogHeader className="pb-1.5 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
               <QrCode className="h-4 w-4" />
             </div>
             <div>
@@ -141,14 +141,14 @@ export function ShareSessionDialog({
               <QRCodeDisplay value={shareUrl} />
             ) : (
               <div className="h-[135px] w-[135px] flex items-center justify-center">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-orange-600 border-t-transparent" />
               </div>
             )}
           </div>
 
           <div className="flex items-center justify-between w-full px-1 text-[11px] font-medium text-slate-600">
             <div className="flex items-center gap-1 text-slate-600">
-              <Smartphone className="h-3 w-3 text-amber-700" />
+              <Smartphone className="h-3 w-3 text-orange-700" />
               <span className="text-[10px] text-slate-500">Scan with camera</span>
             </div>
 
@@ -156,7 +156,7 @@ export function ShareSessionDialog({
               <button
                 type="button"
                 onClick={() => setUseLanIp(!useLanIp)}
-                className="inline-flex items-center gap-1 text-[10px] font-semibold text-amber-700 bg-amber-50 hover:bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100 px-2 py-0.5 rounded-full border border-orange-200/60 transition-colors cursor-pointer"
                 title="Click to toggle LAN IP vs localhost"
               >
                 <Wifi className="h-2.5 w-2.5" />
@@ -171,7 +171,7 @@ export function ShareSessionDialog({
             <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
               Room:
             </span>
-            <span className="font-mono text-xs sm:text-sm font-extrabold text-amber-700 tracking-wider">
+            <span className="font-mono text-xs sm:text-sm font-extrabold text-orange-700 tracking-wider">
               {sessionCode}
             </span>
           </div>
@@ -198,7 +198,7 @@ export function ShareSessionDialog({
 
         <Button
           onClick={handleCopyLink}
-          className="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl h-8.5 gap-1.5 text-xs cursor-pointer shadow-sm shadow-amber-500/20"
+          className="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl h-8.5 gap-1.5 text-xs cursor-pointer shadow-sm shadow-orange-500/20"
         >
           {copiedLink ? (
             <>

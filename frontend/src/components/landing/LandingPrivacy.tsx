@@ -43,8 +43,8 @@ export function LandingPrivacy() {
     <section className="px-4 sm:px-6 py-16 sm:py-20 max-w-3xl mx-auto space-y-10">
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-800 text-xs font-medium shadow-2xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
           <span>Privacy Policy</span>
         </div>
 
@@ -66,7 +66,7 @@ export function LandingPrivacy() {
               key={point.title}
               className="p-5 sm:p-6 rounded-2xl border border-slate-200/90 bg-white/90 shadow-2xs flex items-start gap-4"
             >
-              <div className="h-10 w-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 shrink-0">
+              <div className="h-10 w-10 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-700 shrink-0">
                 <Icon className="h-5 w-5" />
               </div>
               <div className="space-y-1 pt-0.5">
@@ -90,7 +90,7 @@ export function LandingPrivacy() {
 
         <div>
           <Link href="/dashboard">
-            <Button className="h-10 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs rounded-xl gap-2 shadow-xs shadow-amber-600/20 cursor-pointer">
+            <Button className="h-10 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs rounded-xl gap-2 shadow-xs shadow-orange-600/20 cursor-pointer">
               <span>Open ShareNut Station</span>
               <ArrowRight className="h-4 w-4" />
             </Button>

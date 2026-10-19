@@ -19,7 +19,7 @@ function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export function LandingFooter() {
   return (
-    <footer className="border-t border-amber-900/10 bg-[#f7f4ee]/80 py-7 text-xs text-stone-600 sm:py-8">
+    <footer className="border-t border-orange-900/10 bg-[#f7f4ee]/80 py-7 text-xs text-stone-600 sm:py-8">
       <div className="mx-auto max-w-6xl space-y-5 px-4 sm:px-6">
 
         {/* Main Bar */}
@@ -39,7 +39,7 @@ export function LandingFooter() {
               </div>
 
               <span className="font-heading text-base font-bold text-stone-900">
-                Share<span className="text-amber-600">Nut</span>
+                Share<span className="text-orange-600">Nut</span>
               </span>
             </Link>
 

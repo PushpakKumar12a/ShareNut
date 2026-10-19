@@ -65,13 +65,13 @@ export const getFileIcon = (fileName: string) => {
   }
   if (["iso", "img", "dmg"].includes(ext)) {
     return (
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-700 text-white shadow-2xs shrink-0">
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-700 text-white shadow-2xs shrink-0">
         <HardDrive className="h-4 w-4" />
       </div>
     );
   }
   return (
-    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-600 text-white shadow-2xs shrink-0">
+    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-600 text-white shadow-2xs shrink-0">
       <FileText className="h-4 w-4" />
     </div>
   );

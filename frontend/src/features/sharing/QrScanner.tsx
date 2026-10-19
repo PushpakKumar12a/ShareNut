@@ -219,7 +219,7 @@ export function QrScannerDialog({
       <DialogContent className="max-w-md p-6 rounded-2xl bg-white border border-slate-200 shadow-2xl">
         <DialogHeader className="pb-2 border-b border-slate-100">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-700">
               <Camera className="h-5 w-5" />
             </div>
             <div>
@@ -264,21 +264,21 @@ export function QrScannerDialog({
 
           {isScanning && !scannedCode && (
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-8">
-              <div className="relative h-48 w-48 rounded-2xl border-2 border-dashed border-amber-400 shadow-2xl">
+              <div className="relative h-48 w-48 rounded-2xl border-2 border-dashed border-orange-400 shadow-2xl">
 
-                <div className="absolute -top-1 -left-1 h-5 w-5 border-t-3 border-l-3 border-amber-500 rounded-tl-lg" />
-                <div className="absolute -top-1 -right-1 h-5 w-5 border-t-3 border-r-3 border-amber-500 rounded-tr-lg" />
-                <div className="absolute -bottom-1 -left-1 h-5 w-5 border-b-3 border-l-3 border-amber-500 rounded-bl-lg" />
-                <div className="absolute -bottom-1 -right-1 h-5 w-5 border-b-3 border-r-3 border-amber-500 rounded-br-lg" />
+                <div className="absolute -top-1 -left-1 h-5 w-5 border-t-3 border-l-3 border-orange-500 rounded-tl-lg" />
+                <div className="absolute -top-1 -right-1 h-5 w-5 border-t-3 border-r-3 border-orange-500 rounded-tr-lg" />
+                <div className="absolute -bottom-1 -left-1 h-5 w-5 border-b-3 border-l-3 border-orange-500 rounded-bl-lg" />
+                <div className="absolute -bottom-1 -right-1 h-5 w-5 border-b-3 border-r-3 border-orange-500 rounded-br-lg" />
 
-                <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-pulse top-1/2 -translate-y-1/2 shadow-[0_0_12px_rgba(217,119,6,0.8)]" />
+                <div className="absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-orange-400 to-transparent animate-pulse top-1/2 -translate-y-1/2 shadow-[0_0_12px_rgba(217,119,6,0.8)]" />
               </div>
             </div>
           )}
 
           {cameraError && (
             <div className="flex flex-col items-center justify-center p-6 text-center text-slate-300 space-y-3">
-              <AlertCircle className="h-10 w-10 text-amber-400" />
+              <AlertCircle className="h-10 w-10 text-orange-400" />
               <p className="text-xs font-medium text-slate-300 leading-relaxed max-w-xs">
                 {cameraError}
               </p>
@@ -302,7 +302,7 @@ export function QrScannerDialog({
             onClick={() => fileInputRef.current?.click()}
             className="text-xs rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 gap-1.5 h-9 cursor-pointer"
           >
-            <Upload className="h-3.5 w-3.5 text-amber-700" />
+            <Upload className="h-3.5 w-3.5 text-orange-700" />
             <span>Upload QR Image</span>
           </Button>
 

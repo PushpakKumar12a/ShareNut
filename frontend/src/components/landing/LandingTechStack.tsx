@@ -98,12 +98,12 @@ export function LandingTechStack() {
     filter === "All" ? TECH_STACK : TECH_STACK.filter((item) => item.category === filter);
 
   return (
-    <section id="architecture" className="px-4 sm:px-6 py-14 sm:py-20 border-t border-amber-900/10 bg-[#faf8f5] relative scroll-mt-14">
+    <section id="architecture" className="px-4 sm:px-6 py-14 sm:py-20 border-t border-orange-900/10 bg-[#faf8f5] relative scroll-mt-14">
       <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16">
         {/* Section Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-mono shadow-2xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-800 text-xs font-mono shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-600 animate-pulse" />
             <span>Engineering Architecture</span>
           </div>
 
@@ -123,8 +123,8 @@ export function LandingTechStack() {
                 onClick={() => setFilter(cat)}
                 className={`px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all cursor-pointer ${
                   filter === cat
-                    ? "bg-amber-600 text-white shadow-xs shadow-amber-600/25 font-semibold"
-                    : "bg-white text-stone-600 hover:text-stone-900 border border-amber-900/10 hover:bg-amber-50/50 hover:border-amber-200"
+                    ? "bg-orange-600 text-white shadow-xs shadow-orange-600/25 font-semibold"
+                    : "bg-white text-stone-600 hover:text-stone-900 border border-orange-900/10 hover:bg-orange-50/50 hover:border-orange-200"
                 }`}
               >
                 {cat}
@@ -140,14 +140,14 @@ export function LandingTechStack() {
             return (
               <div
                 key={item.id}
-                className="p-6 rounded-2xl border border-amber-900/10 bg-white space-y-4 hover:border-amber-400/60 hover:shadow-md hover:shadow-amber-900/5 transition-all flex flex-col justify-between"
+                className="p-6 rounded-2xl border border-orange-900/10 bg-white space-y-4 hover:border-orange-400/60 hover:shadow-md hover:shadow-orange-900/5 transition-all flex flex-col justify-between"
               >
                 <div className="space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 border border-amber-200/70 text-amber-700 shadow-2xs">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-50 border border-orange-200/70 text-orange-700 shadow-2xs">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-[11px] font-mono font-medium text-amber-800 bg-amber-50/80 px-2.5 py-0.5 rounded-full border border-amber-200/60">
+                    <span className="text-[11px] font-mono font-medium text-orange-800 bg-orange-50/80 px-2.5 py-0.5 rounded-full border border-orange-200/60">
                       {item.category}
                     </span>
                   </div>
@@ -156,7 +156,7 @@ export function LandingTechStack() {
                     <h3 className="text-base font-bold text-stone-900 font-heading">
                       {item.name}
                     </h3>
-                    <p className="text-xs text-amber-700 font-medium pt-0.5 font-mono">
+                    <p className="text-xs text-orange-700 font-medium pt-0.5 font-mono">
                       {item.role}
                     </p>
                   </div>
@@ -166,7 +166,7 @@ export function LandingTechStack() {
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-amber-900/5 flex items-center justify-between text-[11px] font-mono text-stone-500">
+                <div className="pt-3 border-t border-orange-900/5 flex items-center justify-between text-[11px] font-mono text-stone-500">
                   <span>{item.spec}</span>
                   <span className="font-semibold text-stone-800 bg-stone-50 px-2 py-0.5 rounded border border-stone-200/70">
                     {item.tag}
@@ -178,12 +178,12 @@ export function LandingTechStack() {
         </div>
 
         {/* Architecture Data vs Control Plane Summary Banner */}
-        <div className="rounded-2xl border border-amber-900/10 bg-white p-6 sm:p-7 shadow-xs">
+        <div className="rounded-2xl border border-orange-900/10 bg-white p-6 sm:p-7 shadow-xs">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 space-y-2">
               <div className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-amber-600" />
-                <span className="text-xs font-mono font-bold text-amber-800 uppercase tracking-wider">
+                <span className="h-2 w-2 rounded-full bg-orange-600" />
+                <span className="text-xs font-mono font-bold text-orange-800 uppercase tracking-wider">
                   Strict Architectural Separation
                 </span>
               </div>
@@ -200,8 +200,8 @@ export function LandingTechStack() {
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>Control Plane: &lt; 2 KB In-Memory SDP</span>
               </div>
-              <div className="flex items-center gap-2.5 text-xs font-mono text-amber-950 bg-amber-50/80 px-3.5 py-2 rounded-xl border border-amber-200/80">
-                <CheckCircle2 className="h-4 w-4 text-amber-600 shrink-0" />
+              <div className="flex items-center gap-2.5 text-xs font-mono text-orange-950 bg-orange-50/80 px-3.5 py-2 rounded-xl border border-orange-200/80">
+                <CheckCircle2 className="h-4 w-4 text-orange-600 shrink-0" />
                 <span>Data Plane: Direct Hardware Pipe</span>
               </div>
             </div>

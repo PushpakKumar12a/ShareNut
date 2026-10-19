@@ -21,7 +21,7 @@ export function ConnectedDevicesCard({
 
         <div className="flex items-center justify-between pb-2.5 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shadow-2xs">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
               <Network className="h-4 w-4" />
             </div>
             <span className="text-xs font-bold uppercase tracking-wider text-slate-900">
@@ -67,7 +67,7 @@ export function ConnectedDevicesCard({
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-mono">
-                      <span className="text-amber-700 font-semibold">{peer.speed}</span>
+                      <span className="text-orange-700 font-semibold">{peer.speed}</span>
                       <span>•</span>
                       <span className="text-emerald-600">{peer.latency}</span>
                     </div>

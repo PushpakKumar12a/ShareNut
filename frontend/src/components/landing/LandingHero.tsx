@@ -99,7 +99,7 @@ export function LandingHero() {
           <div className="space-y-4">
             <h1 className="font-heading text-[38px] font-extrabold leading-[1.08] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
               Share files directly from{" "}
-              <span className="text-amber-600">your device</span> to anywhere
+              <span className="text-orange-600">your device</span> to anywhere
             </h1>
 
             <p className="max-w-xl text-[15px] leading-6 text-slate-600 sm:text-base lg:text-lg">
@@ -142,7 +142,7 @@ export function LandingHero() {
 
           {/* Mobile Select Files */}
           <div className="mt-8 lg:hidden">
-            <Button onClick={() => fileInputRef.current?.click()} className="h-11 w-full rounded-md bg-amber-600 px-5 text-sm font-medium text-white shadow-xs shadow-amber-600/20 transition-colors hover:bg-amber-700">
+            <Button onClick={() => fileInputRef.current?.click()} className="h-11 w-full rounded-md bg-orange-600 px-5 text-sm font-medium text-white shadow-xs shadow-orange-600/20 transition-colors hover:bg-orange-700">
               <Upload className="h-4 w-4" />
               <span>Select Files</span>
             </Button>
@@ -173,10 +173,10 @@ export function LandingHero() {
 
         {/* Desktop Uploader */}
         <div className="order-2 hidden lg:order-1 lg:col-span-5 lg:block">
-          <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`flex min-h-[360px] flex-1 flex-col items-center justify-between rounded-2xl border-2 border-dashed bg-white p-8 text-center shadow-xs transition-all ${isDragging ? "border-amber-500 bg-amber-50/40" : "border-stone-300 hover:border-amber-400"}`}>
+          <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`flex min-h-[360px] flex-1 flex-col items-center justify-between rounded-2xl border-2 border-dashed bg-white p-8 text-center shadow-xs transition-all ${isDragging ? "border-orange-500 bg-orange-50/40" : "border-stone-300 hover:border-orange-400"}`}>
             {isRedirecting ? (
               <div className="my-auto flex flex-col items-center justify-center space-y-3 py-12">
-                <div className="flex h-10 w-10 items-center justify-center rounded-md border border-amber-200 bg-amber-50 text-amber-700">
+                <div className="flex h-10 w-10 items-center justify-center rounded-md border border-orange-200 bg-orange-50 text-orange-700">
                   <Loader2 className="h-5 w-5 animate-spin" />
                 </div>
 
@@ -210,7 +210,7 @@ export function LandingHero() {
                   </div>
 
                   <div className="flex items-center justify-center gap-2.5 pt-2">
-                    <Button onClick={() => fileInputRef.current?.click()} className="h-9 rounded-md bg-amber-600 px-5 text-xs font-medium text-white shadow-xs shadow-amber-600/20 transition-colors hover:bg-amber-700">
+                    <Button onClick={() => fileInputRef.current?.click()} className="h-9 rounded-md bg-orange-600 px-5 text-xs font-medium text-white shadow-xs shadow-orange-600/20 transition-colors hover:bg-orange-700">
                       <Upload className="h-3.5 w-3.5" />
                       <span>Select Files</span>
                     </Button>

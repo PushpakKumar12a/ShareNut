@@ -60,7 +60,7 @@ export function TransferActivityHub({
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-50 text-amber-600 shadow-2xs">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-orange-50 text-orange-600 shadow-2xs">
             <Activity className="h-4 w-4" />
           </div>
           <div>
@@ -98,7 +98,7 @@ export function TransferActivityHub({
             >
               <span>Active</span>
               {ongoingFiles.length > 0 && (
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
+                <span className="h-1.5 w-1.5 rounded-full bg-orange-600 animate-pulse" />
               )}
               <span className="text-[10px] text-slate-400 font-mono">({ongoingFiles.length})</span>
             </button>
@@ -148,8 +148,8 @@ export function TransferActivityHub({
             return (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-700 flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-amber-600 animate-ping" />
+                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-orange-700 flex items-center gap-1.5">
+                    <span className="h-2 w-2 rounded-full bg-orange-600 animate-ping" />
                     In-Flight Transfers ({activeDisplay.length})
                   </span>
                 </div>
@@ -176,7 +176,7 @@ export function TransferActivityHub({
                                 {getFileIcon(file.manifest.name)}
                               </div>
                               <div className="min-w-0">
-                                <div className="text-xs font-bold text-slate-900 group-hover/file:text-amber-700 group-hover/file:underline truncate max-w-[180px]">
+                                <div className="text-xs font-bold text-slate-900 group-hover/file:text-orange-700 group-hover/file:underline truncate max-w-[180px]">
                                   {file.manifest.name}
                                 </div>
                                 <div className="text-[10px] text-slate-400 font-medium">
@@ -201,8 +201,8 @@ export function TransferActivityHub({
                           )}
 
                           {isWaiting || (file.isSender && file.status === "ready") ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-semibold text-[10px] shrink-0 border border-amber-200/60">
-                              <Clock className="h-2.5 w-2.5 text-amber-600 animate-spin" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-800 font-semibold text-[10px] shrink-0 border border-orange-200/60">
+                              <Clock className="h-2.5 w-2.5 text-orange-600 animate-spin" />
                               Waiting for peer
                             </span>
                           ) : isUploading ? (
@@ -211,18 +211,18 @@ export function TransferActivityHub({
                               Uploading
                             </span>
                           ) : isPaused ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-900 font-semibold text-[10px] shrink-0 border border-amber-200">
-                              <span className={`h-1.5 w-1.5 rounded-full ${file.senderAvailable ? "bg-emerald-500 animate-pulse" : "bg-amber-400"}`} />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-900 font-semibold text-[10px] shrink-0 border border-orange-200">
+                              <span className={`h-1.5 w-1.5 rounded-full ${file.senderAvailable ? "bg-emerald-500 animate-pulse" : "bg-orange-400"}`} />
                               {file.senderAvailable ? "Sender Online" : "Paused"}
                             </span>
                           ) : file.isSender ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-semibold text-[10px] shrink-0">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-800 font-semibold text-[10px] shrink-0">
+                              <span className="h-1.5 w-1.5 rounded-full bg-orange-500" />
                               Ready
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 font-semibold text-[10px] shrink-0">
-                              <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-orange-800 font-semibold text-[10px] shrink-0">
+                              <span className="h-1.5 w-1.5 rounded-full bg-orange-600 animate-pulse" />
                               Downloading
                             </span>
                           )}
@@ -231,7 +231,7 @@ export function TransferActivityHub({
                         <div className="space-y-1">
                           <div className="flex justify-between items-center text-[10px] font-semibold text-slate-600">
                             <span>{isWaiting ? "0%" : `${Math.round(file.progress)}%`}</span>
-                            <span className="font-mono text-amber-700">
+                            <span className="font-mono text-orange-700">
                               {isWaiting ? "—" : formatSpeed(file.speedBytesPerSec)}
                             </span>
                           </div>
@@ -239,12 +239,12 @@ export function TransferActivityHub({
                             <div
                               className={`h-full rounded-full transition-all duration-300 ${
                                 isWaiting
-                                  ? "bg-amber-400 animate-pulse"
+                                  ? "bg-orange-400 animate-pulse"
                                   : isUploading
                                   ? "bg-emerald-600"
                                   : isPaused
                                   ? "bg-orange-500"
-                                  : "bg-amber-600"
+                                  : "bg-orange-600"
                               }`}
                               style={{ width: isWaiting ? "100%" : `${Math.max(3, file.progress)}%` }}
                             />
@@ -349,7 +349,7 @@ export function TransferActivityHub({
                                   <div className="group-hover/link:scale-105 transition-transform">
                                     {getFileIcon(file.manifest.name)}
                                   </div>
-                                  <span className="font-semibold text-slate-900 group-hover/link:text-amber-700 group-hover/link:underline truncate max-w-[200px] lg:max-w-[260px]">
+                                  <span className="font-semibold text-slate-900 group-hover/link:text-orange-700 group-hover/link:underline truncate max-w-[200px] lg:max-w-[260px]">
                                     {file.manifest.name}
                                   </span>
                                 </Link>
@@ -371,8 +371,8 @@ export function TransferActivityHub({
 
                             <td className="py-3.5 pr-4 whitespace-nowrap">
                               {isWaiting || (file.isSender && file.status === "ready") ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold text-[11px] border border-amber-200/60">
-                                  <Clock className="h-3 w-3 text-amber-600 animate-spin" />
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-orange-800 font-semibold text-[11px] border border-orange-200/60">
+                                  <Clock className="h-3 w-3 text-orange-600 animate-spin" />
                                   Waiting for peer
                                 </span>
                               ) : isUploading ? (
@@ -381,18 +381,18 @@ export function TransferActivityHub({
                                   Uploading
                                 </span>
                               ) : isPaused ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-900 font-semibold text-[11px] border border-amber-200">
-                                  <span className={`h-2 w-2 rounded-full ${file.senderAvailable ? "bg-emerald-500 animate-pulse" : "bg-amber-400"}`} />
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-orange-900 font-semibold text-[11px] border border-orange-200">
+                                  <span className={`h-2 w-2 rounded-full ${file.senderAvailable ? "bg-emerald-500 animate-pulse" : "bg-orange-400"}`} />
                                   {file.senderAvailable ? "Sender Online" : "Paused"}
                                 </span>
                               ) : file.isSender ? (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold text-[11px]">
-                                  <span className="h-2 w-2 rounded-full bg-amber-500" />
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-orange-800 font-semibold text-[11px]">
+                                  <span className="h-2 w-2 rounded-full bg-orange-500" />
                                   Ready
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 font-semibold text-[11px]">
-                                  <span className="h-2 w-2 rounded-full bg-amber-600 animate-pulse" />
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-50 text-orange-800 font-semibold text-[11px]">
+                                  <span className="h-2 w-2 rounded-full bg-orange-600 animate-pulse" />
                                   Downloading
                                 </span>
                               )}
@@ -407,12 +407,12 @@ export function TransferActivityHub({
                                   <div
                                     className={`h-full rounded-full transition-all duration-300 ${
                                       isWaiting
-                                        ? "bg-amber-400 animate-pulse"
+                                        ? "bg-orange-400 animate-pulse"
                                         : isUploading
                                         ? "bg-emerald-600"
                                         : isPaused
                                         ? "bg-orange-500"
-                                        : "bg-amber-600"
+                                        : "bg-orange-600"
                                     }`}
                                     style={{ width: isWaiting ? "100%" : `${Math.max(3, file.progress)}%` }}
                                   />
@@ -442,7 +442,7 @@ export function TransferActivityHub({
                                   {formatSpeed(file.speedBytesPerSec)}
                                 </span>
                               ) : (
-                                <span className="text-amber-700 flex items-center gap-1">
+                                <span className="text-orange-700 flex items-center gap-1">
                                   <ArrowDown className="h-3.5 w-3.5 stroke-[2.5]" />
                                   {formatSpeed(file.speedBytesPerSec)}
                                 </span>
@@ -563,7 +563,7 @@ export function TransferActivityHub({
                                 <div className="group-hover/link:scale-105 transition-transform">
                                   {getFileIcon(file.manifest.name)}
                                 </div>
-                                <span className="font-semibold text-slate-900 group-hover/link:text-amber-700 group-hover/link:underline truncate max-w-[320px] lg:max-w-[480px]">
+                                <span className="font-semibold text-slate-900 group-hover/link:text-orange-700 group-hover/link:underline truncate max-w-[320px] lg:max-w-[480px]">
                                   {file.manifest.name}
                                 </span>
                               </Link>
@@ -627,7 +627,7 @@ export function TransferActivityHub({
                             {getFileIcon(file.manifest.name)}
                           </div>
                           <div className="min-w-0">
-                            <div className="text-xs font-bold text-slate-900 group-hover/file:text-amber-700 group-hover/file:underline truncate max-w-[180px]">
+                            <div className="text-xs font-bold text-slate-900 group-hover/file:text-orange-700 group-hover/file:underline truncate max-w-[180px]">
                               {file.manifest.name}
                             </div>
                             <div className="text-[10px] text-slate-400 font-medium">

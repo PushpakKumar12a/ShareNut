@@ -110,7 +110,7 @@ function TransferDetailPageContent() {
       <div className="min-h-screen bg-[#faf8f5] text-slate-900 flex flex-col">
         <AppNavbar sessionCode={currentSessionCode} />
         <main className="flex-1 max-w-4xl mx-auto p-4 sm:p-6 w-full flex flex-col items-center justify-center text-center space-y-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 shadow-2xs">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-orange-50 text-orange-600 shadow-2xs">
             <HardDrive className="h-7 w-7" />
           </div>
           <div className="space-y-1">
@@ -122,7 +122,7 @@ function TransferDetailPageContent() {
             </p>
           </div>
           <Link href={`/dashboard?session=${currentSessionCode}`}>
-            <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-xl gap-2 font-semibold">
+            <Button className="bg-orange-600 hover:bg-orange-700 text-white rounded-xl gap-2 font-semibold">
               <ArrowLeft className="h-4 w-4" />
               <span>Back to Dashboard</span>
             </Button>
@@ -189,7 +189,7 @@ function TransferDetailPageContent() {
 
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-mono text-slate-400">
-              Room <strong className="text-amber-700">{currentSessionCode}</strong>
+              Room <strong className="text-orange-700">{currentSessionCode}</strong>
             </span>
             <Button
               variant="outline"
@@ -197,7 +197,7 @@ function TransferDetailPageContent() {
               onClick={() => setIsShareOpen(true)}
               className="h-7 px-2.5 text-xs font-semibold rounded-lg border-slate-200 bg-white gap-1 cursor-pointer text-slate-700 hover:text-slate-900 shadow-2xs"
             >
-              <Share2 className="h-3 w-3 text-amber-700" />
+              <Share2 className="h-3 w-3 text-orange-700" />
               <span>Share Room</span>
             </Button>
           </div>
@@ -235,8 +235,8 @@ function TransferDetailPageContent() {
 
             <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
               {isWaiting && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200/80 text-xs font-semibold shadow-2xs">
-                  <Clock className="h-3.5 w-3.5 text-amber-600 animate-spin" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-800 border border-orange-200/80 text-xs font-semibold shadow-2xs">
+                  <Clock className="h-3.5 w-3.5 text-orange-600 animate-spin" />
                   <span>Waiting for peer</span>
                 </span>
               )}
@@ -246,9 +246,9 @@ function TransferDetailPageContent() {
                   variant="outline"
                   size="sm"
                   onClick={handleTogglePauseResume}
-                  className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors"
+                  className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-orange-300 bg-orange-50 text-orange-800 hover:bg-orange-100 transition-colors"
                 >
-                  <Play className="h-3.5 w-3.5 fill-amber-700 text-amber-700" />
+                  <Play className="h-3.5 w-3.5 fill-orange-700 text-orange-700" />
                   <span>Resume Transfer</span>
                 </Button>
               )}
@@ -291,7 +291,7 @@ function TransferDetailPageContent() {
         <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-xs space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shadow-2xs">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
                 <Activity className="h-4 w-4" />
               </div>
               <div>
@@ -305,7 +305,7 @@ function TransferDetailPageContent() {
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="font-mono text-base sm:text-lg font-black text-amber-700">
+              <span className="font-mono text-base sm:text-lg font-black text-orange-700">
                 {isWaiting ? "Waiting" : `${Math.round(liveOverallProgress)}%`}
               </span>
               <span className="text-[10px] uppercase font-bold text-slate-400">
@@ -333,7 +333,7 @@ function TransferDetailPageContent() {
               </span>
 
               {liveSpeed > 0 && (
-                <span className="text-amber-700 font-bold flex items-center gap-1 font-mono">
+                <span className="text-orange-700 font-bold flex items-center gap-1 font-mono">
                   <ArrowDown className="h-3 w-3 stroke-[2.5]" />
                   {formatSpeed(liveSpeed)} Transfer Speed
                 </span>
@@ -394,7 +394,7 @@ function TransferDetailPageContent() {
           {/* Header Bar */}
           <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 flex items-center justify-between border-b border-slate-100 bg-slate-50/60">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-50 text-amber-700 shadow-2xs">
+              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
                 <Users className="h-4 w-4" />
               </div>
               <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900">

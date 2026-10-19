@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-amber.svg?style=flat-square" alt="License: Apache 2.0" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-orange.svg?style=flat-square" alt="License: Apache 2.0" /></a>
   <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-black?style=flat-square&logo=next.js" alt="Next.js" /></a>
   <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-149eca?style=flat-square&logo=react" alt="React" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-443e38?style=flat-square&logo=tailwindcss" alt="Tailwind CSS" /></a>
@@ -222,7 +222,7 @@ graph TD
    - `LanTurboTransport.ts`: Bypasses WebRTC DataChannel bandwidth limits when peers share a local subnet, streaming directly over HTTP (`/api/v1/lan-transfer/stream/{session_id}`) with live progress polling and direct-to-OPFS assembly.
 6. **Reactive State & Modern Design System (`frontend/src/`)**:
    - **Zustand (`features/mesh/peerStore.ts`, `engineStore.ts`)**: Decouples UI rendering from high-frequency WebRTC binary packet arrival (hundreds of chunks/sec). Components subscribe only to granular slice selectors, preventing full-tree React re-renders during peak throughput.
-   - **Tailwind CSS v4 & shadcn/ui (`components/ui/`, `app/globals.css`)**: Built using Tailwind v4's CSS-first `@import "tailwindcss";` pipeline, providing accessible Radix UI dialogs, interactive chunk matrices, speed gauges, and warm amber theme tokens.
+   - **Tailwind CSS v4 & shadcn/ui (`components/ui/`, `app/globals.css`)**: Built using Tailwind v4's CSS-first `@import "tailwindcss";` pipeline, providing accessible Radix UI dialogs, interactive chunk matrices, speed gauges, and warm orange theme tokens.
 
 ---
 

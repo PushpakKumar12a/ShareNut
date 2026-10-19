@@ -17,8 +17,8 @@ export function LandingAbout() {
     <section className="px-4 sm:px-6 py-16 sm:py-20 max-w-4xl mx-auto space-y-16">
       {/* Header */}
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-mono shadow-2xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-800 text-xs font-mono shadow-2xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
           <span>Origin &amp; Mission</span>
         </div>
 
@@ -45,8 +45,8 @@ export function LandingAbout() {
           </p>
 
           {/* Quote Callout */}
-          <div className="p-5 sm:p-6 rounded-xl border border-amber-200 bg-amber-50/50 text-slate-800 space-y-2 relative">
-            <Quote className="h-6 w-6 text-amber-500/40 absolute top-4 right-4" />
+          <div className="p-5 sm:p-6 rounded-xl border border-orange-200 bg-orange-50/50 text-slate-800 space-y-2 relative">
+            <Quote className="h-6 w-6 text-orange-500/40 absolute top-4 right-4" />
             <p className="text-base sm:text-lg font-medium italic text-slate-900">
               “It was an incredibly frustrating experience. I could hand my colleague a coffee or a snack from the table in two seconds, but the only way I could send him a file was by literally sending it to another continent first.”
             </p>
@@ -102,7 +102,7 @@ export function LandingAbout() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
             <div className="p-4 rounded-xl border border-slate-200 bg-white shadow-2xs space-y-2">
               <div className="flex items-center gap-2 text-slate-900 font-bold text-sm">
-                <HardDrive className="h-4 w-4 text-amber-600" />
+                <HardDrive className="h-4 w-4 text-orange-600" />
                 <span>Zero Cloud Storage</span>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
@@ -147,7 +147,7 @@ export function LandingAbout() {
         </p>
         <div className="pt-2">
           <Link href="/dashboard">
-            <Button size="lg" className="h-11 px-8 rounded-md bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm gap-2 shadow-xs shadow-amber-600/20 cursor-pointer transition-colors">
+            <Button size="lg" className="h-11 px-8 rounded-md bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm gap-2 shadow-xs shadow-orange-600/20 cursor-pointer transition-colors">
               Launch Station Dashboard
               <ArrowRight className="h-4 w-4" />
             </Button>

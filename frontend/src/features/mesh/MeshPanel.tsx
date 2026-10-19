@@ -45,7 +45,7 @@ const MeshQRCodeDisplay = memo(function MeshQRCodeDisplay({value}: {value: strin
   if (!QRComponent) {
     return (
       <div className="h-[105px] w-[105px] flex items-center justify-center">
-        <div className="h-4 w-4 animate-spin rounded-full border-2 border-amber-600 border-t-transparent" />
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-orange-600 border-t-transparent" />
       </div>
     );
   }
@@ -121,7 +121,7 @@ export function ConnectedMeshPanel({
 
       <div className="flex items-center justify-between pb-2 border-b border-slate-100">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-700">
+          <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
             <Network className="h-4 w-4" />
           </div>
           <div>
@@ -215,7 +215,7 @@ export function ConnectedMeshPanel({
         <button
           type="button"
           onClick={() => setShowHowItWorks(true)}
-          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-amber-50/80 hover:bg-amber-100 text-amber-700 border border-amber-200/80 font-semibold text-[11px] transition-colors shrink-0 cursor-pointer w-full sm:w-auto"
+          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-orange-50/80 hover:bg-orange-100 text-orange-700 border border-orange-200/80 font-semibold text-[11px] transition-colors shrink-0 cursor-pointer w-full sm:w-auto"
         >
           <HelpCircle className="h-3.5 w-3.5" />
           <span>How it works?</span>
@@ -226,7 +226,7 @@ export function ConnectedMeshPanel({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-base font-bold text-slate-900">
-              <HelpCircle className="h-5 w-5 text-amber-700" />
+              <HelpCircle className="h-5 w-5 text-orange-700" />
               How P2P Direct Transfer Works
             </DialogTitle>
             <DialogDescription className="text-xs text-slate-500">
@@ -236,7 +236,7 @@ export function ConnectedMeshPanel({
 
           <div className="space-y-3 py-2 text-xs text-slate-600">
             <div className="flex items-start gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-800 font-bold text-xs">1</span>
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-800 font-bold text-xs">1</span>
               <div>
                 <p className="font-semibold text-slate-800">Same Wi-Fi or LAN</p>
                 <p className="text-slate-500 mt-0.5">Ensure all devices are connected to the same local router or Wi-Fi hotspot.</p>
@@ -262,7 +262,7 @@ export function ConnectedMeshPanel({
 
           <Button
             onClick={() => setShowHowItWorks(false)}
-            className="w-full rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold h-10 cursor-pointer"
+            className="w-full rounded-xl bg-orange-600 hover:bg-orange-700 text-white text-xs font-semibold h-10 cursor-pointer"
           >
             Got it, thanks!
           </Button>

@@ -86,7 +86,7 @@ export default function DevicesPage() {
               Connected Devices
             </h1>
             <p className="text-[11px] text-slate-500 mt-1 truncate">
-              Room <span className="font-mono font-bold text-amber-700">{engineState.sessionCode || "ACTIVE"}</span>
+              Room <span className="font-mono font-bold text-orange-700">{engineState.sessionCode || "ACTIVE"}</span>
               <span className="hidden sm:inline"> • Direct WebRTC network</span>
             </p>
           </div>
@@ -115,7 +115,7 @@ export default function DevicesPage() {
                 key={device.id}
                 className={cn(
                   "px-3.5 py-2.5 sm:px-4 flex items-center justify-between gap-2.5 transition-colors",
-                  device.isLocal ? "bg-amber-50/30" : "hover:bg-slate-50/60"
+                  device.isLocal ? "bg-orange-50/30" : "hover:bg-slate-50/60"
                 )}
               >
 
@@ -124,7 +124,7 @@ export default function DevicesPage() {
                     className={cn(
                       "h-7 w-7 rounded-lg flex items-center justify-center shrink-0 border",
                       device.isLocal
-                        ? "bg-amber-50 border-amber-200 text-amber-700"
+                        ? "bg-orange-50 border-orange-200 text-orange-700"
                         : "bg-slate-50 border-slate-200 text-slate-600"
                     )}
                   >
@@ -137,7 +137,7 @@ export default function DevicesPage() {
                         {device.name}
                       </span>
                       {device.isLocal && (
-                        <span className="text-[8px] font-black uppercase text-amber-800 bg-amber-100 px-1 py-0.2 rounded border border-amber-200 shrink-0">
+                        <span className="text-[8px] font-black uppercase text-orange-800 bg-orange-100 px-1 py-0.2 rounded border border-orange-200 shrink-0">
                           YOU
                         </span>
                       )}
@@ -182,7 +182,7 @@ export default function DevicesPage() {
                 onClick={() => openShare(engineState.sessionCode || undefined)}
                 className="h-7 text-xs font-semibold px-2.5 rounded-lg border-slate-200 bg-white shadow-2xs gap-1 cursor-pointer text-slate-700 hover:text-slate-900"
               >
-                <QrCode className="h-3 w-3 text-amber-700" />
+                <QrCode className="h-3 w-3 text-orange-700" />
                 <span>Open QR</span>
               </Button>
             </div>

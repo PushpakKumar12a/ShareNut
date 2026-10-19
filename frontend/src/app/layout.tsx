@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${jakarta.variable} ${outfit.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#faf8f5] text-slate-900 selection:bg-amber-600 selection:text-white">
+      <body className="min-h-full flex flex-col font-sans bg-[#faf8f5] text-slate-900 selection:bg-orange-600 selection:text-white">
         <EngineProvider>
           {children}
         </EngineProvider>

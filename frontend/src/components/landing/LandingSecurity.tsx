@@ -84,17 +84,17 @@ const COMPARISON_POINTS = [
 
 export function LandingSecurity() {
   return (
-    <section id="security" className="px-4 sm:px-6 py-16 sm:py-20 border-t border-amber-900/10 bg-white relative scroll-mt-14">
+    <section id="security" className="px-4 sm:px-6 py-16 sm:py-20 border-t border-orange-900/10 bg-white relative scroll-mt-14">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Top Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-50 border border-orange-200/80 text-orange-800 text-xs font-medium shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-600 animate-pulse" />
             <span>Zero-Knowledge Architecture</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
-            Security by Design, <span className="text-amber-600">Not by Promise</span>
+            Security by Design, <span className="text-orange-600">Not by Promise</span>
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
             Most cloud file transfer services ask you to trust their servers. ShareNut eliminates the server from the data path entirely with direct device-to-device streaming.
@@ -108,14 +108,14 @@ export function LandingSecurity() {
           return (
             <div
               key={pillar.title}
-              className="p-5 sm:p-6 rounded-2xl border border-slate-200/80 bg-white hover:border-amber-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 shadow-xs group"
+              className="p-5 sm:p-6 rounded-2xl border border-slate-200/80 bg-white hover:border-orange-300 hover:shadow-md transition-all flex flex-col justify-between space-y-4 shadow-xs group"
             >
               <div className="space-y-3.5">
                 <div className="flex items-center justify-between">
-                  <div className="h-10 w-10 rounded-xl bg-amber-50 border border-amber-200/70 text-amber-700 flex items-center justify-center shadow-2xs group-hover:bg-amber-100/80 group-hover:scale-105 transition-all">
+                  <div className="h-10 w-10 rounded-xl bg-orange-50 border border-orange-200/70 text-orange-700 flex items-center justify-center shadow-2xs group-hover:bg-orange-100/80 group-hover:scale-105 transition-all">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <span className="text-[10px] font-semibold text-amber-800 bg-amber-50/80 px-2.5 py-0.5 rounded-full border border-amber-200/70">
+                  <span className="text-[10px] font-semibold text-orange-800 bg-orange-50/80 px-2.5 py-0.5 rounded-full border border-orange-200/70">
                     {pillar.badge}
                   </span>
                 </div>
@@ -194,14 +194,14 @@ export function LandingSecurity() {
             </div>
           </div>
 
-          {/* Right Card: ShareNut Mesh (Highlighted Amber Theme) */}
-          <div className="rounded-2xl border-2 border-amber-500 bg-white p-6 sm:p-7 space-y-6 flex flex-col justify-between shadow-md ring-4 ring-amber-500/5 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-100/50 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10" />
+          {/* Right Card: ShareNut Mesh (Highlighted orange Theme) */}
+          <div className="rounded-2xl border-2 border-orange-500 bg-white p-6 sm:p-7 space-y-6 flex flex-col justify-between shadow-md ring-4 ring-orange-500/5 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-orange-100/50 rounded-full blur-2xl pointer-events-none -mr-10 -mt-10" />
 
             <div className="space-y-4 relative z-10">
-              <div className="flex items-center justify-between pb-3.5 border-b border-amber-100">
+              <div className="flex items-center justify-between pb-3.5 border-b border-orange-100">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-50 border border-amber-200/90 p-1.5 shadow-2xs">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 border border-orange-200/90 p-1.5 shadow-2xs">
                     <Image
                       src="/sharenut-logo.png"
                       alt="ShareNut Logo"
@@ -214,7 +214,7 @@ export function LandingSecurity() {
                     <h3 className="text-base font-bold text-slate-900 font-heading">
                       ShareNut P2P Mesh
                     </h3>
-                    <p className="text-[11px] text-amber-700 font-medium">
+                    <p className="text-[11px] text-orange-700 font-medium">
                       Direct Hardware-to-Hardware Pipeline
                     </p>
                   </div>
@@ -227,7 +227,7 @@ export function LandingSecurity() {
               <div className="space-y-3.5">
                 {COMPARISON_POINTS.map((item) => (
                   <div key={item.feature} className="space-y-1">
-                    <span className="text-[11px] font-bold text-amber-900/60 uppercase tracking-wider block">
+                    <span className="text-[11px] font-bold text-orange-900/60 uppercase tracking-wider block">
                       {item.feature}
                     </span>
                     <div className="flex items-start gap-2.5 text-xs text-slate-800 font-medium">
@@ -241,7 +241,7 @@ export function LandingSecurity() {
               </div>
             </div>
 
-            <div className="pt-4 border-t border-amber-100/80 flex items-center justify-between text-[11px] text-emerald-700 font-semibold relative z-10">
+            <div className="pt-4 border-t border-orange-100/80 flex items-center justify-between text-[11px] text-emerald-700 font-semibold relative z-10">
               <span className="flex items-center gap-1.5">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Direct SCTP DataChannel
@@ -253,8 +253,8 @@ export function LandingSecurity() {
       </div>
 
       {/* Bottom CTA Card */}
-      <div className="rounded-2xl border border-amber-200/80 bg-gradient-to-br from-amber-50/90 via-orange-50/40 to-amber-50/60 p-6 sm:p-8 text-center space-y-4 shadow-xs">
-        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500 text-white shadow-md shadow-amber-500/25 mx-auto">
+      <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-br from-orange-50/90 via-orange-50/40 to-orange-50/60 p-6 sm:p-8 text-center space-y-4 shadow-xs">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-orange-500 text-white shadow-md shadow-orange-500/25 mx-auto">
           <ShieldCheck className="h-6 w-6" />
         </div>
 
@@ -269,7 +269,7 @@ export function LandingSecurity() {
 
         <div className="pt-2">
           <Link href="/dashboard">
-            <Button className="h-10 px-6 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs shadow-sm shadow-amber-600/20 gap-2 cursor-pointer transition-all active:scale-95">
+            <Button className="h-10 px-6 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-xs shadow-sm shadow-orange-600/20 gap-2 cursor-pointer transition-all active:scale-95">
               <span>Launch Dashboard</span>
               <ArrowRight className="h-3.5 w-3.5" />
             </Button>

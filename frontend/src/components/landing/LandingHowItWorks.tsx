@@ -67,8 +67,8 @@ export function LandingHowItWorks() {
       <div className="mx-auto max-w-6xl space-y-12 sm:space-y-16">
         {/* Section Header */}
         <div className="mx-auto max-w-3xl space-y-3 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-200/80 bg-amber-50 px-3 py-1 text-xs font-mono text-amber-800 shadow-2xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
+          <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-orange-50 px-3 py-1 text-xs font-mono text-orange-800 shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
             <span>Workflow &amp; Mechanics</span>
           </div>
 
@@ -132,8 +132,8 @@ export function LandingHowItWorks() {
                       className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300
                         ${
                           isActive
-                            ? "scale-105 border-amber-600 bg-amber-600 text-white shadow-md ring-4 ring-amber-100"
-                            : "border-slate-300 bg-white text-slate-700 shadow-2xs group-hover:border-amber-500 group-hover:text-amber-600"
+                            ? "scale-105 border-orange-600 bg-orange-600 text-white shadow-md ring-4 ring-orange-100"
+                            : "border-slate-300 bg-white text-slate-700 shadow-2xs group-hover:border-orange-500 group-hover:text-orange-600"
                         }
                       `}
                     >
@@ -155,7 +155,7 @@ export function LandingHowItWorks() {
                           sm:text-[11px]
                           ${
                             isActive
-                              ? "font-extrabold text-amber-600"
+                              ? "font-extrabold text-orange-600"
                               : "text-slate-400 group-hover:text-slate-700"
                           }
                         `}
@@ -187,7 +187,7 @@ export function LandingHowItWorks() {
                           sm:text-[11px]
                           ${
                             isActive
-                              ? "border-amber-200 bg-amber-50 font-semibold text-amber-800"
+                              ? "border-orange-200 bg-orange-50 font-semibold text-orange-800"
                               : "border-slate-200 bg-slate-100 text-slate-500"
                           }
                         `}

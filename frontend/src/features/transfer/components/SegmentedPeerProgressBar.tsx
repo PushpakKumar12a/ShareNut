@@ -6,7 +6,7 @@ import { formatSpeed, formatSize } from "./transferUtils";
 
 // ponytail: 8 handpicked distinct colors, wraps for 9+ peers
 const PEER_COLORS = [
-  "#d97706", // amber-600
+  "#d97706", // orange-600
   "#059669", // emerald-600
   "#7c3aed", // violet-600
   "#db2777", // pink-600
@@ -47,10 +47,10 @@ export function SegmentedPeerProgressBar({
             isCompleted
               ? "bg-emerald-500"
               : isWaiting
-              ? "bg-amber-400 animate-pulse"
+              ? "bg-orange-400 animate-pulse"
               : isPaused
-              ? "bg-amber-400"
-              : "bg-linear-to-r from-amber-500 to-amber-600 shadow-xs"
+              ? "bg-orange-400"
+              : "bg-linear-to-r from-orange-500 to-orange-600 shadow-xs"
           }`}
           style={{ width: `${isWaiting ? 100 : Math.max(2, overallProgress)}%` }}
         />
@@ -133,7 +133,7 @@ export function SegmentedPeerProgressBar({
                 {Math.round(peer.progress)}% • {formatSize(peer.transferredBytes)} / {formatSize(peer.totalBytes)}
               </div>
               {peer.speedBytesPerSec > 0 && (
-                <div className="text-amber-300 font-mono">
+                <div className="text-orange-300 font-mono">
                   ↓ {formatSpeed(peer.speedBytesPerSec)}
                 </div>
               )}

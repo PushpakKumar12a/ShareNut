@@ -10,7 +10,7 @@ export function LandingNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="border-b border-amber-900/10 bg-white/85 backdrop-blur-md sticky top-0 z-50">
+    <header className="border-b border-orange-900/10 bg-white/85 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-1">
@@ -27,7 +27,7 @@ export function LandingNav() {
 
           <div className="flex items-center">
             <span className="text-lg font-black tracking-tight text-slate-900 font-heading">
-              Share <span className="text-amber-600">Nut</span>
+              Share <span className="text-orange-600">Nut</span>
             </span>
           </div>
         </Link>
@@ -55,7 +55,7 @@ export function LandingNav() {
           type="button"
           id="landing-mobile-menu-toggle"
           onClick={() => setMobileMenuOpen((open) => !open)}
-          className="md:hidden flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:bg-amber-50 hover:text-amber-900 hover:border-amber-200 transition-colors cursor-pointer"
+          className="md:hidden flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700 hover:bg-orange-50 hover:text-orange-900 hover:border-orange-200 transition-colors cursor-pointer"
           aria-label="Toggle Navigation Menu"
           aria-expanded={mobileMenuOpen}
         >
@@ -78,40 +78,40 @@ export function LandingNav() {
 
       {/* Mobile Drawer Panel */}
       {mobileMenuOpen && (
-        <div className="md:hidden fixed top-14 inset-x-0 bg-white/95 backdrop-blur-md border-b border-amber-900/10 shadow-xl z-50 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
+        <div className="md:hidden fixed top-14 inset-x-0 bg-white/95 backdrop-blur-md border-b border-orange-900/10 shadow-xl z-50 px-4 py-4 space-y-3 animate-in slide-in-from-top-2 duration-150">
           <nav className="flex flex-col space-y-1">
             <Link
               href="/#how-it-works"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
+              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-900 transition-colors"
             >
               Workflow &amp; Mechanics
             </Link>
             <Link
               href="/#architecture"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
+              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-900 transition-colors"
             >
               Architecture
             </Link>
             <Link
               href="/#security"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
+              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-900 transition-colors"
             >
               Security
             </Link>
             <Link
               href="/#faq"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
+              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-900 transition-colors"
             >
               FAQ
             </Link>
             <Link
               href="/about"
               onClick={() => setMobileMenuOpen(false)}
-              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
+              className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-orange-50 hover:text-orange-900 transition-colors"
             >
               About
             </Link>
@@ -119,7 +119,7 @@ export function LandingNav() {
 
           <div className="pt-2 border-t border-slate-100">
             <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full h-10 bg-amber-600 hover:bg-amber-700 text-white font-semibold text-sm rounded-lg gap-2 shadow-xs shadow-amber-600/20 cursor-pointer">
+              <Button className="w-full h-10 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm rounded-lg gap-2 shadow-xs shadow-orange-600/20 cursor-pointer">
                 <span>Launch Station</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>

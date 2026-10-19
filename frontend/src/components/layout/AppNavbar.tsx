@@ -142,7 +142,7 @@ export function AppNavbar({
                 />
               </div>
               <span className="text-lg font-black tracking-tight text-slate-900 font-heading">
-                Share <span className="text-amber-600">Nut</span>
+                Share <span className="text-orange-600">Nut</span>
               </span>
             </Link>
 
@@ -160,14 +160,14 @@ export function AppNavbar({
                     className={cn(
                       "flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all",
                       isActive
-                        ? "bg-amber-50 text-amber-800 shadow-2xs font-bold"
+                        ? "bg-orange-50 text-orange-800 shadow-2xs font-bold"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
                     )}
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span>{item.label}</span>
                     {item.badge !== undefined && (
-                      <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-amber-600 text-white text-[10px] font-bold leading-none">
+                      <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-orange-600 text-white text-[10px] font-bold leading-none">
                         {item.badge}
                       </span>
                     )}
@@ -182,7 +182,7 @@ export function AppNavbar({
             <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50/90 px-3 py-1 text-xs font-medium text-slate-700 shadow-2xs">
               <span
                 className={`h-2 w-2 rounded-full ${
-                  isConnected ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
+                  isConnected ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
                 }`}
               />
               <span className="text-[11px]">
@@ -191,12 +191,12 @@ export function AppNavbar({
             </div>
 
             {currentSessionCode && (
-              <div className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-amber-200 bg-amber-50/80 px-2 sm:px-3 py-1 shadow-2xs whitespace-nowrap">
-                <span className="hidden sm:inline text-[9px] font-extrabold text-amber-700 uppercase tracking-wider">
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-orange-200 bg-orange-50/80 px-2 sm:px-3 py-1 shadow-2xs whitespace-nowrap">
+                <span className="hidden sm:inline text-[9px] font-extrabold text-orange-700 uppercase tracking-wider">
                   Room
                 </span>
                 <span
-                  className="font-mono text-[11px] sm:text-xs font-extrabold text-amber-900 tracking-wider whitespace-nowrap"
+                  className="font-mono text-[11px] sm:text-xs font-extrabold text-orange-900 tracking-wider whitespace-nowrap"
                   suppressHydrationWarning
                 >
                   {currentSessionCode}
@@ -204,7 +204,7 @@ export function AppNavbar({
 
                 <button
                   onClick={handleCopySession}
-                  className="flex h-5 w-5 items-center justify-center rounded-md text-amber-700 hover:text-amber-900 hover:bg-amber-100 transition-colors cursor-pointer"
+                  className="flex h-5 w-5 items-center justify-center rounded-md text-orange-700 hover:text-orange-900 hover:bg-orange-100 transition-colors cursor-pointer"
                   title="Copy Room Code"
                   type="button"
                 >
@@ -217,7 +217,7 @@ export function AppNavbar({
 
                 <button
                   onClick={handleShareClick}
-                  className="flex h-5 w-5 items-center justify-center rounded-md text-amber-700 hover:text-amber-900 hover:bg-amber-100 transition-colors cursor-pointer"
+                  className="flex h-5 w-5 items-center justify-center rounded-md text-orange-700 hover:text-orange-900 hover:bg-orange-100 transition-colors cursor-pointer"
                   title="Share QR Code"
                   type="button"
                 >
@@ -278,7 +278,7 @@ export function AppNavbar({
                       className={cn(
                         "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-colors border",
                         isActive
-                          ? "bg-amber-50 border-amber-200 text-amber-800 shadow-2xs font-bold"
+                          ? "bg-orange-50 border-orange-200 text-orange-800 shadow-2xs font-bold"
                           : "bg-slate-50/70 border-slate-200/70 text-slate-700 hover:bg-slate-100"
                       )}
                     >
@@ -287,7 +287,7 @@ export function AppNavbar({
                         <span>{item.label}</span>
                       </div>
                       {item.badge !== undefined && (
-                        <span className="inline-flex items-center justify-center min-w-4 h-4 px-1.5 rounded-full bg-amber-600 text-white text-[10px] font-bold">
+                        <span className="inline-flex items-center justify-center min-w-4 h-4 px-1.5 rounded-full bg-orange-600 text-white text-[10px] font-bold">
                           {item.badge}
                         </span>
                       )}
@@ -300,7 +300,7 @@ export function AppNavbar({
             <div className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-3 space-y-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-600 text-white font-bold text-xs shadow-2xs">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-orange-600 text-white font-bold text-xs shadow-2xs">
                     <UserIcon className="h-4 w-4" />
                   </div>
                   <div className="min-w-0">
@@ -316,10 +316,10 @@ export function AppNavbar({
                 <div className="inline-flex items-center gap-1.5 text-[11px] font-medium shrink-0">
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      isConnected ? "bg-emerald-500 animate-pulse" : "bg-amber-500"
+                      isConnected ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
                     }`}
                   />
-                  <span className={isConnected ? "text-emerald-700 text-[10px] font-bold" : "text-amber-700 text-[10px] font-bold"}>
+                  <span className={isConnected ? "text-emerald-700 text-[10px] font-bold" : "text-orange-700 text-[10px] font-bold"}>
                     {isConnected ? "Connected" : "Connecting"}
                   </span>
                 </div>
