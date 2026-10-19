@@ -37,13 +37,13 @@ export function LandingNav() {
           <Link href="/#how-it-works" className="hover:text-slate-900 transition-colors">
             Workflow
           </Link>
-          <Link href="/architecture" className="hover:text-slate-900 transition-colors">
+          <Link href="/#architecture" className="hover:text-slate-900 transition-colors">
             Architecture
           </Link>
-          <Link href="/security" className="hover:text-slate-900 transition-colors">
+          <Link href="/#security" className="hover:text-slate-900 transition-colors">
             Security
           </Link>
-          <Link href="/faq" className="hover:text-slate-900 transition-colors">
+          <Link href="/#faq" className="hover:text-slate-900 transition-colors">
             FAQ
           </Link>
           <Link href="/about" className="hover:text-slate-900 transition-colors">
@@ -88,21 +88,21 @@ export function LandingNav() {
               Workflow &amp; Mechanics
             </Link>
             <Link
-              href="/architecture"
+              href="/#architecture"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
             >
               Architecture
             </Link>
             <Link
-              href="/security"
+              href="/#security"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
             >
               Security
             </Link>
             <Link
-              href="/faq"
+              href="/#faq"
               onClick={() => setMobileMenuOpen(false)}
               className="px-3.5 py-2.5 rounded-lg text-sm font-semibold text-slate-700 hover:bg-amber-50 hover:text-amber-900 transition-colors"
             >

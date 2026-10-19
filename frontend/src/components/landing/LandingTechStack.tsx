@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   Network,
   Server,
@@ -99,7 +98,7 @@ export function LandingTechStack() {
     filter === "All" ? TECH_STACK : TECH_STACK.filter((item) => item.category === filter);
 
   return (
-    <section id="tech-stack" className="px-4 sm:px-6 py-14 sm:py-20 border-t border-amber-900/10 bg-[#faf8f5] relative">
+    <section id="architecture" className="px-4 sm:px-6 py-14 sm:py-20 border-t border-amber-900/10 bg-[#faf8f5] relative scroll-mt-14">
       <div className="max-w-6xl mx-auto space-y-12 sm:space-y-16">
         {/* Section Header */}
         <div className="text-center space-y-3 max-w-3xl mx-auto">
@@ -108,9 +107,9 @@ export function LandingTechStack() {
             <span>Engineering Architecture</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight font-heading">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-stone-900 tracking-tight font-heading">
             Decentralized Mesh Architecture
-          </h1>
+          </h2>
           <p className="text-base sm:text-lg text-stone-600 leading-relaxed">
             Built from first principles with modern WebRTC specifications, lightweight in-memory signaling, and native browser cryptographic acceleration.
           </p>

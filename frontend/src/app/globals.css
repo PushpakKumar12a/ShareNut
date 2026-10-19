@@ -31,6 +31,10 @@
   --font-mono: var(--font-mono), ui-monospace, monospace;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   background-color: #faf8f5;
   color: #1c1917;

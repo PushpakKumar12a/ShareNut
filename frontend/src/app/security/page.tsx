@@ -1,12 +1,5 @@
-"use client";
-
-import LandingLayout from "@/components/layout/LandingLayout";
-import { LandingSecurity } from "@/components/landing/LandingSecurity";
+import { redirect } from "next/navigation";
 
 export default function SecurityPage() {
-  return (
-    <LandingLayout>
-      <LandingSecurity />
-    </LandingLayout>
-  );
+  redirect("/#security");
 }

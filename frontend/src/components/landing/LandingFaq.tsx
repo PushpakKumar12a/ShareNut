@@ -21,85 +21,36 @@ const FAQ_ITEMS: FaqItem[] = [
     id: "what-is-sharenut",
     question: "What is ShareNut and how does it work?",
     answer:
-      "ShareNut streams files directly between web browsers using secure peer-to-peer connections. Your files go straight to the recipient without uploading to a cloud server.",
+      "ShareNut streams files directly between web browsers using WebRTC peer-to-peer data channels. Your files travel straight to the recipient over encrypted local or internet connections without ever being uploaded to a cloud server.",
     badge: "Direct P2P",
   },
   {
     id: "no-account-needed",
     question: "Do I or the receiver need to create an account or install an app?",
     answer:
-      "No. ShareNut works entirely in your browser with zero sign-ups, accounts, or app installations.",
-    badge: "No Sign-Up",
+      "No. ShareNut works entirely inside your existing web browser with zero sign-ups, accounts, passwords, or app installations required.",
+    badge: "Zero Sign-Up",
   },
   {
     id: "unlimited-file-size",
     question: "Is there any limit on how large my files can be?",
     answer:
-      "No. There are zero file size limits — transfer small documents or 50 GB+ videos freely without paywalls.",
+      "No. There are zero file size limits. Thanks to OPFS direct-to-disk chunk streaming, you can transfer small photos or 50 GB+ videos without browser memory crashes or artificial paywalls.",
     badge: "Unlimited",
   },
   {
     id: "is-it-safe",
-    question: "Is it safe? Can anyone else see or intercept my files?",
+    question: "Is it secure and private? Can anyone intercept my files?",
     answer:
-      "Yes. All transfers are end-to-end encrypted directly between devices. Nobody in between, including ShareNut, can view your files.",
-    badge: "Encrypted",
-  },
-  {
-    id: "why-faster",
-    question: "Why is it faster than cloud services like Google Drive or WeTransfer?",
-    answer:
-      "The recipient downloads the file live as you send it, skipping the slow cloud upload step. On the same Wi-Fi, it transfers at full local network speed.",
-    badge: "Fast",
+      "Yes. All transfers are end-to-end encrypted with DTLS 1.3 (AES-GCM 256). Every 64 KB chunk is verified using cryptographic SHA-256 hashes. ShareNut servers only negotiate the initial connection and never see or store your files.",
+    badge: "DTLS 1.3",
   },
   {
     id: "cross-platform",
-    question: "Can I send files between different devices, like an iPhone and a Windows PC?",
+    question: "Can I transfer files between different devices and platforms?",
     answer:
-      "Yes. It works across iPhone, Android, Mac, Windows, and Linux on any modern browser.",
+      "Yes. ShareNut works seamlessly across iPhone, iPad, Android, Mac, Windows, and Linux on any modern browser. You can even connect instantly by scanning a QR code with your mobile camera.",
     badge: "Cross-Platform",
-  },
-  {
-    id: "qr-code-sharing",
-    question: "How do I share files with my phone using the QR code?",
-    answer:
-      "Click the QR code button in the top bar, scan it with your phone's camera, and start sending files instantly.",
-    badge: "QR Connect",
-  },
-  {
-    id: "keep-tab-open",
-    question: "Do both devices need to keep the browser tab open during the transfer?",
-    answer:
-      "Yes. Because data streams directly between devices in real time, keep both browser tabs open until the transfer reaches 100%.",
-    badge: "Live Stream",
-  },
-  {
-    id: "connection-drop",
-    question: "What happens if my Wi-Fi drops or hiccups during a transfer?",
-    answer:
-      "ShareNut automatically resumes and re-sends only the missing pieces, so you never have to start over from scratch.",
-    badge: "Auto-Resume",
-  },
-  {
-    id: "group-sharing",
-    question: "Can I share files with multiple friends or colleagues at the same time?",
-    answer:
-      "Yes. Anyone who joins your room code can receive the file simultaneously.",
-    badge: "Group Sharing",
-  },
-  {
-    id: "logs-and-history",
-    question: "Does ShareNut keep a record or log of my file names or transfers?",
-    answer:
-      "Never. All room and transfer data is kept only in temporary memory and disappears the moment you close the tab.",
-    badge: "Zero Logs",
-  },
-  {
-    id: "is-it-free",
-    question: "Is ShareNut completely free to use?",
-    answer:
-      "Yes, 100% free and open source with no ads, subscriptions, or hidden limits.",
-    badge: "Free",
   },
 ];
 
@@ -111,22 +62,23 @@ export function LandingFaq() {
   };
 
   return (
-    <section className="px-4 sm:px-6 py-16 sm:py-20 max-w-4xl mx-auto space-y-10">
-      {/* Top Header */}
-      <div className="text-center space-y-3 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
-          <span>Help &amp; Answers</span>
+    <section id="faq" className="px-4 sm:px-6 py-16 sm:py-20 border-t border-amber-900/10 bg-[#faf8f5] relative scroll-mt-14">
+      <div className="max-w-4xl mx-auto space-y-10 sm:space-y-12">
+        {/* Top Header */}
+        <div className="text-center space-y-3 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-600" />
+            <span>Help &amp; Answers</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight font-heading">
+            Frequently Asked Questions
+          </h2>
+
+          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Clear, simple answers to common questions about sharing files with ShareNut.
+          </p>
         </div>
-
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight font-heading">
-          Frequently Asked Questions
-        </h1>
-
-        <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          Clear, simple answers to common questions about sharing files with ShareNut.
-        </p>
-      </div>
 
       {/* Clean Accordion Questions List */}
       <div className="space-y-3">
@@ -213,6 +165,7 @@ export function LandingFaq() {
             </Button>
           </Link>
         </div>
+      </div>
       </div>
     </section>
   );

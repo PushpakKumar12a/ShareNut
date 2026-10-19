@@ -62,7 +62,7 @@ export function LandingHowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative border-t border-slate-200 bg-white px-4 py-14 sm:px-6 sm:py-20"
+      className="relative border-t border-slate-200 bg-white px-4 py-14 sm:px-6 sm:py-20 scroll-mt-14"
     >
       <div className="mx-auto max-w-6xl space-y-12 sm:space-y-16">
         {/* Section Header */}

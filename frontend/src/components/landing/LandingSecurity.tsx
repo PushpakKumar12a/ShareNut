@@ -84,21 +84,22 @@ const COMPARISON_POINTS = [
 
 export function LandingSecurity() {
   return (
-    <section id="security" className="px-4 sm:px-6 py-16 sm:py-20 max-w-6xl mx-auto space-y-16">
-      {/* Top Header */}
-      <div className="text-center space-y-3 max-w-3xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
-          <span>Zero-Knowledge Architecture</span>
-        </div>
+    <section id="security" className="px-4 sm:px-6 py-16 sm:py-20 border-t border-amber-900/10 bg-white relative scroll-mt-14">
+      <div className="max-w-6xl mx-auto space-y-16">
+        {/* Top Header */}
+        <div className="text-center space-y-3 max-w-3xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-800 text-xs font-medium shadow-2xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
+            <span>Zero-Knowledge Architecture</span>
+          </div>
 
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
-          Security by Design, <span className="text-amber-600">Not by Promise</span>
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
-          Most cloud file transfer services ask you to trust their servers. ShareNut eliminates the server from the data path entirely with direct device-to-device streaming.
-        </p>
-      </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight font-heading leading-tight">
+            Security by Design, <span className="text-amber-600">Not by Promise</span>
+          </h2>
+          <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Most cloud file transfer services ask you to trust their servers. ShareNut eliminates the server from the data path entirely with direct device-to-device streaming.
+          </p>
+        </div>
 
       {/* 4 Pillars Grid (Clean, readable warm cards) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
@@ -274,6 +275,7 @@ export function LandingSecurity() {
             </Button>
           </Link>
         </div>
+      </div>
       </div>
     </section>
   );

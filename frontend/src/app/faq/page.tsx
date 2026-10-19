@@ -1,12 +1,5 @@
-"use client";
-
-import LandingLayout from "@/components/layout/LandingLayout";
-import { LandingFaq } from "@/components/landing/LandingFaq";
+import { redirect } from "next/navigation";
 
 export default function FaqPage() {
-  return (
-    <LandingLayout>
-      <LandingFaq />
-    </LandingLayout>
-  );
+  redirect("/#faq");
 }
