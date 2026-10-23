@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 
 import { FileUp, QrCode, Network, DownloadCloud } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface StepItem {
   number: string;
@@ -62,16 +63,10 @@ export function LandingHowItWorks() {
   return (
     <section
       id="how-it-works"
-      className="relative border-t border-slate-200 bg-white px-4 py-14 sm:px-6 sm:py-20 scroll-mt-14"
+      className="relative border-t border-slate-200 bg-white px-4 py-14 sm:px-6 sm:py-20 scroll-mt-16"
     >
       <div className="mx-auto max-w-6xl space-y-12 sm:space-y-16">
-        {/* Section Header */}
         <div className="mx-auto max-w-3xl space-y-3 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-orange-200/80 bg-orange-50 px-3 py-1 text-xs font-mono text-orange-800 shadow-2xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span>Workflow &amp; Mechanics</span>
-          </div>
-
           <h2 className="font-heading text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
             How Peer-to-Peer Transfer Works
           </h2>
@@ -83,21 +78,18 @@ export function LandingHowItWorks() {
           </p>
         </div>
 
-        {/* Architecture Diagram */}
-        <div className="relative w-full overflow-hidden rounded-lg border border-slate-100 bg-[#faf8f5] sm:rounded-xl">
+        <div className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-xl border border-slate-200/80 bg-white p-2 shadow-xs sm:rounded-2xl sm:p-3">
           <Image
             src="/images/arch.png"
             alt="ShareNut Direct Mesh vs Centralized Cloud Relay Architecture"
-            width={1920}
-            height={1080}
-            className="h-auto w-full object-contain"
+            width={1672}
+            height={941}
+            className="h-auto w-full rounded-lg object-contain sm:rounded-xl"
             priority
           />
         </div>
 
-        {/* Process Pipeline */}
         <div className="space-y-7 pt-2 sm:space-y-8 sm:pt-4">
-          {/* Pipeline Header */}
           <div className="space-y-1 text-center">
             <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-slate-500 sm:text-xs">
               Step-by-Step Execution
@@ -108,12 +100,9 @@ export function LandingHowItWorks() {
             </h3>
           </div>
 
-          {/* Steps */}
           <div className="relative">
-            {/* Desktop Connecting Line */}
             <div className="absolute left-[12%] right-[12%] top-7 hidden h-0.5 bg-slate-200 md:block" />
 
-            {/* Mobile Vertical Line */}
             <div className="absolute bottom-8 left-[27px] top-8 w-0.5 bg-slate-200 md:hidden" />
 
             <div className="relative grid grid-cols-1 gap-7 md:grid-cols-4 md:gap-6">
@@ -127,7 +116,6 @@ export function LandingHowItWorks() {
                     onClick={() => setActiveStep(idx)}
                     className="group relative flex cursor-pointer items-start gap-4 text-left md:flex-col md:items-center md:gap-0 md:space-y-3 md:text-center"
                   >
-                    {/* Icon */}
                     <div
                       className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300
                         ${
@@ -140,9 +128,7 @@ export function LandingHowItWorks() {
                       <Icon className="h-6 w-6" />
                     </div>
 
-                    {/* Content */}
                     <div className="min-w-0 flex-1 space-y-2 md:flex-none">
-                      {/* Step Meta */}
                       <span
                         className={`
                           block
@@ -163,37 +149,20 @@ export function LandingHowItWorks() {
                         Step {step.number} • {step.stepName}
                       </span>
 
-                      {/* Title */}
                       <h4 className="font-heading text-base font-bold text-slate-900">
                         {step.title}
                       </h4>
 
-                      {/* Description */}
                       <p className="max-w-xs text-xs leading-relaxed text-slate-600">
                         {step.description}
                       </p>
 
-                      {/* Tech Spec */}
-                      <span
-                        className={`
-                          inline-block
-                          rounded-full
-                          border
-                          px-2.5
-                          py-0.5
-                          font-mono
-                          text-[10px]
-                          transition-colors
-                          sm:text-[11px]
-                          ${
-                            isActive
-                              ? "border-orange-200 bg-orange-50 font-semibold text-orange-800"
-                              : "border-slate-200 bg-slate-100 text-slate-500"
-                          }
-                        `}
+                      <Badge
+                        variant={isActive ? "downloading" : "outline"}
+                        className="font-mono text-[10px] sm:text-[11px]"
                       >
                         {step.techSpec}
-                      </span>
+                      </Badge>
                     </div>
                   </div>
                 );
@@ -202,29 +171,28 @@ export function LandingHowItWorks() {
           </div>
         </div>
 
-        {/* Technical Specs */}
         <div className="border-t border-slate-200 pt-5 sm:pt-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center font-mono text-[10px] text-slate-600 sm:gap-x-4 sm:text-xs lg:gap-x-6">
-            <span className="flex items-center gap-1.5 font-medium text-slate-800">
-              <span className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+          <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-center">
+            <Badge variant="completed" className="gap-1.5 font-medium text-[11px]">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
               Direct SCTP Transport
-            </span>
+            </Badge>
 
-            <span className="text-slate-300">•</span>
+            <Badge variant="outline" className="text-[11px] font-mono">
+              DTLS 1.3 (AES-GCM)
+            </Badge>
 
-            <span>DTLS 1.3 (AES-GCM)</span>
+            <Badge variant="outline" className="text-[11px] font-mono">
+              SHA-256 Root Verification
+            </Badge>
 
-            <span className="text-slate-300">•</span>
+            <Badge variant="outline" className="text-[11px] font-mono">
+              0 Bytes Stored on Server
+            </Badge>
 
-            <span>SHA-256 Root Verification</span>
-
-            <span className="text-slate-300">•</span>
-
-            <span>0 Bytes Stored on Server</span>
-
-            <span className="text-slate-300">•</span>
-
-            <span>Full Hardware Throughput</span>
+            <Badge variant="outline" className="text-[11px] font-mono">
+              Full Hardware Throughput
+            </Badge>
           </div>
         </div>
       </div>

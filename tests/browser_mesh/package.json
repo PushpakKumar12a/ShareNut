@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "test": "node runner.mjs",
-    "start": "node runner.mjs"
+    "start": "node runner.mjs",
+    "mesh": "node runner.mjs",
+    "run_mesh_browser_test.ts": "node runner.mjs",
+    "run_mesh_browser.ts": "node runner.mjs"
   },
   "dependencies": {
     "playwright": "^1.49.0"

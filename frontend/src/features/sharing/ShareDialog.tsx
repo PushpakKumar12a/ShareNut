@@ -10,6 +10,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface ShareSessionDialogProps {
   sessionCode: string;
@@ -18,8 +20,9 @@ interface ShareSessionDialogProps {
 }
 
 function QRCodeDisplay({ value }: { value: string }) {
-
-  const [QRComponent, setQRComponent] = useState<any>(null);
+  const [QRComponent, setQRComponent] = useState<
+    typeof import("qrcode.react").QRCodeSVG | null
+  >(null);
 
   useEffect(() => {
     import("qrcode.react").then((mod) => {
@@ -153,48 +156,50 @@ export function ShareSessionDialog({
             </div>
 
             {lanIp && (
-              <button
-                type="button"
+              <Badge
+                variant="outline"
                 onClick={() => setUseLanIp(!useLanIp)}
-                className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100 px-2 py-0.5 rounded-full border border-orange-200/60 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100 border-orange-200/60 transition-colors cursor-pointer"
                 title="Click to toggle LAN IP vs localhost"
               >
                 <Wifi className="h-2.5 w-2.5" />
                 <span>{useLanIp ? lanIp : "localhost"}</span>
-              </button>
+              </Badge>
             )}
           </div>
         </div>
 
-        <div className="flex items-center justify-between px-3 py-2 rounded-xl border border-slate-200 bg-white">
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-              Room:
-            </span>
-            <span className="font-mono text-xs sm:text-sm font-extrabold text-orange-700 tracking-wider">
-              {sessionCode}
-            </span>
-          </div>
+        <Card className="rounded-xl border border-slate-200 bg-white shadow-2xs">
+          <CardContent className="flex items-center justify-between px-3 py-2 p-0">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Room:
+              </span>
+              <span className="font-mono text-xs sm:text-sm font-extrabold text-orange-700 tracking-wider">
+                {sessionCode}
+              </span>
+            </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleCopyCode}
-            className="h-6.5 text-[10px] font-semibold gap-1 px-2 rounded-md border-slate-200 cursor-pointer"
-          >
-            {copiedCode ? (
-              <>
-                <Check className="h-3 w-3 text-emerald-600" />
-                <span className="text-emerald-600">Copied</span>
-              </>
-            ) : (
-              <>
-                <Copy className="h-3 w-3 text-slate-600" />
-                <span>Copy</span>
-              </>
-            )}
-          </Button>
-        </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopyCode}
+              className="h-6.5 text-[10px] font-semibold gap-1 px-2 rounded-md border-slate-200 cursor-pointer"
+            >
+              {copiedCode ? (
+                <>
+                  <Check className="h-3 w-3 text-emerald-600" />
+                  <span className="text-emerald-600">Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-3 w-3 text-slate-600" />
+                  <span>Copy</span>
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
 
         <Button
           onClick={handleCopyLink}

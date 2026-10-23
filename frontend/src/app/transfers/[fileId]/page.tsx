@@ -14,12 +14,12 @@ import {
   Trash2,
   Share2,
   CheckCircle2,
-  Layers,
   ArrowDown,
-  Wifi,
 } from "lucide-react";
 import { AppNavbar } from "@/components/layout/AppNavbar";
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   useEngineState,
   useTransferEngine,
@@ -48,7 +48,6 @@ function TransferDetailPageContent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [tick, setTick] = useState(0);
 
-  // Live polling tick to guarantee real-time UI updates (progress, speed, ETA)
   useEffect(() => {
     const timer = setInterval(() => {
       setTick((prev) => (prev + 1) % 10000);
@@ -64,6 +63,7 @@ function TransferDetailPageContent() {
       : "NUT-ACTIVE");
 
   const targetFile = useMemo(() => {
+    void tick;
     if (!fileIdParam) return engineState.activeFiles[0] || null;
     return (
       engineState.activeFiles.find(
@@ -76,8 +76,9 @@ function TransferDetailPageContent() {
 
   const meshSummary = useMemo(() => {
     if (!targetFile) return null;
+    void tick;
     return engine.getMeshProgressSummary(targetFile.fileId);
-  }, [engine, targetFile, engineState, tick]);
+  }, [engine, targetFile, tick]);
 
   const handleTogglePauseResume = async () => {
     if (!targetFile) return;
@@ -88,8 +89,12 @@ function TransferDetailPageContent() {
       } else {
         engine.pauseTransfer(targetFile.fileId);
       }
-    } catch (err: any) {
-      setErrorMessage(err?.message || "Failed to resume transfer");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("Failed to resume transfer");
+      }
     }
   };
 
@@ -177,7 +182,6 @@ function TransferDetailPageContent() {
       />
 
       <main className="flex-1 w-full max-w-4xl mx-auto p-3.5 sm:p-6 space-y-5 pb-16">
-        {/* Navigation Breadcrumb */}
         <div className="flex items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
           <Link
             href={`/dashboard?session=${currentSessionCode}`}
@@ -203,7 +207,6 @@ function TransferDetailPageContent() {
           </div>
         </div>
 
-        {/* Error Alert if Resume fails */}
         {errorMessage && (
           <div className="p-3.5 rounded-xl border border-red-200 bg-red-50 text-red-700 text-xs font-medium flex items-center justify-between gap-2 shadow-2xs">
             <span>{errorMessage}</span>
@@ -216,183 +219,181 @@ function TransferDetailPageContent() {
           </div>
         )}
 
-        {/* File Overview Card */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-3.5 min-w-0">
-              {getFileIcon(targetFile.manifest.name)}
-              <div className="min-w-0">
-                <h1 className="text-base sm:text-lg font-bold text-slate-900 truncate max-w-sm sm:max-w-md">
-                  {targetFile.manifest.name}
-                </h1>
-                <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono mt-0.5">
-                  <span>{formatSize(targetFile.manifest.size)}</span>
-                  <span>•</span>
-                  <span className="capitalize">{targetFile.manifest.mimeType || "Binary File"}</span>
+        <Card className="rounded-2xl border border-slate-200/80 bg-white shadow-xs">
+          <CardContent className="p-4 sm:p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5 min-w-0">
+                {getFileIcon(targetFile.manifest.name)}
+                <div className="min-w-0">
+                  <h1 className="text-base sm:text-lg font-bold text-slate-900 truncate max-w-sm sm:max-w-md">
+                    {targetFile.manifest.name}
+                  </h1>
+                  <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono mt-0.5">
+                    <span>{formatSize(targetFile.manifest.size)}</span>
+                    <span>•</span>
+                    <span className="capitalize">{targetFile.manifest.mimeType || "Binary File"}</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-              {isWaiting && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-800 border border-orange-200/80 text-xs font-semibold shadow-2xs">
-                  <Clock className="h-3.5 w-3.5 text-orange-600 animate-spin" />
-                  <span>Waiting for peer</span>
-                </span>
-              )}
+              <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                {isWaiting && (
+                  <Badge variant="paused" className="gap-1.5 px-3 py-1.5 text-xs shadow-2xs">
+                    <Clock className="h-3.5 w-3.5 text-orange-600 animate-spin" />
+                    <span>Waiting for peer</span>
+                  </Badge>
+                )}
 
-              {isPaused && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleTogglePauseResume}
-                  className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-orange-300 bg-orange-50 text-orange-800 hover:bg-orange-100 transition-colors"
-                >
-                  <Play className="h-3.5 w-3.5 fill-orange-700 text-orange-700" />
-                  <span>Resume Transfer</span>
-                </Button>
-              )}
+                {isPaused && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleTogglePauseResume}
+                    className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-orange-300 bg-orange-50 text-orange-800 hover:bg-orange-100 transition-colors"
+                  >
+                    <Play className="h-3.5 w-3.5 fill-orange-700 text-orange-700" />
+                    <span>Resume Transfer</span>
+                  </Button>
+                )}
 
-              {isTransferring && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleTogglePauseResume}
-                  className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
-                >
-                  <Pause className="h-3.5 w-3.5" />
-                  <span>Pause Transfer</span>
-                </Button>
-              )}
+                {isTransferring && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleTogglePauseResume}
+                    className="h-8 px-3 rounded-lg text-xs font-semibold gap-1.5 cursor-pointer shadow-2xs border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    <Pause className="h-3.5 w-3.5" />
+                    <span>Pause Transfer</span>
+                  </Button>
+                )}
 
-              {isCompleted && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                  <span>Completed</span>
-                </span>
-              )}
+                {isCompleted && (
+                  <Badge variant="completed" className="gap-1.5 px-3 py-1 text-xs">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>Completed</span>
+                  </Badge>
+                )}
 
-              {!isCompleted && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleCancel}
-                  className="h-8 px-3 rounded-lg text-xs font-semibold border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 gap-1.5 cursor-pointer shadow-2xs"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
-                  <span>Cancel</span>
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Overall Transfer Progress Card */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
-                <Activity className="h-4 w-4" />
+                {!isCompleted && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCancel}
+                    className="h-8 px-3 rounded-lg text-xs font-semibold border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 gap-1.5 cursor-pointer shadow-2xs"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Cancel</span>
+                  </Button>
+                )}
               </div>
-              <div>
-                <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900 leading-tight">
-                  Overall Transfer Progress
-                </h2>
-                <p className="text-[10px] text-slate-400 font-medium">
-                  Aggregated across all connected downloading devices
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="rounded-2xl border border-slate-200/80 bg-white shadow-xs">
+          <CardContent className="p-4 sm:p-5 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
+                  <Activity className="h-4 w-4" />
+                </div>
+                <div>
+                  <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-900 leading-tight">
+                    Overall Transfer Progress
+                  </h2>
+                  <p className="text-[10px] text-slate-400 font-medium">
+                    Aggregated across all connected downloading devices
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-base sm:text-lg font-black text-orange-700">
+                  {isWaiting ? "Waiting" : `${Math.round(liveOverallProgress)}%`}
+                </span>
+                <span className="text-[10px] uppercase font-bold text-slate-400">
+                  {isWaiting ? "for peer" : isCompleted ? "Completed" : "Delivered"}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <SegmentedPeerProgressBar
+                peers={meshSummary?.peers || []}
+                overallProgress={liveOverallProgress}
+                isWaiting={isWaiting}
+                isCompleted={isCompleted}
+                isPaused={isPaused}
+              />
+
+              <div className="flex justify-between items-center text-[11px] font-mono text-slate-500 pt-1">
+                <span>
+                  Total Transferred:{" "}
+                  <strong className="text-slate-800">
+                    {formatSize(liveTransferredBytes)}
+                  </strong>
+                </span>
+
+                {liveSpeed > 0 && (
+                  <span className="text-orange-700 font-bold flex items-center gap-1 font-mono">
+                    <ArrowDown className="h-3 w-3 stroke-[2.5]" />
+                    {formatSpeed(liveSpeed)} Transfer Speed
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+              <Card className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 shadow-none space-y-0.5">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+                  Connected Devices
+                </span>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
+                  {engine.getConnectedPeerCount()} active
                 </p>
-              </div>
-            </div>
+              </Card>
 
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-base sm:text-lg font-black text-orange-700">
-                {isWaiting ? "Waiting" : `${Math.round(liveOverallProgress)}%`}
-              </span>
-              <span className="text-[10px] uppercase font-bold text-slate-400">
-                {isWaiting ? "for peer" : isCompleted ? "Completed" : "Delivered"}
-              </span>
-            </div>
-          </div>
-
-          {/* Segmented Peer Progress Bar */}
-          <div className="space-y-2">
-            <SegmentedPeerProgressBar
-              peers={meshSummary?.peers || []}
-              overallProgress={liveOverallProgress}
-              isWaiting={isWaiting}
-              isCompleted={isCompleted}
-              isPaused={isPaused}
-            />
-
-            <div className="flex justify-between items-center text-[11px] font-mono text-slate-500 pt-1">
-              <span>
-                Total Transferred:{" "}
-                <strong className="text-slate-800">
-                  {formatSize(liveTransferredBytes)}
-                </strong>
-              </span>
-
-              {liveSpeed > 0 && (
-                <span className="text-orange-700 font-bold flex items-center gap-1 font-mono">
-                  <ArrowDown className="h-3 w-3 stroke-[2.5]" />
-                  {formatSpeed(liveSpeed)} Transfer Speed
+              <Card className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 shadow-none space-y-0.5">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+                  Active Downloads
                 </span>
-              )}
-            </div>
-          </div>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
+                  {recipientPeers.length} device{recipientPeers.length === 1 ? "" : "s"}
+                </p>
+              </Card>
 
-          {/* Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
-            <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 space-y-0.5">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
-                Connected Devices
-              </span>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
-                {engine.getConnectedPeerCount()} active
-              </p>
-            </div>
+              <Card className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 shadow-none space-y-0.5">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+                  Completed
+                </span>
+                <p className="text-xs sm:text-sm font-bold text-emerald-600 font-mono">
+                  {recipientPeers.length > 0
+                    ? `${meshSummary?.completedRecipientPeers ?? (isCompleted ? recipientPeers.length : 0)} / ${recipientPeers.length}`
+                    : isCompleted
+                    ? "1 / 1"
+                    : "—"}
+                </p>
+              </Card>
 
-            <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 space-y-0.5">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
-                Active Downloads
-              </span>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
-                {recipientPeers.length} device{recipientPeers.length === 1 ? "" : "s"}
-              </p>
+              <Card className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 shadow-none space-y-0.5">
+                <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+                  Estimated Time
+                </span>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
+                  {isCompleted
+                    ? "Complete"
+                    : isWaiting
+                    ? "Waiting for peer..."
+                    : formatEta(targetFile.etaSeconds)}
+                </p>
+              </Card>
             </div>
+          </CardContent>
+        </Card>
 
-            <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 space-y-0.5">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
-                Completed
-              </span>
-              <p className="text-xs sm:text-sm font-bold text-emerald-600 font-mono">
-                {recipientPeers.length > 0
-                  ? `${meshSummary?.completedRecipientPeers ?? (isCompleted ? recipientPeers.length : 0)} / ${recipientPeers.length}`
-                  : isCompleted
-                  ? "1 / 1"
-                  : "—"}
-              </p>
-            </div>
-
-            <div className="p-3 rounded-xl bg-slate-50/70 border border-slate-100 space-y-0.5">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
-                Estimated Time
-              </span>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 font-mono">
-                {isCompleted
-                  ? "Complete"
-                  : isWaiting
-                  ? "Waiting for peer..."
-                  : formatEta(targetFile.etaSeconds)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Peers Downloading The File ("Device Section Style") */}
-        <div className="rounded-2xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
-          {/* Header Bar */}
-          <div className="px-3.5 py-2.5 sm:px-4 sm:py-3 flex items-center justify-between border-b border-slate-100 bg-slate-50/60">
+        <Card className="rounded-2xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
+          <CardHeader className="px-3.5 py-2.5 sm:px-4 sm:py-3 flex flex-row items-center justify-between border-b border-slate-100 bg-slate-50/60 space-y-0">
             <div className="flex items-center gap-2">
               <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-orange-50 text-orange-700 shadow-2xs">
                 <Users className="h-4 w-4" />
@@ -402,14 +403,13 @@ function TransferDetailPageContent() {
               </span>
             </div>
 
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold text-[10px] border border-emerald-200/60 shadow-2xs">
+            <Badge variant="completed" className="gap-1.5 text-[10px] shadow-2xs">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>Direct P2P</span>
-            </span>
-          </div>
+            </Badge>
+          </CardHeader>
 
-          {/* List of Peers in Device Section Style */}
-          <div className="p-3.5 sm:p-4 space-y-3">
+          <CardContent className="p-3.5 sm:p-4 space-y-3">
             {meshSummary?.peers && meshSummary.peers.length > 0 ? (
               meshSummary.peers.map((peer: MeshPeerProgress) => (
                 <MeshPeerCard key={peer.peerId} peer={peer} />
@@ -429,8 +429,8 @@ function TransferDetailPageContent() {
                 </p>
               </div>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </main>
 
       <ShareSessionDialog

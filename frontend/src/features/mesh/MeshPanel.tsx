@@ -4,6 +4,7 @@ import React, { useState, useEffect, memo } from "react";
 import { Network, Users, HelpCircle, Link2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -117,9 +118,8 @@ export function ConnectedMeshPanel({
   };
 
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-white p-3.5 sm:p-4 shadow-xs space-y-2.5 h-full flex flex-col justify-between">
-
-      <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+    <Card className="h-full flex flex-col justify-between">
+      <CardHeader className="p-3.5 sm:p-4 pb-2 border-b border-slate-100 flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
           <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-700">
             <Network className="h-4 w-4" />
@@ -130,97 +130,100 @@ export function ConnectedMeshPanel({
             </h3>
           </div>
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="flex-1 flex flex-col justify-center py-0.5">
-        <div className="flex flex-col md:grid md:grid-cols-[auto_auto_1fr] items-center gap-3 sm:gap-4 w-full">
-
-          <div className="flex flex-col items-center justify-center bg-[#faf8f5] border border-slate-100/90 rounded-xl p-2.5 sm:p-3 shrink-0">
-            <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-2xs flex items-center justify-center">
-              {showQr && effectiveShareUrl ? (
-                <MeshQRCodeDisplay value={effectiveShareUrl} />
-              ) : (
-                <div className="h-[105px] w-[105px] flex items-center justify-center">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={onRevealQr}
-                    disabled={!sessionCode}
-                    className="h-9 rounded-lg gap-1.5 text-xs font-semibold"
-                  >
-                    <QrCode className="h-3.5 w-3.5" />
-                    Show QR
-                  </Button>
-                </div>
-              )}
-            </div>
-            <span className="text-[11px] font-medium text-slate-500 mt-1.5 text-center">
-              {showQr ? "Scan this QR code" : "Reveal when needed"}
-            </span>
-          </div>
-
-          <div className="hidden md:flex flex-col items-center justify-center relative self-stretch px-0.5">
-            <div className="absolute inset-y-1 w-px bg-slate-200" />
-            <div className="relative z-10 w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-400 shadow-2xs">
-              OR
-            </div>
-          </div>
-
-          <div className="flex md:hidden items-center justify-center relative my-0.5 w-full">
-            <div className="absolute inset-x-0 h-px bg-slate-200" />
-            <span className="relative z-10 bg-white px-2.5 text-[10px] font-bold text-slate-400 border border-slate-200 rounded-full py-0.5">
-              OR
-            </span>
-          </div>
-
-          <div className="flex flex-col items-center justify-center text-center px-1 w-full">
-            <h4 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
-              Connect to a peer
-            </h4>
-            <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 mb-2.5 leading-snug max-w-[260px]">
-              Scan a QR code or enter a peer code to start WebRTC streaming.
-            </p>
-
-            <form onSubmit={handleConnectSubmit} className="w-full space-y-2">
-              <div className="relative w-full">
-                <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 rotate-45" />
-                <Input
-                  type="text"
-                  value={peerCode}
-                  onChange={(e) => setPeerCode(e.target.value.toUpperCase())}
-                  placeholder="Enter peer code (e.g. NUT-XXXX)"
-                  className="pl-9 h-9 text-xs bg-white rounded-lg border-slate-200 placeholder:text-slate-400 focus-visible:ring-emerald-500 font-medium"
-                />
+      <CardContent className="p-3.5 sm:p-4 pt-3 flex-1 flex flex-col justify-between space-y-2.5">
+        <div className="flex-1 flex flex-col justify-center py-0.5">
+          <div className="flex flex-col md:grid md:grid-cols-[auto_auto_1fr] items-center gap-3 sm:gap-4 w-full">
+            <div className="flex flex-col items-center justify-center bg-[#faf8f5] border border-slate-100/90 rounded-xl p-2.5 sm:p-3 shrink-0">
+              <div className="bg-white p-2 rounded-lg border border-slate-100 shadow-2xs flex items-center justify-center">
+                {showQr && effectiveShareUrl ? (
+                  <MeshQRCodeDisplay value={effectiveShareUrl} />
+                ) : (
+                  <div className="h-[105px] w-[105px] flex items-center justify-center">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={onRevealQr}
+                      disabled={!sessionCode}
+                      className="h-9 rounded-lg gap-1.5 text-xs font-semibold"
+                    >
+                      <QrCode className="h-3.5 w-3.5" />
+                      Show QR
+                    </Button>
+                  </div>
+                )}
               </div>
-              <Button
-                type="submit"
-                disabled={!peerCode.trim()}
-                className="w-full h-9 rounded-lg bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-colors cursor-pointer disabled:opacity-50"
-              >
-                Connect
-              </Button>
-            </form>
+              <span className="text-[11px] font-medium text-slate-500 mt-1.5 text-center">
+                {showQr ? "Scan this QR code" : "Reveal when needed"}
+              </span>
+            </div>
+
+            <div className="hidden md:flex flex-col items-center justify-center relative self-stretch px-0.5">
+              <div className="absolute inset-y-1 w-px bg-slate-200" />
+              <div className="relative z-10 w-7 h-7 rounded-full bg-white border border-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-400 shadow-2xs">
+                OR
+              </div>
+            </div>
+
+            <div className="flex md:hidden items-center justify-center relative my-0.5 w-full">
+              <div className="absolute inset-x-0 h-px bg-slate-200" />
+              <span className="relative z-10 bg-white px-2.5 text-[10px] font-bold text-slate-400 border border-slate-200 rounded-full py-0.5">
+                OR
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center justify-center text-center px-1 w-full">
+              <h4 className="text-base sm:lg font-bold text-slate-900 tracking-tight">
+                Connect to a peer
+              </h4>
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 mb-2.5 leading-snug max-w-[260px]">
+                Scan a QR code or enter a peer code to start WebRTC streaming.
+              </p>
+
+              <form onSubmit={handleConnectSubmit} className="w-full space-y-2">
+                <div className="relative w-full">
+                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400 rotate-45" />
+                  <Input
+                    type="text"
+                    value={peerCode}
+                    onChange={(e) => setPeerCode(e.target.value.toUpperCase())}
+                    placeholder="Enter peer code (e.g. NUT-XXXX)"
+                    className="pl-9 h-9 text-xs bg-white rounded-lg border-slate-200 placeholder:text-slate-400 focus-visible:ring-emerald-500 font-medium"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={!peerCode.trim()}
+                  className="w-full h-9 rounded-lg bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white font-semibold text-xs shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                >
+                  Connect
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col sm:flex-row items-center gap-2 pt-1.5 border-t border-slate-100">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#faf8f5] border border-slate-100 flex-1 w-full text-slate-500">
-          <Users className="h-3.5 w-3.5 shrink-0 text-slate-400" />
-          <span className="text-[11px]">
-            Make sure the other device is online and in the same room.
-          </span>
+        <div className="flex flex-col sm:flex-row items-center gap-2 pt-1.5 border-t border-slate-100">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#faf8f5] border border-slate-100 flex-1 w-full text-slate-500">
+            <Users className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+            <span className="text-[11px]">
+              Make sure the other device is online and in the same room.
+            </span>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setShowHowItWorks(true)}
+            className="h-8 gap-1 rounded-lg bg-orange-50/80 hover:bg-orange-100 text-orange-700 border-orange-200/80 font-semibold text-[11px] shrink-0 cursor-pointer w-full sm:w-auto"
+          >
+            <HelpCircle className="h-3.5 w-3.5" />
+            <span>How it works?</span>
+          </Button>
         </div>
-
-        <button
-          type="button"
-          onClick={() => setShowHowItWorks(true)}
-          className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg bg-orange-50/80 hover:bg-orange-100 text-orange-700 border border-orange-200/80 font-semibold text-[11px] transition-colors shrink-0 cursor-pointer w-full sm:w-auto"
-        >
-          <HelpCircle className="h-3.5 w-3.5" />
-          <span>How it works?</span>
-        </button>
-      </div>
+      </CardContent>
 
       <Dialog open={showHowItWorks} onOpenChange={setShowHowItWorks}>
         <DialogContent className="sm:max-w-md">
@@ -268,9 +271,6 @@ export function ConnectedMeshPanel({
           </Button>
         </DialogContent>
       </Dialog>
-    </div>
+    </Card>
   );
 }
-
-export const ConnectedMeshMeshPanel = ConnectedMeshPanel;
-export const ConnectedMeshPeersPanel = ConnectedMeshPanel;

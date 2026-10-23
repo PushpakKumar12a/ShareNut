@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import LandingLayout from "@/components/layout/LandingLayout";
 
 export default function NotFound() {
@@ -8,9 +9,11 @@ export default function NotFound() {
       <main className="flex min-h-[75vh] items-center px-6 py-20 sm:px-12 lg:px-20">
         <section className="mx-auto grid w-full max-w-6xl items-center gap-10 border-y border-stone-200 py-16 md:grid-cols-[1.2fr_1fr] md:gap-16 md:py-24">
           <div className="min-w-0">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.22em] text-orange-700">
-              Error <span className="text-stone-400">/</span> 404
-            </p>
+            <div className="mb-5">
+              <Badge variant="downloading" className="font-semibold uppercase tracking-[0.22em] text-[10px]">
+                Error <span className="text-stone-400 mx-1">/</span> 404
+              </Badge>
+            </div>
 
             <h1 className="font-heading text-[clamp(6rem,17vw,13rem)] font-bold leading-[0.8] tracking-[-0.09em] text-stone-900">
               404<span className="text-orange-600">.</span>

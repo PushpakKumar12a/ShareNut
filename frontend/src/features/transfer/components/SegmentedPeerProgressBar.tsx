@@ -4,16 +4,15 @@ import React, { useState } from "react";
 import type { MeshPeerProgress } from "@/features/transfer/engine/engineTypes";
 import { formatSpeed, formatSize } from "./transferUtils";
 
-// ponytail: 8 handpicked distinct colors, wraps for 9+ peers
 const PEER_COLORS = [
-  "#d97706", // orange-600
-  "#059669", // emerald-600
-  "#7c3aed", // violet-600
-  "#db2777", // pink-600
-  "#2563eb", // blue-600
-  "#ea580c", // orange-600
-  "#0891b2", // cyan-600
-  "#4f46e5", // indigo-600
+  "#d97706",
+  "#059669",
+  "#7c3aed",
+  "#db2777",
+  "#2563eb",
+  "#ea580c",
+  "#0891b2",
+  "#4f46e5",
 ];
 
 interface Props {
@@ -36,7 +35,6 @@ export function SegmentedPeerProgressBar({
   const [hoveredPeer, setHoveredPeer] = useState<string | null>(null);
   const activePeers = peers.filter((p) => !p.isSender);
 
-  // Fallback: no peers or waiting — show single bar
   if (activePeers.length === 0 || isWaiting) {
     return (
       <div
@@ -58,8 +56,6 @@ export function SegmentedPeerProgressBar({
     );
   }
 
-  // Each peer contributes equally to the bar width (1/N of total)
-  // Within their segment, fill is their individual progress
   const segmentWidth = 100 / activePeers.length;
 
   return (
@@ -95,7 +91,6 @@ export function SegmentedPeerProgressBar({
                       : "0",
                 }}
               />
-              {/* Segment divider */}
               {idx < activePeers.length - 1 && (
                 <div className="absolute right-0 top-0 h-full w-px bg-white/60" />
               )}
@@ -103,14 +98,11 @@ export function SegmentedPeerProgressBar({
           );
         })}
       </div>
-
-      {/* Hover tooltip */}
       {hoveredPeer && (() => {
         const peerIdx = activePeers.findIndex((p) => p.peerId === hoveredPeer);
         const peer = activePeers[peerIdx];
         if (!peer) return null;
         const color = PEER_COLORS[peerIdx % PEER_COLORS.length];
-        // Position tooltip roughly above the peer's segment center
         const leftPercent = (peerIdx + 0.5) * segmentWidth;
 
         return (
@@ -139,7 +131,6 @@ export function SegmentedPeerProgressBar({
               )}
               <div className="text-slate-400 capitalize">{peer.status}</div>
             </div>
-            {/* Tooltip arrow */}
             <div className="flex justify-center">
               <div className="w-2 h-2 bg-slate-900 rotate-45 -mt-1" />
             </div>
@@ -147,7 +138,6 @@ export function SegmentedPeerProgressBar({
         );
       })()}
 
-      {/* Peer legend (compact, only when >1 peer) */}
       {activePeers.length > 1 && (
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 text-[10px] font-mono text-slate-500">
           {activePeers.map((peer, idx) => (

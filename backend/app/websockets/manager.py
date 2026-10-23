@@ -1,5 +1,3 @@
-"""WebSocket connection and signaling room manager for WebRTC peer discovery."""
-
 import logging
 from typing import Any
 from fastapi import WebSocket
@@ -21,7 +19,7 @@ class SignalingManager:
         websocket: WebSocket,
         metadata: dict[str, Any],
     ) -> None:
-        """Register a new peer WebSocket connection in a signaling room."""
+        # Register a new peer WebSocket connection in a signaling room.
         if getattr(websocket, "client_state", None) and websocket.client_state.name != "CONNECTED":
             await websocket.accept()
 
@@ -91,7 +89,7 @@ class SignalingManager:
         peer_id: str,
         websocket: WebSocket | None = None,
     ) -> None:
-        """Remove a peer from a signaling room and notify remaining peers."""
+        # Remove a peer from a signaling room and notify remaining peers.
         code = session_code.upper()
         if code not in self.rooms:
             return
@@ -145,7 +143,7 @@ class SignalingManager:
         target_peer_id: str,
         message: SignalingMessage,
     ) -> bool:
-        """Send a signaling message directly to a target peer."""
+        # Send a signaling message directly to a target peer.
         code = session_code.upper()
         ws = self.rooms.get(code, {}).get(target_peer_id)
         if ws is None:
@@ -168,7 +166,7 @@ class SignalingManager:
         message: SignalingMessage,
         exclude_peer_id: str | None = None,
     ) -> None:
-        """Broadcast a message to all connected peers in a room, optionally excluding sender."""
+        # Broadcast a message to all connected peers in a room, optionally excluding sender.
         code = session_code.upper()
         room_peers = self.rooms.get(code, {})
         json_data = message.model_dump_json()
@@ -185,7 +183,6 @@ class SignalingManager:
                 self.prune_peer(code, pid)
 
     def get_room_peers(self, session_code: str) -> list[dict[str, Any]]:
-        """Get list of active peer metadata in a room."""
         code = session_code.upper()
         return list(self.peer_meta.get(code, {}).values())
 

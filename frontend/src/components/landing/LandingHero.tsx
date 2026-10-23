@@ -14,6 +14,7 @@ import {
   ArrowLeftRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 function generateSessionCode(): string {
   return "NUT-" + Math.random().toString(36).slice(2, 7).toUpperCase();
@@ -31,7 +32,10 @@ export function LandingHero() {
   const [sessionRoomCode, setSessionRoomCode] = useState<string>("");
 
   useEffect(() => {
-    setSessionRoomCode(generateSessionCode());
+    const timer = setTimeout(() => {
+      setSessionRoomCode(generateSessionCode());
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleFilesSelected = (files: File[]) => {
@@ -93,9 +97,7 @@ export function LandingHero() {
         {...({ webkitdirectory: "", directory: "" } as React.InputHTMLAttributes<HTMLInputElement>)}
       />
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-        {/* Pitch / Features */}
         <div className="order-1 flex flex-col justify-center lg:order-2 lg:col-span-7 lg:pl-4">
-          {/* Heading */}
           <div className="space-y-4">
             <h1 className="font-heading text-[38px] font-extrabold leading-[1.08] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
               Share files directly from{" "}
@@ -107,7 +109,6 @@ export function LandingHero() {
             </p>
           </div>
 
-          {/* Features */}
           <div className="mt-9 grid grid-cols-1 gap-y-5 sm:mt-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-4">
             <div className="flex min-h-6 items-center gap-4">
               <InfinityIcon className="h-[22px] w-[22px] shrink-0 text-slate-700" />
@@ -140,7 +141,6 @@ export function LandingHero() {
             </div>
           </div>
 
-          {/* Mobile Select Files */}
           <div className="mt-8 lg:hidden">
             <Button onClick={() => fileInputRef.current?.click()} className="h-11 w-full rounded-md bg-orange-600 px-5 text-sm font-medium text-white shadow-xs shadow-orange-600/20 transition-colors hover:bg-orange-700">
               <Upload className="h-4 w-4" />
@@ -148,30 +148,25 @@ export function LandingHero() {
             </Button>
           </div>
 
-          {/* Technical Specs */}
           <div className="mt-8 border-t border-slate-200 pt-5 sm:mt-7">
-            <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-2 font-mono text-[10px] leading-4 text-slate-500 sm:justify-start sm:text-xs">
-              <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap font-medium text-slate-700">
+            <div className="flex flex-wrap items-center justify-center gap-2 font-mono sm:justify-start">
+              <Badge variant="completed" className="gap-1.5 font-medium text-[11px]">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-                Direct Browser-to-Browser Pipe
-              </span>
-
-              <span className="shrink-0 text-slate-300">•</span>
-
-              <span className="whitespace-nowrap">WebRTC SCTP</span>
-
-              <span className="shrink-0 text-slate-300">•</span>
-
-              <span className="whitespace-nowrap">DTLS 1.3</span>
-
-              <span className="shrink-0 text-slate-300">•</span>
-
-              <span className="whitespace-nowrap">SHA-256</span>
+                Direct Browser Pipe
+              </Badge>
+              <Badge variant="outline" className="text-[11px] font-mono">
+                WebRTC SCTP
+              </Badge>
+              <Badge variant="outline" className="text-[11px] font-mono">
+                DTLS 1.3
+              </Badge>
+              <Badge variant="outline" className="text-[11px] font-mono">
+                SHA-256
+              </Badge>
             </div>
           </div>
         </div>
 
-        {/* Desktop Uploader */}
         <div className="order-2 hidden lg:order-1 lg:col-span-5 lg:block">
           <div onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop} className={`flex min-h-[360px] flex-1 flex-col items-center justify-between rounded-2xl border-2 border-dashed bg-white p-8 text-center shadow-xs transition-all ${isDragging ? "border-orange-500 bg-orange-50/40" : "border-stone-300 hover:border-orange-400"}`}>
             {isRedirecting ? (
@@ -222,14 +217,16 @@ export function LandingHero() {
                   </div>
                 </div>
 
-                <div className="flex w-full flex-wrap items-center justify-center gap-3 border-t border-slate-100 pt-3 font-mono text-[11px] text-slate-500">
-                  <span>Unlimited size</span>
-                  <span>•</span>
-                  <span>64 KB SHA-256</span>
-                  <span>•</span>
-                  <span>Direct SCTP</span>
-                  <span>•</span>
-                  <span>LAN Turbo</span>
+                <div className="flex w-full flex-wrap items-center justify-center gap-1.5 border-t border-slate-100 pt-3">
+                  <Badge variant="outline" className="text-[10px] font-mono font-normal text-slate-500">
+                    Unlimited size
+                  </Badge>
+                  <Badge variant="outline" className="text-[10px] font-mono font-normal text-slate-500">
+                    64 KB SHA-256
+                  </Badge>
+                  <Badge variant="outline" className="text-[10px] font-mono font-normal text-slate-500">
+                    Direct SCTP
+                  </Badge>
                 </div>
               </>
             )}

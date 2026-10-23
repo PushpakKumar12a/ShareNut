@@ -261,9 +261,7 @@ export class ChunkStore {
         await root.removeEntry(sanitizedName);
         this.opfsHandles.delete(fileId);
         console.log(`[ChunkStore] Purged OPFS file: ${sanitizedName}`);
-      } catch {
-        // Entry may already be removed
-      }
+      } catch {}
     }
   }
 }

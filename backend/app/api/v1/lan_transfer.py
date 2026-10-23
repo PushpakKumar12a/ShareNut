@@ -1,10 +1,3 @@
-"""Dedicated LAN / Wi-Fi Router Turbo Transport API.
-Real-Time Live Streaming Pipe inspired by ShareNut Protocol v2.
-
-Streams raw binary data directly from Sender -> Router -> Receiver concurrently
-with near-zero RAM footprint (< 2 MB) and simultaneous lockstep progress synchronization.
-"""
-
 import asyncio
 import logging
 import uuid
@@ -47,7 +40,7 @@ class PrepareUploadResponse(BaseModel):
 
 @router.post("/prepare-upload", response_model=PrepareUploadResponse)
 async def prepare_upload(payload: PrepareUploadRequest) -> PrepareUploadResponse:
-    """Phase 1: ShareNut-style metadata negotiation and live stream queue allocation."""
+    # metadata negotiation and live stream queue allocation.
     session_id = f"lan-sess-{uuid.uuid4().hex[:12]}"
     file_tokens: dict[str, str] = {}
     file_chunks: dict[str, list[bytes]] = {}
@@ -92,7 +85,7 @@ async def upload_stream(
     fileId: str = Query(..., alias="fileId"),
     token: str = Query(..., alias="token"),
 ) -> dict[str, Any]:
-    """Phase 2: Feed live binary stream directly into receiver pipe as bytes arrive."""
+    # Feed live binary stream directly into receiver pipe as bytes arrive.
     if sessionId not in active_sessions:
         raise HTTPException(status_code=404, detail="Invalid or expired session")
 
@@ -111,7 +104,7 @@ async def upload_stream(
 
     received = 0
     last_flush_bytes = 0
-    FLUSH_THRESHOLD = 512 * 1024  # 512 KB flush threshold for ultra-low latency & 200+ MB/s
+    FLUSH_THRESHOLD = 512 * 1024
 
     try:
         async for chunk in request.stream():
@@ -147,7 +140,7 @@ async def download_file(
     file_id: str,
     sessionId: str = Query(..., alias="sessionId"),
 ) -> StreamingResponse:
-    """Phase 3: Stream live binary chunks to the receiver concurrently as the sender uploads."""
+    # Stream live binary chunks to the receiver concurrently as the sender uploads.
     if sessionId not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
 
@@ -219,7 +212,7 @@ async def download_file(
 
 @router.get("/room/{room_code}/files")
 async def get_room_files(room_code: str) -> list[dict[str, Any]]:
-    """Retrieve all files staged in local LAN memory for a room."""
+    # Retrieve all files staged in local LAN memory for a room.
     code = room_code.upper()
     session_ids = room_sessions.get(code, set())
     results: list[dict[str, Any]] = []
@@ -245,7 +238,7 @@ async def get_room_files(room_code: str) -> list[dict[str, Any]]:
 
 @router.get("/session/{session_id}")
 async def get_session_info(session_id: str) -> dict[str, Any]:
-    """Retrieve current session metadata and file transfer states."""
+    # Retrieve current session metadata and file transfer states.
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
 
@@ -260,7 +253,7 @@ async def get_session_info(session_id: str) -> dict[str, Any]:
 
 @router.get("/progress/{session_id}")
 async def get_session_progress(session_id: str) -> dict[str, Any]:
-    """Return real download progress for a session based on bytes actually delivered to receivers."""
+    # Return real download progress for a session based on bytes actually delivered to receivers.
     if session_id not in active_sessions:
         raise HTTPException(status_code=404, detail="Session not found")
 
@@ -297,7 +290,7 @@ async def get_session_progress(session_id: str) -> dict[str, Any]:
 
 @router.post("/cancel")
 async def cancel_session(sessionId: str = Query(..., alias="sessionId")) -> dict[str, str]:
-    """Cancel session and immediately release in-memory streaming queues."""
+    # Cancel session and immediately release in-memory streaming queues.
     if sessionId in active_sessions:
         s = active_sessions[sessionId]
 

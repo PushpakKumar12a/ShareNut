@@ -1,0 +1,13 @@
+{
+  "name": "sharenut",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "bun test",
+    "test:unit": "bun test",
+    "test:mesh": "node tests/browser_mesh/runner.mjs",
+    "test:browser": "node tests/browser_mesh/runner.mjs",
+    "run_mesh_browser_test.ts": "node tests/browser_mesh/runner.mjs",
+    "run_mesh_browser.ts": "node tests/browser_mesh/runner.mjs"
+  }
+}

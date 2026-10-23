@@ -22,7 +22,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShareNut — Decentralized Peer-to-Peer WebRTC File Mesh",
+  title: "ShareNut — P2P File Sharing",
   description:
     "Direct browser-to-browser high-speed file transfer using WebRTC SCTP DataChannels and SHA-256 chunk verification. Zero sign-in required.",
   keywords: ["file transfer", "peer-to-peer", "WebRTC", "ShareNut", "P2P", "encrypted"],

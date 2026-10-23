@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 function GithubIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -22,10 +23,8 @@ export function LandingFooter() {
     <footer className="border-t border-orange-900/10 bg-[#f7f4ee]/80 py-7 text-xs text-stone-600 sm:py-8">
       <div className="mx-auto max-w-6xl space-y-5 px-4 sm:px-6">
 
-        {/* Main Bar */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-          {/* Brand */}
           <div className="flex flex-col items-center gap-2 text-center sm:flex-row sm:items-center sm:gap-3 sm:text-left">
             <Link href="/" className="flex items-center">
               <div className="flex h-7 w-7 items-center justify-center">
@@ -48,10 +47,9 @@ export function LandingFooter() {
             </p>
           </div>
 
-          {/* GitHub + Open Source */}
           <div className="flex items-center justify-center gap-2.5 sm:justify-end">
             <a
-              href="https://github.com"
+              href="https://github.com/PushpakKumar12a/ShareNut"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-medium text-slate-700 shadow-2xs transition-colors hover:border-slate-300 hover:bg-slate-50"
@@ -63,22 +61,19 @@ export function LandingFooter() {
               <ArrowUpRight className="h-3 w-3 text-slate-400" />
             </a>
 
-            <div className="flex h-8 items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 font-mono text-[10px] text-emerald-700">
+            <Badge variant="completed" className="h-8 gap-1.5 px-2.5 font-mono text-[10px]">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
               <span>Open Source</span>
-            </div>
+            </Badge>
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="flex flex-col items-center gap-3 border-t border-slate-200/70 pt-4 text-center font-mono text-[10px] text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:text-left sm:text-[11px]">
 
-          {/* Copyright */}
           <div>
             © {new Date().getFullYear()} ShareNut. Zero server storage by design.
           </div>
 
-          {/* Legal / Policy Navigation */}
           <nav className="flex items-center gap-4 text-slate-500">
             <Link
               href="/privacy"

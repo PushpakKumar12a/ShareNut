@@ -150,7 +150,6 @@ export class LanTurboTransport {
       bodyToSend = file as Blob;
     }
 
-    const total = file.size;
     let transferComplete = false;
 
     const pollInterval = this.startProgressPoller(
@@ -169,8 +168,6 @@ export class LanTurboTransport {
         signal,
       });
 
-      // Upload to backend done, but receiver download is still ongoing.
-      // Wait for download to complete (poll will report progress).
       if (!transferComplete) {
         await new Promise<void>((resolve) => {
           const checker = setInterval(() => {
@@ -244,9 +241,7 @@ export class LanTurboTransport {
             total > 0 ? Math.min(99, Math.floor((dlBytes / total) * 100)) : 0;
           onProgress?.(progress, downloadSpeed, dlBytes, total);
         }
-      } catch {
-        // Polling failure is non-fatal
-      }
+      } catch {}
     }, 1000);
 
     return pollInterval;

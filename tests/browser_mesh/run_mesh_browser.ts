@@ -3,11 +3,62 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 
-const CHROME_PATH =
-  "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-const DASHBOARD_URL = "http://localhost:3000/dashboard";
+function getChromeExecutablePath(): string | undefined {
+  if (process.env.CHROME_BIN && fs.existsSync(process.env.CHROME_BIN)) {
+    return process.env.CHROME_BIN;
+  }
+  const defaultChrome =
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+  if (fs.existsSync(defaultChrome)) return defaultChrome;
+
+  const localAppData = process.env.LOCALAPPDATA
+    ? path.join(
+        process.env.LOCALAPPDATA,
+        "Google\\Chrome\\Application\\chrome.exe",
+      )
+    : "";
+  if (localAppData && fs.existsSync(localAppData)) return localAppData;
+
+  const programFilesX86 = process.env["ProgramFiles(x86)"]
+    ? path.join(
+        process.env["ProgramFiles(x86)"],
+        "Google\\Chrome\\Application\\chrome.exe",
+      )
+    : "";
+  if (programFilesX86 && fs.existsSync(programFilesX86)) return programFilesX86;
+
+  return undefined;
+}
+
+let DASHBOARD_URL =
+  process.env.DASHBOARD_URL || "http://127.0.0.1:3000/dashboard";
 const SESSION_CODE =
   "NUT-REAL" + Math.random().toString(36).slice(2, 6).toUpperCase();
+
+async function checkServerAvailable(
+  url: string,
+): Promise<{ ok: boolean; resolvedUrl: string }> {
+  const candidates = [
+    url,
+    url.includes("localhost")
+      ? url.replace("localhost", "127.0.0.1")
+      : url.replace("127.0.0.1", "localhost"),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      const origin = new URL(candidate).origin;
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2000);
+      const response = await fetch(origin, { signal: controller.signal });
+      clearTimeout(timeout);
+      if (response.ok || response.status < 500) {
+        return { ok: true, resolvedUrl: candidate };
+      }
+    } catch {}
+  }
+  return { ok: false, resolvedUrl: url };
+}
 
 function determineTempDirectory(): string {
   if (process.env.TEMP_DIR) {
@@ -27,6 +78,33 @@ async function resolveTestConfig(): Promise<{
   let payloadMb = process.env.PAYLOAD_MB
     ? parseInt(process.env.PAYLOAD_MB, 10)
     : NaN;
+
+  // Check CLI arguments (e.g. bun run run_mesh_browser.ts 10 6 or --peers=6 --mb=10)
+  const cliArgs = process.argv.slice(2);
+  for (let index = 0; index < cliArgs.length; index++) {
+    const argument = cliArgs[index];
+    if (argument.startsWith("--peers=")) {
+      peers = parseInt(argument.split("=")[1], 10);
+    } else if (argument === "--peers" && cliArgs[index + 1]) {
+      peers = parseInt(cliArgs[index + 1], 10);
+    } else if (
+      argument.startsWith("--mb=") ||
+      argument.startsWith("--payload=")
+    ) {
+      payloadMb = parseInt(argument.split("=")[1], 10);
+    } else if (
+      (argument === "--mb" || argument === "--payload") &&
+      cliArgs[index + 1]
+    ) {
+      payloadMb = parseInt(cliArgs[index + 1], 10);
+    } else if (!argument.startsWith("-") && isNaN(payloadMb)) {
+      const parsedNumber = parseInt(argument, 10);
+      if (!isNaN(parsedNumber)) payloadMb = parsedNumber;
+    } else if (!argument.startsWith("-") && isNaN(peers)) {
+      const parsedNumber = parseInt(argument, 10);
+      if (!isNaN(parsedNumber)) peers = parsedNumber;
+    }
+  }
 
   if ((isNaN(peers) || isNaN(payloadMb)) && process.stdin.isTTY) {
     const readlineModule = await import("readline/promises");
@@ -129,14 +207,28 @@ async function runRealBrowserMeshTest(): Promise<void> {
   console.log(
     `  • File Size: ${payload.size.toLocaleString()} bytes (${payloadSizeMb}.00 MB)`,
   );
+  const chromeExecutable = getChromeExecutablePath();
   console.log(`  • Original SHA-256: ${payload.sha256}\n`);
   console.log(
-    `► REAL BROWSER INSTANCES: ${totalPeers} Google Chrome contexts (Chromium ${CHROME_PATH})`,
+    `► REAL BROWSER INSTANCES: ${totalPeers} Google Chrome contexts (${chromeExecutable || "Playwright Chromium"})`,
   );
   console.log(`► TRANSFER SESSION CODE: ${SESSION_CODE}`);
   console.log(
     `► TARGET TOPOLOGY: Complete Graph ${topologyName} (${requiredBidirectionalLinks} bidirectional links, ${requiredDirectedChannels} directed channels)\n`,
   );
+
+  const serverCheck = await checkServerAvailable(DASHBOARD_URL);
+  if (!serverCheck.ok) {
+    console.error(
+      `\n❌ Error: ShareNut web app is not reachable at ${DASHBOARD_URL}.\n` +
+        "   Please start the frontend development server before running the browser mesh test:\n" +
+        "     cd frontend\n" +
+        "     bun run dev\n" +
+        "   Once running on http://localhost:3000, rerun this test.\n",
+    );
+    process.exit(1);
+  }
+  DASHBOARD_URL = serverCheck.resolvedUrl;
 
   console.log(
     `[STEP 1] Launching ${totalPeers} Real Google Chrome Browser Contexts...\n`,
@@ -144,8 +236,7 @@ async function runRealBrowserMeshTest(): Promise<void> {
 
   let browser: any = null;
   try {
-    browser = await chromium.launch({
-      executablePath: CHROME_PATH,
+    const launchOptions: any = {
       headless: true,
       args: [
         "--no-sandbox",
@@ -154,7 +245,11 @@ async function runRealBrowserMeshTest(): Promise<void> {
         "--disable-web-security",
         "--allow-file-access-from-files",
       ],
-    });
+    };
+    if (chromeExecutable) {
+      launchOptions.executablePath = chromeExecutable;
+    }
+    browser = await chromium.launch(launchOptions);
 
     const contexts = await Promise.all(
       Array.from({ length: totalPeers }).map(() => browser.newContext()),

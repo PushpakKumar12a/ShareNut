@@ -16,21 +16,18 @@ describe("CryptoEngine (AES-GCM 64 KB Chunk Streaming)", () => {
       sessionSecret,
     );
 
-    
     expect(encrypted.byteLength).toBe(12 + originalChunk.byteLength + 16);
     expect(new Uint8Array(encrypted)).not.toEqual(originalChunk);
 
-    const decrypted = await CryptoEngine.decryptChunk(
-      encrypted,
-      sessionSecret,
-    );
+    const decrypted = await CryptoEngine.decryptChunk(encrypted, sessionSecret);
 
     expect(decrypted.byteLength).toBe(originalChunk.byteLength);
     expect(new Uint8Array(decrypted)).toEqual(originalChunk);
   });
 
   it("produces unique IVs and ciphertexts for identical chunks", async () => {
-    const chunk = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]).buffer as ArrayBuffer;
+    const chunk = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8])
+      .buffer as ArrayBuffer;
 
     const enc1 = await CryptoEngine.encryptChunk(chunk, sessionSecret);
     const enc2 = await CryptoEngine.encryptChunk(chunk, sessionSecret);
@@ -45,19 +42,25 @@ describe("CryptoEngine (AES-GCM 64 KB Chunk Streaming)", () => {
   });
 
   it("gracefully catches tampered ciphertext", async () => {
-    const chunk = new Uint8Array([10, 20, 30, 40]).buffer as ArrayBuffer;
-    const encrypted = await CryptoEngine.encryptChunk(chunk, sessionSecret);
+    const originalWarn = console.warn;
+    console.warn = () => {};
+    try {
+      const chunk = new Uint8Array([10, 20, 30, 40]).buffer as ArrayBuffer;
+      const encrypted = await CryptoEngine.encryptChunk(chunk, sessionSecret);
 
-    const tampered = new Uint8Array(encrypted);
-    tampered[15] ^= 0xff; // corrupt a ciphertext byte
+      const tampered = new Uint8Array(encrypted);
+      tampered[15] ^= 0xff; // corrupt a ciphertext byte
 
-    const result = await CryptoEngine.decryptChunk(
-      tampered.buffer as ArrayBuffer,
-      sessionSecret,
-    );
+      const result = await CryptoEngine.decryptChunk(
+        tampered.buffer as ArrayBuffer,
+        sessionSecret,
+      );
 
-    // On GCM auth tag failure, fallback returns uncorrupted or original raw
-    expect(new Uint8Array(result)).not.toEqual(new Uint8Array(chunk));
+      // On GCM auth tag failure, fallback returns uncorrupted or original raw
+      expect(new Uint8Array(result)).not.toEqual(new Uint8Array(chunk));
+    } finally {
+      console.warn = originalWarn;
+    }
   });
 
   it("computes accurate SHA-256 hex digest", async () => {
@@ -113,8 +116,12 @@ describe("CryptoEngine (AES-GCM 64 KB Chunk Streaming)", () => {
     // 6. Verify full file bit-for-bit match and SHA-256 hash match
     expect(reassembled).toEqual(fullPayload);
 
-    const originalHash = await CryptoEngine.computeSha256(fullPayload.buffer as ArrayBuffer);
-    const reassembledHash = await CryptoEngine.computeSha256(reassembled.buffer as ArrayBuffer);
+    const originalHash = await CryptoEngine.computeSha256(
+      fullPayload.buffer as ArrayBuffer,
+    );
+    const reassembledHash = await CryptoEngine.computeSha256(
+      reassembled.buffer as ArrayBuffer,
+    );
     expect(reassembledHash).toBe(originalHash);
   });
 });

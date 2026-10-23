@@ -9,32 +9,78 @@ const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const tempDirectory = path.join(scriptDirectory, "temp");
 
 async function promptTestConfiguration() {
-  const rl = readline.createInterface({ input, output });
+  let payloadSizeMb = process.env.PAYLOAD_MB
+    ? parseInt(process.env.PAYLOAD_MB, 10)
+    : 10;
+  let totalPeers = process.env.PEERS ? parseInt(process.env.PEERS, 10) : 6;
 
-  console.log("======================================================================");
-  console.log("          ShareNut Real Chrome Full-Mesh Test Configuration           ");
-  console.log("======================================================================\n");
-
-  let payloadSizeMb = 10;
-  let totalPeers = 6;
-
-  try {
-    const payloadInput = await rl.question("► Enter payload size in MB [default: 10]: ");
-    const parsedPayload = parseInt(payloadInput.trim(), 10);
-    if (!isNaN(parsedPayload) && parsedPayload > 0) {
-      payloadSizeMb = parsedPayload;
+  const cliArgs = process.argv.slice(2);
+  for (let index = 0; index < cliArgs.length; index++) {
+    const argument = cliArgs[index];
+    if (argument.startsWith("--peers=")) {
+      totalPeers = parseInt(argument.split("=")[1], 10);
+    } else if (argument === "--peers" && cliArgs[index + 1]) {
+      totalPeers = parseInt(cliArgs[index + 1], 10);
+    } else if (
+      argument.startsWith("--mb=") ||
+      argument.startsWith("--payload=")
+    ) {
+      payloadSizeMb = parseInt(argument.split("=")[1], 10);
+    } else if (
+      (argument === "--mb" || argument === "--payload") &&
+      cliArgs[index + 1]
+    ) {
+      payloadSizeMb = parseInt(cliArgs[index + 1], 10);
+    } else if (!argument.startsWith("-") && isNaN(payloadSizeMb)) {
+      const parsedNumber = parseInt(argument, 10);
+      if (!isNaN(parsedNumber)) payloadSizeMb = parsedNumber;
+    } else if (!argument.startsWith("-") && isNaN(totalPeers)) {
+      const parsedNumber = parseInt(argument, 10);
+      if (!isNaN(parsedNumber)) totalPeers = parsedNumber;
     }
-
-    const peersInput = await rl.question("► Enter number of peers (min 2) [default: 6]: ");
-    const parsedPeers = parseInt(peersInput.trim(), 10);
-    if (!isNaN(parsedPeers) && parsedPeers >= 2) {
-      totalPeers = parsedPeers;
-    }
-  } finally {
-    rl.close();
   }
 
-  console.log(`\n✓ Configured test: ${payloadSizeMb} MB payload across ${totalPeers} Chrome peers.`);
+  const hasEnvOrCli = Boolean(
+    process.env.PAYLOAD_MB || process.env.PEERS || cliArgs.length > 0,
+  );
+
+  if (!hasEnvOrCli && process.stdin.isTTY) {
+    const rl = readline.createInterface({ input, output });
+
+    console.log(
+      "======================================================================",
+    );
+    console.log(
+      "          ShareNut Real Chrome Full-Mesh Test Configuration           ",
+    );
+    console.log(
+      "======================================================================\n",
+    );
+
+    try {
+      const payloadInput = await rl.question(
+        "► Enter payload size in MB [default: 10]: ",
+      );
+      const parsedPayload = parseInt(payloadInput.trim(), 10);
+      if (!isNaN(parsedPayload) && parsedPayload > 0) {
+        payloadSizeMb = parsedPayload;
+      }
+
+      const peersInput = await rl.question(
+        "► Enter number of peers (min 2) [default: 6]: ",
+      );
+      const parsedPeers = parseInt(peersInput.trim(), 10);
+      if (!isNaN(parsedPeers) && parsedPeers >= 2) {
+        totalPeers = parsedPeers;
+      }
+    } finally {
+      rl.close();
+    }
+  }
+
+  console.log(
+    `\n✓ Configured test: ${payloadSizeMb} MB payload across ${totalPeers} Chrome peers.`,
+  );
   console.log(`✓ Artifacts directory: ${tempDirectory}\n`);
 
   return { payloadSizeMb, totalPeers };
@@ -47,9 +93,15 @@ function ensureTempDirectory() {
 }
 
 function compileTypeScriptTest() {
-  console.log("[STEP 0] Compiling run_mesh_browser_test.ts into temp folder...");
-  const compiledJsPath = path.join(tempDirectory, "run_mesh_browser_test.js");
-  const sourceTsPath = path.join(scriptDirectory, "run_mesh_browser_test.ts");
+  const sourceTsPath = fs.existsSync(
+    path.join(scriptDirectory, "run_mesh_browser.ts"),
+  )
+    ? path.join(scriptDirectory, "run_mesh_browser.ts")
+    : path.join(scriptDirectory, "run_mesh_browser_test.ts");
+  const compiledJsPath = path.join(tempDirectory, "run_mesh_browser.js");
+  console.log(
+    `[STEP 0] Compiling ${path.basename(sourceTsPath)} into temp folder...`,
+  );
 
   const buildResult = spawnSync(
     "bun",

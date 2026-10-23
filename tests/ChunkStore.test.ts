@@ -1,7 +1,21 @@
-import { describe, expect, it } from "bun:test";
+import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { ChunkStore } from "../frontend/src/features/transfer/engine/ChunkStore";
 
 describe("ChunkStore LRU Cache", () => {
+  const originalWarn = console.warn;
+  beforeAll(() => {
+    console.warn = (...args: unknown[]) => {
+      if (typeof args[0] === "string" && args[0].includes("[ChunkStore]")) {
+        return;
+      }
+      originalWarn(...args);
+    };
+  });
+
+  afterAll(() => {
+    console.warn = originalWarn;
+  });
+
   it("stores and retrieves chunks from RAM memory cache", async () => {
     const store = new ChunkStore();
     const fileId = "test-file-alpha";

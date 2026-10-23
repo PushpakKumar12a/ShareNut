@@ -51,7 +51,6 @@ app.include_router(ws_router)
 
 @app.get("/", tags=["root"])
 async def root() -> dict:
-    """Root endpoint providing service status and API documentation links."""
     return {
         "service": "ShareNut-backend",
         "status": "online",
@@ -71,5 +70,4 @@ async def root() -> dict:
 
 @app.get("/api/v1/health", tags=["health"])
 async def health_check() -> dict:
-    """Simple health check endpoint."""
     return {"status": "healthy", "service": "ShareNut"}

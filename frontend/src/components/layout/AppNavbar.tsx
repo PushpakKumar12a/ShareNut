@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,7 @@ import {
 import { usePeerStore } from "@/features/mesh/peerStore";
 import { useEngineState } from "@/features/transfer/engine/EngineContext";
 import { useModalStore } from "@/features/ui/modalStore";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface AppNavbarProps {
@@ -45,13 +46,6 @@ export function AppNavbar({
 
   const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  const mobileMenuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -64,37 +58,8 @@ export function AppNavbar({
     };
   }, [mobileMenuOpen]);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent | TouchEvent) {
-      const target = event.target as Node;
-      if (
-        mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(target) &&
-        !(event.target as HTMLElement).closest("#mobile-menu-toggle")
-      ) {
-        setMobileMenuOpen(false);
-      }
-    }
-
-    if (mobileMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("touchstart", handleClickOutside, { passive: true });
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
-    };
-  }, [mobileMenuOpen]);
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
-  const isConnected = hasConnectedPeer;
-
-  const currentSessionCode = mounted
-    ? (sessionCode !== undefined ? sessionCode : engineSessionCode || "NUT-ROOM1")
-    : (sessionCode || "NUT-ROOM1");
+  const currentSessionCode =
+    sessionCode !== undefined ? sessionCode : engineSessionCode || "NUT-ROOM1";
 
   const handleCopySession = () => {
     if (currentSessionCode) {
@@ -167,9 +132,9 @@ export function AppNavbar({
                     <Icon className="h-4 w-4 shrink-0" />
                     <span>{item.label}</span>
                     {item.badge !== undefined && (
-                      <span className="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded-full bg-orange-600 text-white text-[10px] font-bold leading-none">
+                      <Badge className="min-w-4 h-4 px-1 rounded-full bg-orange-600 text-white text-[10px] font-bold leading-none p-0 flex items-center justify-center border-transparent">
                         {item.badge}
-                      </span>
+                      </Badge>
                     )}
                   </Link>
                 );
@@ -178,20 +143,25 @@ export function AppNavbar({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-
-            <div className="hidden lg:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50/90 px-3 py-1 text-xs font-medium text-slate-700 shadow-2xs">
+            <Badge
+              variant={hasConnectedPeer ? "completed" : "outline"}
+              className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium shadow-2xs"
+            >
               <span
-                className={`h-2 w-2 rounded-full ${
-                  isConnected ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
+                className={`h-1.5 w-1.5 rounded-full ${
+                  hasConnectedPeer ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
                 }`}
               />
-              <span className="text-[11px]">
-                {isConnected ? "Session: Connected" : "Connecting..."}
+              <span>
+                {hasConnectedPeer ? "Session: Connected" : "Connecting..."}
               </span>
-            </div>
+            </Badge>
 
             {currentSessionCode && (
-              <div className="inline-flex items-center gap-1 sm:gap-1.5 rounded-full border border-orange-200 bg-orange-50/80 px-2 sm:px-3 py-1 shadow-2xs whitespace-nowrap">
+              <Badge
+                variant="outline"
+                className="inline-flex items-center gap-1 sm:gap-1.5 border-orange-200 bg-orange-50/80 px-2 sm:px-3 py-1 shadow-2xs whitespace-nowrap"
+              >
                 <span className="hidden sm:inline text-[9px] font-extrabold text-orange-700 uppercase tracking-wider">
                   Room
                 </span>
@@ -223,7 +193,7 @@ export function AppNavbar({
                 >
                   <QrCode className="h-3.5 w-3.5" />
                 </button>
-              </div>
+              </Badge>
             )}
 
             <button
@@ -257,10 +227,8 @@ export function AppNavbar({
 
         {mobileMenuOpen && (
           <div
-            ref={mobileMenuRef}
             className="md:hidden fixed top-16 inset-x-0 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain bg-white border-b border-slate-200/90 shadow-2xl z-50 px-4 py-4 space-y-4 animate-in slide-in-from-top-2 duration-150"
           >
-
             <div className="space-y-1">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">
                 Navigation
@@ -287,9 +255,9 @@ export function AppNavbar({
                         <span>{item.label}</span>
                       </div>
                       {item.badge !== undefined && (
-                        <span className="inline-flex items-center justify-center min-w-4 h-4 px-1.5 rounded-full bg-orange-600 text-white text-[10px] font-bold">
+                        <Badge className="min-w-4 h-4 px-1.5 rounded-full bg-orange-600 text-white text-[10px] font-bold border-transparent">
                           {item.badge}
-                        </span>
+                        </Badge>
                       )}
                     </Link>
                   );
@@ -305,31 +273,32 @@ export function AppNavbar({
                   </div>
                   <div className="min-w-0">
                     <div className="text-xs font-bold text-slate-900 truncate">
-                      {mounted ? user?.username || "Local Peer Node" : "Local Peer Node"}
+                      {user?.username || "Local Peer Node"}
                     </div>
                     <div className="text-[10px] text-slate-400 truncate">
-                      {mounted ? device?.device_name || "Web Browser" : "Web Browser"}
+                      {device?.device_name || "Web Browser"}
                     </div>
                   </div>
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 text-[11px] font-medium shrink-0">
+                <Badge
+                  variant={hasConnectedPeer ? "completed" : "downloading"}
+                  className="gap-1.5 text-[10px] font-bold shrink-0"
+                >
                   <span
-                    className={`h-2 w-2 rounded-full ${
-                      isConnected ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      hasConnectedPeer ? "bg-emerald-500 animate-pulse" : "bg-orange-500"
                     }`}
                   />
-                  <span className={isConnected ? "text-emerald-700 text-[10px] font-bold" : "text-orange-700 text-[10px] font-bold"}>
-                    {isConnected ? "Connected" : "Connecting"}
+                  <span>
+                    {hasConnectedPeer ? "Connected" : "Connecting"}
                   </span>
-                </div>
+                </Badge>
               </div>
-
             </div>
           </div>
         )}
       </header>
-
     </>
   );
 }

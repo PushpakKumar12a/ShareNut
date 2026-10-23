@@ -103,7 +103,6 @@ export class TransferEngine {
           Math.random().toString(36).slice(2, 8) +
           "-" +
           Math.random().toString(36).slice(2, 6));
-
   }
 
   public getLocalPeerId(): string {

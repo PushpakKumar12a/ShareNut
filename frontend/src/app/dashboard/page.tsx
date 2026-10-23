@@ -67,7 +67,6 @@ function DashboardContent() {
   const isQrScannerOpen = useModalStore((state) => state.isQrScannerOpen);
   const openShare = useModalStore((state) => state.openShare);
   const closeShare = useModalStore((state) => state.closeShare);
-  const openQrScanner = useModalStore((state) => state.openQrScanner);
   const closeQrScanner = useModalStore((state) => state.closeQrScanner);
   const [sessionInitialized, setSessionInitialized] = useState(false);
 
@@ -123,7 +122,6 @@ function DashboardContent() {
     [user, device, searchParams, engine]
   );
 
-  // Auto-consume files staged from landing page hero uploader
   useEffect(() => {
     if (sessionInitialized) {
       const staged = consumeStagedFiles();
@@ -198,11 +196,7 @@ function DashboardContent() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5 items-stretch">
 
           <TopTransferActionCards
-            sessionCode={currentSessionCode}
             onSelectFiles={handleSelectFiles}
-            activeFileId={engineState.activeFiles[0]?.fileId}
-            onJoinSession={(code) => initSession(code)}
-            onOpenQrScanner={() => openQrScanner()}
           />
 
           <div className="hidden lg:block h-full">

@@ -769,12 +769,10 @@ export class WebTransferHandler {
     }
   }
 
-  // Alias used by TransferEngine — delegates to pumpRarestFirst
   public static async pumpScheduler(engine: TransferEngine): Promise<void> {
     return WebTransferHandler.pumpRarestFirst(engine);
   }
 
-  // Decode raw binary buffer and dispatch to handleWebPacket
   public static async handleIncomingBinary(
     engine: TransferEngine,
     senderPeerId: string,
@@ -785,7 +783,6 @@ export class WebTransferHandler {
     await WebTransferHandler.handleWebPacket(engine, senderPeerId, packet);
   }
 
-  // Trigger download for every completed file
   public static async downloadAllCompleted(
     engine: TransferEngine,
   ): Promise<void> {

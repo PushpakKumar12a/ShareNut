@@ -3,22 +3,18 @@
 import React, { useRef, useState } from "react";
 import { Upload, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface TopTransferActionCardsProps {
-  sessionCode?: string;
   onSelectFiles: (files: File[]) => void;
-  onJoinSession: (code: string) => void;
-  onOpenQrScanner?: () => void;
-  activeFileId?: string;
   disabled?: boolean;
 }
 
 export function TopTransferActionCards({
-  sessionCode,
   onSelectFiles,
   disabled = false,
 }: TopTransferActionCardsProps) {
-  void sessionCode;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -59,46 +55,49 @@ export function TopTransferActionCards({
         className="hidden"
       />
 
-      <div
+      <Card
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        className={`rounded-2xl border-2 border-dashed transition-all duration-200 p-4 sm:p-5 shadow-xs flex flex-col items-center justify-between text-center ${
+        className={cn(
+          "rounded-2xl border-2 border-dashed transition-all duration-200 shadow-xs flex flex-col items-center justify-between text-center",
           isDragging
             ? "border-orange-500 bg-orange-50/50 scale-[1.01]"
             : "border-orange-300/80 hover:border-orange-400 bg-white"
-        }`}
+        )}
       >
-        <div className="flex flex-col items-center justify-center space-y-2 my-auto">
-          <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-orange-50 text-orange-600 shadow-xs">
-            <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
+        <CardContent className="p-4 sm:p-5 flex flex-col items-center justify-between text-center w-full h-full">
+          <div className="flex flex-col items-center justify-center space-y-2 my-auto">
+            <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-orange-50 text-orange-600 shadow-xs">
+              <Upload className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+
+            <div>
+              <h3 className="text-sm font-bold text-slate-900">
+                Send &amp; Share Files
+              </h3>
+              <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 max-w-[240px]">
+                Drag &amp; drop files or browse device to stream directly to peers
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                className="font-semibold rounded-lg h-9 px-6 text-xs bg-orange-600 hover:bg-orange-700 text-white shadow-xs shadow-orange-600/20 cursor-pointer active:scale-95 transition-all gap-1.5"
+              >
+                <Upload className="h-3.5 w-3.5" />
+                <span>Transfer File</span>
+              </Button>
+            </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-bold text-slate-900">
-              Send &amp; Share Files
-            </h3>
-            <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5 max-w-[240px]">
-              Drag &amp; drop files or browse device to stream directly to peers
-            </p>
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-medium pt-2 mt-2 border-t border-slate-100 w-full justify-center text-slate-400">
+            <Zap className="h-3 w-3 text-orange-500" />
+            <span>Unlimited file size • 64 KB SHA-256 Slicing</span>
           </div>
-
-          <div className="flex items-center gap-2 flex-wrap justify-center">
-            <Button
-              onClick={() => fileInputRef.current?.click()}
-              className="font-semibold rounded-lg h-9 px-6 text-xs bg-orange-600 hover:bg-orange-700 text-white shadow-xs shadow-orange-600/20 cursor-pointer active:scale-95 transition-all gap-1.5"
-            >
-              <Upload className="h-3.5 w-3.5" />
-              <span>Transfer File</span>
-            </Button>
-          </div>
-        </div>
-
-        <div className="inline-flex items-center gap-1.5 text-[10px] font-medium pt-2 mt-2 border-t border-slate-100 w-full justify-center text-slate-400">
-          <Zap className="h-3 w-3 text-orange-500" />
-          <span>Unlimited file size • 64 KB SHA-256 Slicing</span>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </>
   );
 }
