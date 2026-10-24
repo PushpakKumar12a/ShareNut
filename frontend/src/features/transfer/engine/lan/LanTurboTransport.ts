@@ -50,7 +50,7 @@ export class LanTurboTransport {
       return this.cachedLanHost;
     }
 
-    this.cachedLanHost = `${window.location.protocol}//${window.location.hostname}:8000`;
+    this.cachedLanHost = `${window.location.protocol}//${window.location.host}`;
     return this.cachedLanHost;
   }
 

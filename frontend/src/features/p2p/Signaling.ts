@@ -36,6 +36,10 @@ export class SignalingClient {
     this.isExplicitlyClosed = false;
 
     let baseUrl = this.config.wsUrl;
+    if (!baseUrl) {
+      baseUrl = process.env.NEXT_PUBLIC_WS_URL;
+    }
+
     if (
       !baseUrl &&
       typeof window !== "undefined" &&
@@ -45,8 +49,6 @@ export class SignalingClient {
     ) {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       baseUrl = `${protocol}//${window.location.hostname}:8000`;
-    } else if (!baseUrl) {
-      baseUrl = process.env.NEXT_PUBLIC_WS_URL;
     }
 
     if (baseUrl) {
